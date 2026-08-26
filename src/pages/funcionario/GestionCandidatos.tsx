@@ -36,6 +36,7 @@ interface Candidato {
   numeroTarjeton: string;
   propuesta: string;
   foto: string;
+  jornada: string;
 }
 
 const GestionCandidatos = () => {
@@ -51,20 +52,20 @@ const GestionCandidatos = () => {
   const [nombreEleccion, setNombreEleccion] = useState("");
 
   const fetchCandidatos = async () => {
-    if (!isAuthenticated || !user) return;
+    if (!isAuthenticated || !user || !idEleccion) return;
 
     try {
       setLoading(true);
+
       const res = await api.get(
-        `/api/candidatos/listar/cformacion/${user?.centroFormacion}`
+        `/api/candidatos/listar/${idEleccion}`
       );
 
-      const filtrados = res.data.data.filter((candidato: Candidato) => candidato.ideleccion === Number(idEleccion));
-      setCandidatos(filtrados || []);
-
       if (!res.data) {
-        throw new Error("Error al traer aprendices");
+        throw new Error("Error al traer candidatos");
       }
+
+      setCandidatos(res.data.data || []);
     } catch (error) {
       console.error(error);
     } finally {
@@ -109,6 +110,16 @@ const GestionCandidatos = () => {
   if (!isAuthenticated) {
     return <p>Debes iniciar sesión para gestionar candidatos</p>;
   }
+  const candidatosManana = candidatos.filter(
+    (c) => c.jornada === "Mañana"
+  );
+  const candidatosTarde = candidatos.filter(
+    (c) => c.jornada === "Tarde"
+  );
+
+  const candidatosNoche = candidatos.filter(
+    (c) => c.jornada === "Noche"
+  );
 
   const handleAgregarCandidato = (nuevo: Candidato) => {
     setCandidatos(prev => [...prev, nuevo]);
@@ -184,57 +195,59 @@ const GestionCandidatos = () => {
                 </tr>
               </thead>
               <tbody>
-                {loading ? (
-                  <tr>
-                    <td colSpan={4} className="text-center py-5 text-muted">
-                      Cargando candidatos...
+                {candidatosManana.map((c) => (
+                  <tr key={c.idcandidatos}>
+                    <td className="ps-4">
+                      <img
+                        src={
+                          c.foto && c.foto.trim() !== ""
+                            ? c.foto
+                            : `https://ui-avatars.com/api/?name=${encodeURIComponent(
+                                c.nombres
+                              )}&background=random&size=128&rounded=true&bold=true&format=png`
+                        }
+                        alt={`${c.nombres}`}
+                        className="rounded-circle"
+                        style={{
+                          width: 48,
+                          height: 48,
+                          objectFit: "cover",
+                        }}
+                      />
                     </td>
-                  </tr>
-                ) : candidatos.length > 0 ? (
-                  candidatos.map((c) => (
-                    <tr key={c.idcandidatos}>
-                      <td className="ps-4">
-                        <img
-                          src={c.foto && c.foto.trim() !== ""
-                            ? c.foto : `https://ui-avatars.com/api/?name=${encodeURIComponent(c.nombres)}&background=random&size=128&rounded=true&bold=true&format=png`}
-                          alt={`${c.nombres} `}
-                          className="rounded-circle"
-                          style={{ width: 48, height: 48, objectFit: "cover" }}
-                        />
-                      </td>
-                      <td className="fw-semibold">
-                        {c.nombres}
-                      </td>
-                      <td className="text-muted">{c.numeroTarjeton || "Sin programa"}</td>
-                      <td className="text-muted">{c.propuesta}</td>
-                      <td>
-                        <div className="d-flex justify-content-center gap-3">
-                          <button
-                            className="btn btn-sm p-0 border-0 text-primary"
-                            title="Editar"
-                            onClick={() => onEditar(c.idcandidatos)}
-                          >
-                            <FiEdit2 size={18} />
-                          </button>
-                          <button
-                            className="btn btn-sm p-0 border-0 text-danger"
-                            title="Eliminar"
-                            onClick={() => onEliminar(c.idcandidatos)}
-                          >
-                            <FiTrash2 size={18} />
-                          </button>
-                        </div>
-                      </td>
-                    </tr>
-                  ))
-                ) : (
-                  <tr>
-                    <td colSpan={4} className="text-center py-5 text-muted">
-                      No hay candidatos en este centro de formación.
+                    <td className="fw-semibold">
+                      {c.nombres}
                     </td>
-                  </tr>
-                )}
 
+                    <td className="text-muted">
+                      {c.numeroTarjeton || "Sin programa"}
+                    </td>
+
+                    <td className="text-muted">
+                      {c.propuesta}
+                    </td>
+
+                     <td>
+                      <div className="d-flex justify-content-center gap-3">
+                        <button
+                          className="btn btn-sm p-0 border-0 text-primary"
+                          title="Editar"
+                          onClick={() => onEditar(c.idcandidatos)}
+                        >
+                          <FiEdit2 size={18} />
+                        </button>
+                        <button
+                          className="btn btn-sm p-0 border-0 text-danger"
+                          title="Eliminar"
+                          onClick={() => onEliminar(c.idcandidatos)}
+                        >
+                          <FiTrash2 size={18} />
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                ))}
+                    
               </tbody>
             </table>
 
