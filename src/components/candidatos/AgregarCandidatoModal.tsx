@@ -29,6 +29,8 @@ const AgregarCandidatoModal = ({ show, onHide, onSave, idEleccion, aprendices }:
     ideleccion: number | null;
     propuesta: string;
     numero_tarjeton: string;
+    jornada: string;
+    
   }>({
     nombres: "",
     foto: null as File | null,
@@ -36,6 +38,7 @@ const AgregarCandidatoModal = ({ show, onHide, onSave, idEleccion, aprendices }:
     ideleccion: idEleccion || null,
     propuesta: "",
     numero_tarjeton: "",
+    jornada: "",
   });
   const [previewUrl, setPreviewUrl] = useState<string>("");
 
@@ -65,6 +68,7 @@ const AgregarCandidatoModal = ({ show, onHide, onSave, idEleccion, aprendices }:
       data.append("ideleccion", String(formData.ideleccion));
       data.append("idaprendiz", String(formData.idaprendiz));
       data.append("propuesta", formData.propuesta);
+      data.append("jornada", formData.jornada);
       data.append("numero_tarjeton", String(formData.numero_tarjeton));
 
       if (formData.foto instanceof File) {
@@ -219,6 +223,20 @@ const AgregarCandidatoModal = ({ show, onHide, onSave, idEleccion, aprendices }:
                   onChange={handleChange}
                   placeholder="Número de Tarjetón"
                 />
+              </Form.Group>
+              <Form.Group className="mb-3">
+                <Form.Label>Jornada del tarjetón</Form.Label>
+                <Form.Select
+                  name="jornada"
+                  value={formData.jornada}
+                  onChange={handleChange}
+                  required
+                >
+                  <option value="">Seleccione ...</option>
+                  <option value="Mañana">Mañana</option>
+                  <option value="Tarde">Tarde</option>
+                  <option value="Noche">Noche</option>
+                </Form.Select>
               </Form.Group>
             </Col>
           </Row>

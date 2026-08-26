@@ -27,6 +27,7 @@ const ModificarCandidatoModal = ({ show, onHide, candidato, onSave, aprendices }
     idaprendiz: null as number | null,
     propuesta: "",
     numero_tarjeton: "",
+    jornada: "",
   });
   const [previewUrl, setPreviewUrl] = useState<string>(""); // para previsualizar
 
@@ -37,6 +38,7 @@ const ModificarCandidatoModal = ({ show, onHide, candidato, onSave, aprendices }
         idaprendiz: candidato.idaprendiz || null,
         propuesta: candidato.propuesta || "",
         numero_tarjeton: candidato.numeroTarjeton || "",
+        jornada: candidato.jornada || "",
         foto: candidato.foto
       });
       setPreviewUrl(typeof candidato.foto === "string" ? candidato.foto : "");
@@ -70,6 +72,7 @@ const ModificarCandidatoModal = ({ show, onHide, candidato, onSave, aprendices }
       data.append("idaprendiz", String(formData.idaprendiz));
       data.append("propuesta", formData.propuesta);
       data.append("numero_tarjeton", String(formData.numero_tarjeton));
+      data.append("jornada", formData.jornada);
 
       if (formData.foto instanceof File) {
         data.append("foto", formData.foto);
@@ -202,6 +205,19 @@ const ModificarCandidatoModal = ({ show, onHide, candidato, onSave, aprendices }
                   onChange={handleChange}
                   placeholder="Número de Tarjetón"
                 />
+              </Form.Group>
+              <Form.Group className="mb-3">
+                <Form.Label>Jornada del tarjetón</Form.Label>
+                <Form.Select
+                  name="jornada"
+                  value={formData.jornada}
+                  onChange={handleChange}
+                >
+                  <option value="">Seleccione ...</option>
+                  <option value="Mañana">Mañana</option>
+                  <option value="Tarde">Tarde</option>
+                  <option value="Noche">Noche</option>
+                </Form.Select>
               </Form.Group>
             </Col>
           </Row>

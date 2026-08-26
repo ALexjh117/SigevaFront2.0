@@ -27,11 +27,7 @@ const VotacionesActivasPage = () => {
     loadData();
   }, [user?.CentroFormacion]);
 
-  const filtraJornada = votaciones.filter(
-    (val) => val.jornada == user?.jornada
-  );
 
- 
 
   return (
     <>
@@ -42,7 +38,7 @@ const VotacionesActivasPage = () => {
           Participe en los procesos de elección de aprendices.
         </p>
         <Row className="g-4 my-4">
-          {filtraJornada.map((vote, index) => (
+          {votaciones.map((vote, index) => (
             <Col key={index} xs={12} md={6} lg={4}>
               <VotacionCard {...vote} />
             </Col>
