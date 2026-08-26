@@ -139,10 +139,7 @@ export default function EleccionDetalleModal({
               <FaCalendarAlt className="me-2" />
               {eleccion.fechaInicio} - {eleccion.fechaFin}
             </p>
-            <p>
-              <strong>Jornada:</strong> {eleccion.jornada}
-            </p>
-
+      
             <Row className="g-3 mt-3">
               {candidatos.map((candidato) => (
                 <Col key={candidato.idcandidatos} xs={6} md={4} lg={3}>

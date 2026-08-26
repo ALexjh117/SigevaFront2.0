@@ -8,7 +8,7 @@ import { api } from "../../api";
 function FormEleccion() {
 
   const [nombre, setNombre] = useState("");
-  const [jornada, setJornada] = useState<string>("");
+ 
   const [fecha_inicio, setFechaInicio] = useState("");
   const [fecha_fin, setFechaCierre] = useState("");
   const [hora_inicio, setHoraInicio] = useState("");
@@ -28,8 +28,6 @@ function FormEleccion() {
           {
             idcentro_formacion: user?.centroFormacion,
             nombre,
-            jornada,
-            fecha_inicio,
             fecha_fin,
             hora_inicio: `${fecha_inicio} ${hora_inicio}:00`,
             hora_fin: `${fecha_fin} ${hora_fin}:00`,
@@ -74,13 +72,7 @@ function FormEleccion() {
                 </Col>
                 <Col md={4}>
                   <Form.Group className="mb-4">
-                    <FormLabel>Selecciona la jornada</FormLabel>
-                    <Form.Select required onChange={(e)=>setJornada(e.target.value)}>
-                      <option value="">Seleccione...</option>
-                      <option value="Mañana">Mañana</option>
-                      <option value="Tarde">Tarde</option>
-                      <option value="Noche">Noche</option>
-                    </Form.Select>
+                   
                     </Form.Group>
                 </Col>
                 </Row>
