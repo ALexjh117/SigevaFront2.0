@@ -28,6 +28,7 @@ function FormEleccion() {
           {
             idcentro_formacion: user?.centroFormacion,
             nombre,
+            fecha_inicio,
             fecha_fin,
             hora_inicio: `${fecha_inicio} ${hora_inicio}:00`,
             hora_fin: `${fecha_fin} ${hora_fin}:00`,
@@ -38,9 +39,20 @@ function FormEleccion() {
       navigate("/elecciones");
       
 
-      } catch (error) {
-        console.error("Error al crear eleccion", error)
-      }
+     } catch (error: any) {
+  console.log("STATUS:", error.response?.status);
+  console.log("RESPUESTA BACKEND:", error.response?.data);
+  console.log("DATOS ENVIADOS:", {
+    idcentro_formacion: user?.centroFormacion,
+    nombre,
+    fecha_inicio,
+    fecha_fin,
+    hora_inicio: `${fecha_inicio} ${hora_inicio}:00`,
+    hora_fin: `${fecha_fin} ${hora_fin}:00`,
+  });
+
+  console.error("Error al crear eleccion", error);
+}
   }
   
 

@@ -75,30 +75,34 @@ const AgregarCandidatoModal = ({ show, onHide, onSave, idEleccion, aprendices }:
         data.append("foto", formData.foto);
       }
 
-      const response = await api.post(
-        `/api/candidatos/crear`,
-
-        data,
-        {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
-        }
-      );
+      const response = await api.post(`/api/candidatos/crear`, data, {
+        headers: { "Content-Type": "multipart/form-data" },
+      });
 
       toast.success(response.data.message, { id: "toast" });
 
       if (onSave) {
-        onSave({
-          ...response.data,
-          programa: response.data.aprendiz?.programa?.programa ?? "",
-        });
+        onSave(response.data.data);
       }
 
+      setFormData({
+        nombres: "",
+        foto: null,
+        idaprendiz: null,
+        ideleccion: idEleccion || null,
+        propuesta: "",
+        numero_tarjeton: "",
+        jornada: "",
+      });
+      setPreviewUrl("");
       onHide();
     } catch (error: any) {
       console.error("Error al crear candidato:", error.response?.data || error.message);
-      toast.error("Error al guardar candidato");
+      const mensaje =
+        error.response?.data?.message ||
+        error.response?.data?.errors?.jornada?.[0] ||
+        "Error al guardar candidato";
+      toast.error(mensaje);
     }
   };
 

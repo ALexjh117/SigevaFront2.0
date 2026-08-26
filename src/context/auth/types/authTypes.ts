@@ -12,8 +12,9 @@ export interface Aprendiz {
   apellidos: string;
   estado: string;
   perfil: "Aprendiz";
-  jornada: string;
-  centroFormacionIdcentroFormacion: number;
+  jornada: string | null;
+  CentroFormacion: number;
+  centroFormacionIdcentroFormacion?: number;
 }
 
 export type User = Gestor | Aprendiz;
@@ -26,11 +27,12 @@ export interface ResponseType<T> {
 
 export interface UserNormalizado {
   id: number;
-  email?: string;  
-  apellidos?: string;  
+  email?: string;
+  nombre?: string;
+  apellidos?: string;
   estado: string;
   perfil: "Funcionario" | "Administrador" | "Aprendiz";
-  jornada?: string;    
-  CentroFormacion?: number; 
-  centroFormacion?: number; 
+  jornada?: string | null;
+  CentroFormacion?: number;
+  centroFormacion?: number;
 }

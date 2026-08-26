@@ -1,8 +1,25 @@
 import { useState, type PropsWithChildren } from "react";
 import { AuthContext } from "./auth.context";
-import type { Aprendiz, Gestor, ResponseType, User, UserNormalizado } from "./types/authTypes";
+import type { Gestor, ResponseType, User, UserNormalizado } from "./types/authTypes";
 import toast from "react-hot-toast";
+import type { Jornada } from "../../constants/jornada";
+import { getJornadaGuardada, guardarJornada } from "../../utils/jornadaAprendiz";
 
+function centroDe(rawUser: User): number | undefined {
+  if ("CentroFormacion" in rawUser && rawUser.CentroFormacion != null) {
+    return Number(rawUser.CentroFormacion);
+  }
+  if ("centroFormacion" in rawUser && rawUser.centroFormacion != null) {
+    return Number(rawUser.centroFormacion);
+  }
+  if (
+    "centroFormacionIdcentroFormacion" in rawUser &&
+    rawUser.centroFormacionIdcentroFormacion != null
+  ) {
+    return Number(rawUser.centroFormacionIdcentroFormacion);
+  }
+  return undefined;
+}
 
 export function AuthProvider({ children }: PropsWithChildren) {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -15,24 +32,27 @@ export function AuthProvider({ children }: PropsWithChildren) {
       toast.error(response.message);
       return;
     }
-    
+
     if (
-        response.data?.estado.toLowerCase() != "activo" && 
-        response.data?.estado.toLowerCase() != "en formacion" &&
-        response.data?.estado.toLowerCase() != "condicionado"
-      ){
+      response.data?.estado.toLowerCase() != "activo" &&
+      response.data?.estado.toLowerCase() != "en formacion" &&
+      response.data?.estado.toLowerCase() != "condicionado"
+    ) {
       toast.error("Usuario no habilitado. Contacta con Bienestar al Aprendiz.");
-      return
+      return;
     }
 
     const rawUser = response.data!;
+    const centro = centroDe(rawUser);
 
-    const normalizado : UserNormalizado = {
+    const jornadaGuardada =
+      rawUser.perfil === "Aprendiz" ? getJornadaGuardada(rawUser.id) : null;
+
+    const normalizado: UserNormalizado = {
       ...rawUser,
-      centroFormacion:
-        "centroFormacion" in rawUser
-          ? (rawUser as Gestor).centroFormacion
-          : (rawUser as Aprendiz).centroFormacionIdcentroFormacion,
+      centroFormacion: centro ?? (rawUser as Gestor).centroFormacion,
+      CentroFormacion: centro,
+      jornada: jornadaGuardada,
     };
 
     setIsAuthenticated(true);
@@ -46,6 +66,13 @@ export function AuthProvider({ children }: PropsWithChildren) {
     toast.success("Sesión cerrada correctamente");
   };
 
+  const setJornada = (jornada: Jornada) => {
+    if (user) {
+      guardarJornada(user.id, jornada);
+    }
+    setUser((prev) => (prev ? { ...prev, jornada } : prev));
+  };
+
   return (
     <AuthContext
       value={{
@@ -53,6 +80,7 @@ export function AuthProvider({ children }: PropsWithChildren) {
         isAuthenticated,
         login,
         logout,
+        setJornada,
       }}
     >
       {children}
