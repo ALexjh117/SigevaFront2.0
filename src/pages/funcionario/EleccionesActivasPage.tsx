@@ -122,10 +122,7 @@ export default function EleccionesActivasPage() {
       selector: (row) => formatDateTime(row.fechaFin, row.horaFin),
       sortable: true,
     },
-    {
-      name: <b>Jornada</b>,
-      selector: (row) => row.jornada ?? "Sin jornada",
-    },
+  
     {
       name: <b>Estado</b>,
       cell: (row) => {

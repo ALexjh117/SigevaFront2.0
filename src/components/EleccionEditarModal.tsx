@@ -77,10 +77,14 @@ export default function EleccionEditarModal({
     if (!eleccion) return;
 
     // Payload seguro: solo enviar campos con valor válido
-    const payload: any = {
-      nombre: formData.nombre,
-      jornada: formData.jornada,
-    };
+    const payload = {
+    idcentro_formacion: user.centroFormacion, // el de la sesión
+    nombre: formData.nombre,
+    fecha_inicio: formData.fecha_inicio,
+    fecha_fin: formData.fecha_fin,
+    hora_inicio: `${formData.fecha_inicio}T${formData.hora_inicio}:00`,
+    hora_fin: `${formData.fecha_fin}T${formData.hora_fin}:00`,
+  };
 
     if (formData.fecha_inicio) payload.fecha_inicio = formData.fecha_inicio;
     if (formData.fecha_fin) payload.fecha_fin = formData.fecha_fin;
@@ -176,17 +180,7 @@ export default function EleccionEditarModal({
 
             <Col sm={12}>
               <Form.Group className="mb-3">
-                <Form.Label>Jornada</Form.Label>
-                <Form.Select
-                  name="jornada"
-                  value={formData.jornada}
-                  onChange={handleChange}
-                >
-                  <option value="">Seleccionar</option>
-                  <option value="Mañana">Mañana</option>
-                  <option value="Tarde">Tarde</option>
-                  <option value="Noche">Noche</option>
-                </Form.Select>
+
               </Form.Group>
             </Col>
           </Row>
