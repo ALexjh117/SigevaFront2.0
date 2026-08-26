@@ -13,6 +13,7 @@ import {
   loginSchema,
   type FormValues,
 } from "../components/LoginForm/models/login.schema";
+import { getJornadaGuardada } from "../utils/jornadaAprendiz";
 
 interface Props {
   perfil: "gestor" | "aprendiz";
@@ -46,7 +47,9 @@ export default function Login({ perfil }: Props) {
       if (res.data.success && res.data.data) {
         switch (res.data.data.perfil) {
           case "Aprendiz":
-            navigate("/votaciones");
+            navigate(
+              getJornadaGuardada(res.data.data.id) ? "/votaciones" : "/elegir-jornada"
+            );
             break;
           case "Funcionario":
             navigate("/dashboard");

@@ -1,26 +1,42 @@
 import { useEffect, useState } from "react";
 import { Container, Row, Col, Button } from "react-bootstrap";
 import CandidatoCard from "../../components/aprendiz/CandidatoCard";
-import { useNavigate, useParams } from "react-router-dom";
+import { Navigate, useNavigate, useParams } from "react-router-dom";
 import { api } from "../../api";
 import SelecionarCandidato from "../../components/aprendiz/ModalCandidato";
 import { FaArrowAltCircleLeft } from "react-icons/fa";
 import Navbar from "../../components/aprendiz/Navbar";
+import { useAuth } from "../../context/auth/auth.context";
+import { jornadaDelAprendiz } from "../../utils/jornadaAprendiz";
 
 export default function CandidateSelectionPage() {
   const { id } = useParams();
   const [candidatos, setCandidatos] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
   const [showModal, setShowModal] = useState(false);
   const [idCandidato, setIdCandidato] = useState("");
-  const navigate=useNavigate();
+  const navigate = useNavigate();
+  const { user } = useAuth();
+  const jornada = jornadaDelAprendiz(user);
 
   useEffect(() => {
     const loadData = async () => {
-      const response = await api.get(`/api/candidatos/listar/${id}`);
-      setCandidatos(response.data.data);
+      if (!id || !jornada) return;
+      try {
+        setLoading(true);
+        const response = await api.get(`/api/candidatos/listar/${id}`, {
+          params: { jornada },
+        });
+        setCandidatos(response.data.data ?? []);
+      } catch (error) {
+        console.error("Error al cargar candidatos:", error);
+        setCandidatos([]);
+      } finally {
+        setLoading(false);
+      }
     };
     loadData();
-  }, []);
+  }, [id, jornada]);
 
   const [candidatoSeleccionado, setCandidatoSeleccionado] = useState<{
     nombre: string;
@@ -32,13 +48,21 @@ export default function CandidateSelectionPage() {
   } | null>(null);
 
 
+  if (user?.perfil === "Aprendiz" && !jornada) {
+    return <Navigate to="/elegir-jornada" replace />;
+  }
+
   return (
     <>
       <Navbar />
-      {candidatos.length === 0 ? (
+      {loading ? (
+        <Container className="my-4 text-center">
+          <p className="text-muted">Cargando candidatos de la jornada {jornada}...</p>
+        </Container>
+      ) : candidatos.length === 0 ? (
         <Container className="my-4 text-center">
           <div>
-            No hay candicatos en esta eleccion disponibles.
+            No hay candidatos para tu jornada!
           <div className="d-flex justify-content-start">
               <Button variant="success" onClick={()=>navigate("/votaciones")}><FaArrowAltCircleLeft/> Volver</Button></div>
           </div>

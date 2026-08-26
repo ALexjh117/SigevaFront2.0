@@ -8,6 +8,7 @@ import {
 import "./App.css";
 import VotacionesActivasPage from "./pages/aprendiz/VotacionesActivasPage";
 import Login from "./pages/Login";
+import ElegirJornadaPage from "./pages/aprendiz/ElegirJornadaPage";
 import CandidateSelectionPage from "./pages/aprendiz/SeleccionarCandidatoPage";
 import ConfirmarVoto from "./pages/aprendiz/ConfirmarVoto";
 import GestionCandidatos from "./pages/funcionario/GestionCandidatos";
@@ -74,6 +75,7 @@ function App() {
 
         {/* Rutas de Aprendiz */}
         <Route element={<PrivateLayout />}>
+          <Route path="/elegir-jornada" element={<ElegirJornadaPage />} />
           <Route path="/votaciones" element={<VotacionesActivasPage />} />
           <Route path="/seleccion/:id" element={<CandidateSelectionPage />} />
           <Route path="/confirmar-voto" element={<ConfirmarVoto />} />
