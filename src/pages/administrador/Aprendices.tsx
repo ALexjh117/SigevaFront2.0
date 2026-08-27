@@ -61,13 +61,45 @@ const Aprendices: React.FC = () => {
     };
     loadData();
   }, [user?.centroFormacion]);
+  const normalizarTexto = (texto: unknown) =>
+    String(texto ?? "")
+      .normalize("NFD")
+      .replace(/[\u0300-\u036f]/g, "")
+      .replace(/\s+/g, " ")
+      .trim()
+      .toLowerCase();
 
-  const filteredData = aprendices.filter((a) =>
-    [a.nombres, a.apellidos, a.numeroDocumento, a.email]
-      .join(" ")
-      .toLowerCase()
-      .includes(buscar.toLowerCase())
-  );
+  const filteredData = aprendices.filter((a) => {
+    const textoBusqueda = normalizarTexto(buscar);
+
+    const datosAprendiz = [
+      a.idaprendiz,
+      a.idgrupo,
+      a.idprogramaFormacion,
+      a.perfilIdperfil,
+      a.centroFormacionIdcentroFormacion,
+      a.nombres,
+      a.apellidos,
+      a.celular,
+      a.estado,
+      a.tipoDocumento,
+      a.numeroDocumento,
+      a.email,
+      
+
+      // Relaciones
+      a.centro_formacion?.centroFormacioncol,
+      a.grupo?.grupo,
+      a.programa?.programa,
+    ];
+    const textoCompleto = normalizarTexto(
+      datosAprendiz
+        .filter((dato) => dato !== null && dato !== undefined)
+        .join(" ")
+    );
+
+    return textoCompleto.includes(textoBusqueda);
+  });
 
   const columns: TableRow[] = [
     {
