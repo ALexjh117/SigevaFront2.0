@@ -53,7 +53,7 @@ export default function EleccionesActivasPage() {
     try {
       const res = await api.get(`/api/eleccion/traerTodas/${user.centroFormacion}`);
   
-      setEleccionActiva(res.data.eleccionesActivas);
+      setEleccionActiva([...res.data.eleccionesActivas].reverse());
       setLoading(false);
     } catch (error) {
       console.error("Error al cargar las votaciones:", error);
@@ -248,7 +248,7 @@ export default function EleccionesActivasPage() {
           if (user?.centroFormacion) {
             api.get(`/api/eleccionPorCentro/${user?.centroFormacion}`)
               .then(res => {
-                setEleccionActiva(res.data.eleccionesActivas)
+                setEleccionActiva([...res.data.eleccionesActivas].reverse());
                 setLoading(false);
                 loadData();
               })
