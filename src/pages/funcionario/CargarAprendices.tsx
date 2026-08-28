@@ -12,6 +12,7 @@ import Spinner from "react-bootstrap/Spinner";
 import { api } from "../../api";
 import { useAuth } from "../../context/auth/auth.context";
 import type { User, Gestor } from "../../context/auth/types/authTypes";
+import { esRolDeCentro } from "../../utils/roles";
 import Modal from "react-bootstrap/Modal";
 import { Toast } from "react-bootstrap";
 import ToastContainer from "react-bootstrap/ToastContainer";
@@ -25,9 +26,8 @@ const UPLOAD_URL = "/api/aprendices/importarExcel";
 
 export default function CargarAprendices() {
   const { user, isAuthenticated } = useAuth();
-  const isFuncionario =
-    isAuthenticated && (user as User)?.perfil === "Funcionario";
-  const userId = isFuncionario ? (user as Gestor).id : null;
+  const puedeImportar = isAuthenticated && esRolDeCentro((user as User)?.perfil);
+  const userId = puedeImportar ? (user as Gestor).id : null;
 
   const [file, setFile] = useState<File | null>(null);
   const [jornada, setJornada] = useState("Mañana");
@@ -130,10 +130,10 @@ export default function CargarAprendices() {
 
   // onSubmit ahora acepta `force` para obligar la subida incluso si hay omitidos
   const onSubmit = async (force = false) => {
-    if (!isFuncionario) {
+    if (!puedeImportar) {
       setMsg({
         type: "warning",
-        text: "Solo los usuarios con perfil Funcionario pueden importar aprendices.",
+        text: "Solo el funcionario o el admin de centro pueden importar aprendices de su sede.",
       });
       setShowToast(true);
       return;
@@ -259,10 +259,10 @@ export default function CargarAprendices() {
       <Container className="mb-5">
         <h1>Cargar Archivos De Votantes</h1>
 
-        {!isFuncionario && (
+        {!puedeImportar && (
           <Alert variant="warning" className="mt-3">
-            Debes iniciar sesión como <strong>Funcionario</strong> para importar
-            aprendices
+            Debes iniciar sesión como <strong>funcionario o admin de centro</strong> para importar
+            aprendices de tu sede
           </Alert>
         )}
         {msg && (
@@ -280,7 +280,7 @@ export default function CargarAprendices() {
               type="file"
               accept=".xlsx,.xls"
               onChange={onFileChange}
-              disabled={!isFuncionario || subiendo}
+              disabled={!puedeImportar || subiendo}
             />
           </Form.Group>
 
@@ -289,7 +289,7 @@ export default function CargarAprendices() {
             <Form.Select
               value={jornada}
               onChange={(e) => setJornada(e.target.value)}
-              disabled={!isFuncionario || subiendo}
+              disabled={!puedeImportar || subiendo}
             >
               <option value="Mañana">Mañana</option>
               <option value="Tarde">Tarde</option>
@@ -392,7 +392,7 @@ export default function CargarAprendices() {
         <Button
           variant="primary"
           onClick={() => setShowConfirmModal(true)}
-          disabled={!isFuncionario || !file || subiendo}
+          disabled={!puedeImportar || !file || subiendo}
         >
           {subiendo ? (
             <>

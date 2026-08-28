@@ -37,8 +37,9 @@ const equipoActual: Miembro[] = [
   {
     nombre: "Maikol Estiven Daza",
     rol: "Backend",
-    avatar: "",
+     avatar: "/avatars/maikol-sg.jpeg",
     github: "maiKol269",
+    
     grupo: "Desarrolladores",
   },
   {
@@ -58,7 +59,7 @@ const equipoActual: Miembro[] = [
   {
     nombre: "Sofia Bonilla Gallego ",
     rol: "Frontend",
-    avatar: "",
+     avatar: "/avatars/sofia-sg.jpeg",
     github: "sofiaboni06",
     grupo: "Desarrolladores",
   },

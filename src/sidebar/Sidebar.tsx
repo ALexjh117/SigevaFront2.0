@@ -5,6 +5,7 @@ import { Button, Dropdown } from 'react-bootstrap';
 import { BsList } from 'react-icons/bs';
 import "./sidebar.css";
 import { useAuth } from '../context/auth/auth.context';
+import { esAdministradorRed, esRolDeCentro } from '../utils/roles';
 
 interface SidebarProps {
   onNavigate?: () => void;
@@ -22,7 +23,7 @@ const Sidebar: React.FC<SidebarProps> = ({ onNavigate }) => {
   const navigate = useNavigate();
 
   const { user, logout } = useAuth();
-  const isAdmin = user?.perfil?.toLowerCase() === 'administrador';
+  const isAdmin = esAdministradorRed(user?.perfil);
   const sidebarClass = isAdmin ? 'admin-sidebar' : '';
 
   // No se usan directamente, se controla con setShowSidebar en eventos
@@ -47,7 +48,7 @@ const Sidebar: React.FC<SidebarProps> = ({ onNavigate }) => {
 
     const commonItems: NavItem[] = [];
 
-    if (user.perfil?.toLowerCase() === 'funcionario') {
+    if (esRolDeCentro(user.perfil)) {
       return [
         { to: '/dashboard', icon: <FaHome />, text: 'Inicio', type: 'link' },
         { 
@@ -58,24 +59,22 @@ const Sidebar: React.FC<SidebarProps> = ({ onNavigate }) => {
             { to: '/aprendices', icon: <FaUserGraduate />, text: 'Aprendices' },
           ] 
         },
-        // { to: '/gestion-candidatos', icon: <FaUserTie />, text: 'Gestión de Candidatos', type: 'link' },
         { to: '/cargar-aprendices', icon: <FaUserPlus />, text: 'Cargar Aprendices', type: 'link' },
-        //{ to: '/panel-metricas', icon: <FaChartBar />, text: 'Métricas', type: 'link' },
         { to: '/elecciones', icon: <FaClipboardList />, text: 'Elecciones', type: 'link' },
       ];
     }
 
-    if (user.perfil?.toLowerCase() === 'administrador') {
+    if (esAdministradorRed(user.perfil)) {
       return [
         { to: '/dashboard-admin', icon: <FaHome />, text: 'Dashboard', type: 'link' },
+        { to: '/aprendices', icon: <FaUserGraduate />, text: 'Aprendices', type: 'link' },
         { 
           type: 'dropdown', 
           text: 'Gestión de Usuarios', 
           icon: <FaUsers />,
           items: [
-            { to: '/aprendices', icon: <FaUserGraduate />, text: 'Aprendices' },
             { to: '/funcionarios', icon: <FaUserTie />, text: 'Funcionarios' },
-             { to: '/cargar-aprendices-admin', icon: <FaUserPlus/>, text: 'Cargar aprendices' },
+            { to: '/cargar-aprendices-admin', icon: <FaUserPlus/>, text: 'Cargar aprendices' },
           ] 
         },
         { to: '/aprendiz-form', icon: <FaUserPlus />, text: 'Añadir Aprendiz', type: 'link' },
