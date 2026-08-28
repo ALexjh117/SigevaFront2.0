@@ -2,6 +2,7 @@
 import { useState, useEffect } from "react";
 import { Modal, Button, Form, Row, Col } from "react-bootstrap";
 import { api } from "../api";
+import { useAuth } from "../context/auth/auth.context";
 
 interface Eleccion {
   ideleccion: number;
@@ -11,7 +12,7 @@ interface Eleccion {
   horaInicio?: string;
   horaFin?: string;
   jornada?: string | null;
-
+  idcentroFormacion?: number;
 }
 
 interface Props {
@@ -28,6 +29,7 @@ export default function EleccionEditarModal({
   eleccion,
   onUpdated,
 }: Props) {
+  const { user } = useAuth();
   const [formData, setFormData] = useState({
     nombre: "",
     fecha_inicio: "",
@@ -76,15 +78,17 @@ export default function EleccionEditarModal({
   const handleSubmit = async () => {
     if (!eleccion) return;
 
-    // Payload seguro: solo enviar campos con valor válido
-    const payload = {
-    idcentro_formacion: user.centroFormacion, // el de la sesión
-    nombre: formData.nombre,
-    fecha_inicio: formData.fecha_inicio,
-    fecha_fin: formData.fecha_fin,
-    hora_inicio: `${formData.fecha_inicio}T${formData.hora_inicio}:00`,
-    hora_fin: `${formData.fecha_fin}T${formData.hora_fin}:00`,
-  };
+    const idCentro =
+      eleccion.idcentroFormacion ?? user?.centroFormacion;
+    if (!idCentro) {
+      alert("No se pudo determinar el centro de formación de esta elección.");
+      return;
+    }
+
+    const payload: Record<string, string | number> = {
+      idcentro_formacion: idCentro,
+      nombre: formData.nombre,
+    };
 
     if (formData.fecha_inicio) payload.fecha_inicio = formData.fecha_inicio;
     if (formData.fecha_fin) payload.fecha_fin = formData.fecha_fin;
