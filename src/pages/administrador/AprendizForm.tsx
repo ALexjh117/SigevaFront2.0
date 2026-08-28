@@ -6,6 +6,7 @@ import { useForm } from "react-hook-form";
 import toast, { Toaster } from "react-hot-toast";
 import { useEffect, useState } from "react";
 import { useAuth } from "../../context/auth/auth.context";
+import { esAdministradorRed } from "../../utils/roles";
 
 export interface ProgramaFormacion {
   idprogramaFormacion: number;
@@ -58,13 +59,12 @@ const getProgramas = async () => {
 };
 
   useEffect(() => {
-    if (!user?.centroFormacion) {
-   
-      return;
+    if (!esAdministradorRed(user?.perfil) && !user?.centroFormacion) {
+      return
     }
-    getCentros();
-    getProgramas();
-  }, []);
+    getCentros()
+    getProgramas()
+  }, [user?.perfil, user?.centroFormacion])
 
   const { register, handleSubmit } = useForm({
     defaultValues: aprendiz
@@ -218,7 +218,7 @@ const getProgramas = async () => {
                     </Form.Select>
                   </Form.Group>
                 </Col>
-                {user?.perfil == "Administrador"?
+                {esAdministradorRed(user?.perfil)?
                 <Col md={6}>
                   <Form.Group>
                     <Form.Label>Centro Formación</Form.Label>
@@ -227,7 +227,7 @@ const getProgramas = async () => {
                       >
                       <option value={0}>Seleccione...</option>
                       {centros.map((c) => (
-                        <option value={c.idcentroFormacion}>
+                        <option key={c.idcentroFormacion} value={c.idcentroFormacion}>
                           {c.centroFormacioncol}
                         </option>
                       ))}

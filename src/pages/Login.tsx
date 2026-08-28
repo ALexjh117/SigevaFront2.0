@@ -54,6 +54,9 @@ export default function Login({ perfil }: Props) {
           case "Funcionario":
             navigate("/dashboard");
             break;
+          case "admin_sistema":
+            navigate("/dashboard");
+            break;
           case "Administrador":
             navigate("/dashboard-admin");
             break;

@@ -2,7 +2,7 @@ export interface Gestor {
   id: number;
   email: string;
   estado: string;
-  perfil: "Funcionario" | "Administrador";
+  perfil: "Funcionario" | "Administrador" | "admin_sistema";
   centroFormacion: number;
 }
 
@@ -29,9 +29,10 @@ export interface UserNormalizado {
   id: number;
   email?: string;
   nombre?: string;
+  nombres?: string;
   apellidos?: string;
   estado: string;
-  perfil: "Funcionario" | "Administrador" | "Aprendiz";
+  perfil: "Funcionario" | "Administrador" | "Aprendiz" | "admin_sistema";
   jornada?: string | null;
   CentroFormacion?: number;
   centroFormacion?: number;

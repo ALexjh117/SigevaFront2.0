@@ -27,6 +27,7 @@ import { DashboardAdmin } from "./pages/administrador/DashboardAdmin";
 import { Toaster } from "react-hot-toast";
 import CargarAprendicesAdmin from "./pages/administrador/CargarAprendicesAdmin";
 import Equipo from "./pages/Equipo";
+import { esRolDeCentro } from "./utils/roles";
 
 
 function PublicLayout() {
@@ -35,8 +36,6 @@ function PublicLayout() {
 
 function PrivateLayout() {
   const { isAuthenticated } = useAuth();
-  // const isAuth = !!localStorage.getItem("token");
-  // if (!isAuth) return <Navigate to="/" replace />;
 
   if (!isAuthenticated) {
     return <Navigate to="/" replace />;
@@ -45,7 +44,11 @@ function PrivateLayout() {
   return <Outlet />;
 }
 
-function FuncionarioLayout() {
+function GestionLayout() {
+  const { user } = useAuth();
+  if (user?.perfil === "Aprendiz") {
+    return <Navigate to="/votaciones" replace />;
+  }
   return (
     <MainLayout showSidebar={true}>
       <Outlet />
@@ -53,7 +56,14 @@ function FuncionarioLayout() {
   );
 }
 
-function AdminLayout() {
+function RedSenaLayout() {
+  const { user } = useAuth();
+  if (user?.perfil === "Aprendiz") {
+    return <Navigate to="/votaciones" replace />;
+  }
+  if (esRolDeCentro(user?.perfil)) {
+    return <Navigate to="/dashboard" replace />;
+  }
   return (
     <MainLayout showSidebar={true}>
       <Outlet />
@@ -80,8 +90,8 @@ function App() {
           <Route path="/seleccion/:id" element={<CandidateSelectionPage />} />
           <Route path="/confirmar-voto" element={<ConfirmarVoto />} />
 
-          {/* Rutas de Funcionario */}
-          <Route element={<FuncionarioLayout />}>
+          {/* Gestión de centro: funcionario y admin_sistema */}
+          <Route element={<GestionLayout />}>
             <Route path="/dashboard" element={<DashboardAdmin />} />
             <Route path="/gestion-candidatos/:idEleccion" element={<GestionCandidatos />} />
             <Route path="/cargar-aprendices" element={<CargarAprendices />} />
@@ -89,15 +99,15 @@ function App() {
             <Route path="/elecciones" element={<EleccionesActivasPage />} />
             <Route path="/agregar-candidato" element={<AgregarCandidato />} />
             <Route path="/nueva-eleccion" element={<FormEleccion />} />
+            <Route path="/aprendices" element={<Aprendices />} />
+            <Route path="/aprendiz-form" element={<AprendizForm />} />
           </Route>
 
-          {/* Rutas de Administrador */}
-          <Route element={<AdminLayout />}>
+          {/* Torre de red: solo Administrador */}
+          <Route element={<RedSenaLayout />}>
             <Route path="/dashboard-admin" element={<DashboardAdmin />} />
-            <Route path="/aprendices" element={<Aprendices />} />
             <Route path="/funcionarios" element={<Funcionarios />} />
-             <Route path="/cargar-aprendices-admin" element={<CargarAprendicesAdmin/>} />
-            <Route path="/aprendiz-form" element={<AprendizForm />} />
+            <Route path="/cargar-aprendices-admin" element={<CargarAprendicesAdmin/>} />
           </Route>
         </Route>
 

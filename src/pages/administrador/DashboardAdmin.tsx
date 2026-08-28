@@ -1,10 +1,11 @@
 import { useEffect, useState } from "react";
 import { Card, Col, Container, Row } from "react-bootstrap";
 import { MdHowToVote, MdOutlineAssignment } from "react-icons/md";
-import { FaUsers, FaPlusCircle } from "react-icons/fa";
+import { FaUsers, FaPlusCircle, FaUserGraduate } from "react-icons/fa";
 import { api } from "../../api";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/auth/auth.context";
+import { esAdministradorRed } from "../../utils/roles";
 export const DashboardAdmin = () => {
   const navigate = useNavigate();
   const [votacionesActivas, setVotacionesActivas] = useState<number>(0);
@@ -12,22 +13,21 @@ export const DashboardAdmin = () => {
   const [aprendizDisponible, setAprendizDisponible] = useState<number>(0);
   const [votosHoy, setVotosHoy] = useState<number>(0);
   const {user} = useAuth();
+  const esRed = esAdministradorRed(user?.perfil);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         // Votaciones activas
-        const resActivas = await api.get(user?.perfil =="Administrador"? "api/eleccion/activas":`api/eleccionPorCentro/${user?.centroFormacion}`);
+        const resActivas = await api.get(esRed? "api/eleccion/activas":`api/eleccionPorCentro/${user?.centroFormacion}`);
         setVotacionesActivas(resActivas.data.eleccionesActivas?.length || 0);
 
-        // Votaciones activas
-        const resAprendizActivo = await api.get(user?.perfil =="Administrador"? "api/aprendiz/disponibles/":`api/aprendiz/disponibles/centros/${user?.centroFormacion}`);
+        const resAprendizActivo = await api.get(esRed? "api/aprendiz/disponibles/":`api/aprendiz/disponibles/centros/${user?.centroFormacion}`);
         
         setAprendizDisponible(resAprendizActivo.data.data.length || 0);
 
-        // Usuarios registrados (aprendices)
-        const resUsuarios = await api.get(user?.perfil == 'Administrador'? "/api/aprendiz/listar" : `api/aprendiz/inscritos/centro/${user?.centroFormacion}`);
-        user?.perfil == 'Administrador'? setUsuariosRegistrados(resUsuarios.data?.length || 0) : setUsuariosRegistrados(resUsuarios.data.data?.length || 0);
+        const resUsuarios = await api.get(esRed? "/api/aprendiz/listar" : `api/aprendiz/inscritos/centro/${user?.centroFormacion}`);
+        esRed? setUsuariosRegistrados(resUsuarios.data?.length || 0) : setUsuariosRegistrados(resUsuarios.data.data?.length || 0);
 
         // Votos totales hoy
         const resVotos = await api.get("/api/votoXCandidato/traer");
@@ -60,13 +60,15 @@ export const DashboardAdmin = () => {
                   color: "#5F2EEA",
                 }}
               >
-                {user?.perfil}
+                {user?.perfil === "admin_sistema"
+                  ? "admin de centro"
+                  : user?.perfil}
               </span>
             </h2>
             <p className="text-muted">
-              Desde aquí puedes gestionar usuarios, supervisar el registro de
-              aprendices y acceder a los reportes de votaciones realizadas en
-              cada centro de formación.
+              {esRed
+                ? "Desde aquí puedes gestionar usuarios, supervisar el registro de aprendices y acceder a los reportes de votaciones realizadas en cada centro de formación."
+                : "Desde aquí administras las elecciones y el padrón de tu centro de formación."}
             </p>
           </Col>
         </Row>
@@ -93,7 +95,11 @@ export const DashboardAdmin = () => {
 
           {/* Usuarios Registrados */}
           <Col md={4}>
-            <Card className="shadow-sm text-center p-3">
+            <Card
+              className="shadow-sm text-center p-3"
+              style={{ cursor: "pointer" }}
+              onClick={() => navigate("/aprendices")}
+            >
               <Card.Body>
                 <FaUsers size={40} color="#28a745" />
                 <Card.Title>Aprendices Registrados</Card.Title>
@@ -132,6 +138,21 @@ export const DashboardAdmin = () => {
             </Col>
           </Row>
           <Row className="">
+            {esRed && (
+            <Col md="auto">
+              <Card className="shadow-sm text-center p-3">
+                <Card.Body>
+                  <FaUserGraduate
+                    size={40}
+                    className="text-primary mb-2"
+                    style={{ cursor: "pointer" }}
+                    onClick={() => navigate("/aprendices")}
+                  />
+                  <Card.Title>Padrón de la red</Card.Title>
+                </Card.Body>
+              </Card>
+            </Col>
+            )}
             <Col md="auto">
               <Card className="shadow-sm text-center p-3">
                 <Card.Body>
@@ -147,7 +168,7 @@ export const DashboardAdmin = () => {
                 </Card.Body>
               </Card>
             </Col>
-          {user?.perfil =="Administrador" &&  
+          {esRed &&  
             <Col md="auto">
               <Card className="shadow-sm text-center p-3">
                 <Card.Body>

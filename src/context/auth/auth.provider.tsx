@@ -4,6 +4,7 @@ import type { Gestor, ResponseType, User, UserNormalizado } from "./types/authTy
 import toast from "react-hot-toast";
 import type { Jornada } from "../../constants/jornada";
 import { getJornadaGuardada, guardarJornada } from "../../utils/jornadaAprendiz";
+import { setActorHeader } from "../../api";
 
 function centroDe(rawUser: User): number | undefined {
   if ("CentroFormacion" in rawUser && rawUser.CentroFormacion != null) {
@@ -57,12 +58,18 @@ export function AuthProvider({ children }: PropsWithChildren) {
 
     setIsAuthenticated(true);
     setUser(normalizado);
+    if (rawUser.perfil === "Aprendiz") {
+      setActorHeader(null);
+    } else {
+      setActorHeader(rawUser.id);
+    }
     toast.success("¡Inicio de sesión exitoso!");
   };
 
   const logout = () => {
     setIsAuthenticated(false);
     setUser(null);
+    setActorHeader(null);
     toast.success("Sesión cerrada correctamente");
   };
 
