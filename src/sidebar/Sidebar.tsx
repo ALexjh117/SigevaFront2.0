@@ -67,6 +67,7 @@ const Sidebar: React.FC<SidebarProps> = ({ onNavigate }) => {
     if (esAdministradorRed(user.perfil)) {
       return [
         { to: '/dashboard-admin', icon: <FaHome />, text: 'Dashboard', type: 'link' },
+        { to: '/elecciones', icon: <FaClipboardList />, text: 'Elecciones de la red', type: 'link' },
         { to: '/aprendices', icon: <FaUserGraduate />, text: 'Aprendices', type: 'link' },
         { 
           type: 'dropdown', 
@@ -168,8 +169,19 @@ const Sidebar: React.FC<SidebarProps> = ({ onNavigate }) => {
             );
           })}
         </nav>
-        
+        {isAdmin && (
+          <div className="sidebar-motto">
+            <p>
+              La inteligencia no es un don para guardar.
+              Es un privilegio, un regalo.
+              Se honra cuando se usa para el bien de los demás.
+            </p>
+          </div>
+        )}
         <div className="sidebar-footer">
+          {isAdmin && user?.email && (
+            <span className="sidebar-user">{user.email}</span>
+          )}
           <button
             className="sidebar-link"
             onClick={(e) => {
