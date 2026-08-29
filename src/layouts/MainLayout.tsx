@@ -4,13 +4,13 @@ import Sidebar from '../sidebar/Sidebar';
 import '../Dashboard.css';
 import '../theme/admin.css';
 import { useAuth } from '../context/auth/auth.context';
-import { esAdministradorRed } from '../utils/roles';
+import { usaTemaAdmin } from '../utils/roles';
+import { jornadaDelAprendiz } from '../utils/jornadaAprendiz';
 import {
   etiquetaPerfil,
   inicialesDeUsuario,
   nombreDeUsuario,
 } from '../utils/usuario';
-import { SigevaName } from '../components/landing/SigevaMark';
 
 interface MainLayoutProps {
   children: ReactNode;
@@ -20,6 +20,7 @@ interface MainLayoutProps {
 
 function tituloDeRuta(pathname: string) {
   if (pathname.startsWith('/dashboard')) return 'Inicio';
+  if (pathname.startsWith('/panel-metricas')) return 'Estadísticas';
   if (pathname.startsWith('/elecciones')) return 'Elecciones';
   if (pathname.startsWith('/funcionarios')) return 'Funcionarios';
   if (pathname.startsWith('/aprendices')) return 'Aprendices';
@@ -27,20 +28,25 @@ function tituloDeRuta(pathname: string) {
   if (pathname.startsWith('/cargar-aprendices')) return 'Cargar aprendices';
   if (pathname.startsWith('/gestion-candidatos')) return 'Candidatos';
   if (pathname.startsWith('/nueva-eleccion')) return 'Nueva elección';
+  if (pathname.startsWith('/votaciones')) return 'Votos';
+  if (pathname.startsWith('/elegir-jornada')) return 'Jornada';
+  if (pathname.startsWith('/seleccion')) return 'Votos';
+  if (pathname.startsWith('/confirmar-voto')) return 'Votos';
   return 'Panel';
 }
 
 const MainLayout = ({ children, showSidebar = true, role = 'funcionario' }: MainLayoutProps) => {
   const { user } = useAuth();
   const { pathname } = useLocation();
-  const isAdminRed = esAdministradorRed(user?.perfil);
+  const lookAdmin = usaTemaAdmin(user?.perfil);
+  const jornada = jornadaDelAprendiz(user);
 
   return (
-    <div className={`main-layout ${role}${isAdminRed ? ' theme-admin' : ''}`}>
-      {showSidebar && role === 'funcionario' && <Sidebar />}
-      
-      <main className={`main-content ${showSidebar && role === 'funcionario' ? 'with-sidebar' : ''}`}>
-        {isAdminRed && (
+    <div className={`main-layout ${role}${lookAdmin ? ' theme-admin' : ''}`}>
+      {showSidebar && <Sidebar />}
+
+      <main className={`main-content ${showSidebar ? 'with-sidebar' : ''}`}>
+        {lookAdmin && (
           <header className="admin-topbar">
             <div className="admin-topbar-brand">
               <img
@@ -49,12 +55,7 @@ const MainLayout = ({ children, showSidebar = true, role = 'funcionario' }: Main
                 className="admin-topbar-fabrica"
               />
               <span className="admin-topbar-sep" aria-hidden />
-              <div className="admin-topbar-product">
-                <p className="admin-topbar-kicker">
-                  <SigevaName />
-                </p>
-                <p className="admin-topbar-title">{tituloDeRuta(pathname)}</p>
-              </div>
+              <p className="admin-topbar-title">{tituloDeRuta(pathname)}</p>
             </div>
             <div className="admin-topbar-trace" aria-hidden>
               <svg viewBox="0 0 720 48" preserveAspectRatio="none">
@@ -88,6 +89,12 @@ const MainLayout = ({ children, showSidebar = true, role = 'funcionario' }: Main
                 <circle cx="634" cy="24" r="2.4" fill="#39A900" />
               </svg>
             </div>
+            {jornada ? (
+              <span className="admin-topbar-jornada">
+                <small>Jornada</small>
+                {jornada}
+              </span>
+            ) : null}
             <div className="admin-topbar-user">
               <span className="admin-topbar-avatar" aria-hidden>
                 {inicialesDeUsuario(user)}

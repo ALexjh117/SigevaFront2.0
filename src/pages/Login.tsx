@@ -12,7 +12,8 @@ import {
   loginSchema,
   type FormValues,
 } from "../components/LoginForm/models/login.schema";
-import { getJornadaGuardada } from "../utils/jornadaAprendiz";
+import { getJornadaGuardada, idDelAprendiz } from "../utils/jornadaAprendiz";
+import { esJornada } from "../constants/jornada";
 import { SigevaWordmark, SigevaName } from "../components/landing/SigevaMark";
 import "./Login.css";
 
@@ -50,11 +51,14 @@ export default function Login(_props: Props) {
 
       if (res.data.success && res.data.data) {
         switch (res.data.data.perfil) {
-          case "Aprendiz":
-            navigate(
-              getJornadaGuardada(res.data.data.id) ? "/votaciones" : "/elegir-jornada"
-            );
+          case "Aprendiz": {
+            const id = idDelAprendiz(res.data.data);
+            const yaEligio =
+              esJornada(res.data.data.jornada) ||
+              (id ? Boolean(getJornadaGuardada(id)) : false);
+            navigate(yaEligio ? "/votaciones" : "/elegir-jornada");
             break;
+          }
           case "Funcionario":
             navigate("/dashboard");
             break;

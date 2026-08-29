@@ -19,8 +19,11 @@ import {
   DetalleFilaModal,
   LupaDetalle,
   SemaforoEstado,
+  etiquetaEstado,
   textoCorto,
 } from "../../components/tabla/detalleTabla";
+import { MiniGraficas, contarPor, topN } from "../../components/graficas/MiniGraficas";
+import { etiquetaAnidada } from "../../utils/comoLista";
 
 export interface AprendizResponse {
   idaprendiz: number;
@@ -123,10 +126,34 @@ const Aprendices: React.FC = () => {
             Gestión de <span className="app-accent">Aprendices</span>
           </h3>
           <p className="text-muted mb-0">
-            Aprendices de la red habilitados para votar.
+            {esRed
+              ? "Aprendices de la red habilitados para votar."
+              : "Aprendices de tu centro de formación habilitados para votar."}
           </p>
         </Col>
       </Row>
+
+      <MiniGraficas
+        barras={{
+          titulo: esRed ? "Aprendices por centro" : "Aprendices por programa",
+          datos: topN(
+            contarPor(
+              aprendices,
+              (a) =>
+                (esRed
+                  ? etiquetaAnidada(a.centro_formacion)
+                  : etiquetaAnidada(a.programa, ["programa"])) || "Sin dato"
+            ),
+            8
+          ),
+          horizontal: true,
+          unidad: "aprendices",
+        }}
+        dona={{
+          titulo: "Por estado",
+          datos: contarPor(aprendices, (a) => etiquetaEstado(a.estado)),
+        }}
+      />
 
       <Row className="mb-3 d-flex justify-content-between">
         <Col sm={6}>
@@ -155,7 +182,7 @@ const Aprendices: React.FC = () => {
           pagination
           highlightOnHover
           striped
-          customStyles={esRed ? adminTableStyles : undefined}
+          customStyles={adminTableStyles}
         />
       </div>
 
