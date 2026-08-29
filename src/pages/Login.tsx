@@ -2,6 +2,7 @@ import toast from "react-hot-toast";
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
 import { Link, useLocation, useNavigate } from "react-router-dom";
+import { FaArrowLeft, FaArrowRight, FaLock, FaUserGraduate, FaUserTie } from "react-icons/fa";
 import { api } from "../api";
 import { useAuth } from "../context/auth/auth.context";
 import type { ResponseType, User } from "../context/auth/types/authTypes";
@@ -12,6 +13,7 @@ import {
   type FormValues,
 } from "../components/LoginForm/models/login.schema";
 import { getJornadaGuardada } from "../utils/jornadaAprendiz";
+import { SigevaWordmark, SigevaName } from "../components/landing/SigevaMark";
 import "./Login.css";
 
 interface Props {
@@ -64,43 +66,46 @@ export default function Login(_props: Props) {
             break;
         }
       }
-    } catch (error) {
+    } catch {
       toast.error("Credenciales inválidas. Verifica tu correo y contraseña.");
     }
   };
 
   return (
     <div className="login-page">
-      <Link to="/" className="login-back">
-        ← Volver al inicio
-      </Link>
-
       <section className="login-card" aria-label="Inicio de sesión">
         <aside className="login-visual">
           <img
+            className="login-visual-photo"
             src="/landing/login-voto.png"
             alt="Aprendices depositando su voto en urna"
           />
           <div className="login-visual-copy">
-            <div className="login-brands">
-              <div className="login-brands-chip">
-                <img src="/logo_fabrica.png" alt="Fábrica de Software SENA" />
-                <span className="login-brands-sep" aria-hidden />
-                <img src="/sena.png" alt="SENA" />
-              </div>
-            </div>
             <p className="login-visual-kicker">Una voz, un voto</p>
-            <h2>SIGEVA</h2>
-            <p>Sistema de Gestión de Votos para Aprendices. Entre y elija con claridad.</p>
+            <h2>
+              <SigevaName />
+            </h2>
+            <p>Sistema de Gestión de Votos para Aprendices. Ético y fácil de usar.</p>
           </div>
         </aside>
 
         <div className="login-panel">
+          <div className="login-panel-brands">
+            <div className="login-brand-sigeva">
+              <SigevaWordmark />
+              <small>Sistema Electoral SENA</small>
+            </div>
+            <span className="login-brand-sep" aria-hidden />
+            <img
+              src="/logo_fabrica.png"
+              alt="Fábrica de Software SENA"
+              className="login-brand-fab"
+            />
+          </div>
+
           <h1>Iniciar sesión</h1>
           <p className="login-panel-lead">
-            {esAprendiz
-              ? "Acceso para aprendices. Use su correo institucional para votar."
-              : "Acceso para funcionarios y administradores de la red."}
+            Accede para garantizar tu voto de forma confiable y segura.
           </p>
 
           <div className="login-switch" role="tablist" aria-label="Tipo de usuario">
@@ -110,6 +115,7 @@ export default function Login(_props: Props) {
               role="tab"
               aria-selected={esAprendiz}
             >
+              <FaUserGraduate />
               Aprendiz
             </Link>
             <Link
@@ -118,15 +124,14 @@ export default function Login(_props: Props) {
               role="tab"
               aria-selected={!esAprendiz}
             >
+              <FaUserTie />
               Funcionario
             </Link>
           </div>
 
           <Form onSubmit={handleSubmit(onSubmit)}>
             <Form.Group className="mb-3">
-              <Form.Label>
-                <strong>Correo electrónico</strong>
-              </Form.Label>
+              <Form.Label>Correo electrónico</Form.Label>
               <Controller
                 name="email"
                 control={control}
@@ -134,21 +139,17 @@ export default function Login(_props: Props) {
                   <Form.Control
                     id="email"
                     type="email"
-                    placeholder="Ingrese su correo electrónico"
+                    placeholder="nombreusuario@email.com"
                     {...field}
                     className={errors.email ? "is-invalid" : ""}
                   />
                 )}
               />
-              {errors.email && (
-                <p className="login-error">{errors.email.message}</p>
-              )}
+              {errors.email && <p className="login-error">{errors.email.message}</p>}
             </Form.Group>
 
-            <Form.Group className="mb-4">
-              <Form.Label>
-                <strong>Contraseña</strong>
-              </Form.Label>
+            <Form.Group className="mb-3">
+              <Form.Label>Contraseña</Form.Label>
               <Controller
                 name="password"
                 control={control}
@@ -167,18 +168,28 @@ export default function Login(_props: Props) {
               )}
             </Form.Group>
 
-            <Form.Group>
-              <Button
-                type="submit"
-                className="login-submit"
-                disabled={isSubmitting}
-              >
-                {isSubmitting ? "Ingresando..." : "Ingresar"}
-              </Button>
-            </Form.Group>
+            <Button type="submit" className="login-submit" disabled={isSubmitting}>
+              <span>{isSubmitting ? "Ingresando..." : "Ingresar"}</span>
+              <FaArrowRight />
+            </Button>
           </Form>
 
-          <p className="login-footnote">Fábrica de Software · Centro de formación</p>
+          <Link
+            to={`/recuperar-contrasena?desde=${esAprendiz ? "aprendiz" : "funcionario"}`}
+            className="login-recover"
+          >
+            <FaLock /> Recuperar contraseña
+          </Link>
+
+          <div className="login-steps" aria-hidden>
+            <i />
+            <span />
+          </div>
+
+          <Link to="/" className="login-devolver">
+            <FaArrowLeft />
+            <span>Devolver</span>
+          </Link>
         </div>
       </section>
     </div>

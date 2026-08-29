@@ -1,9 +1,11 @@
 import React, { useState } from "react";
-import Sigeva from "../assets/sena-sigeva.svg";
+import { Modal } from "react-bootstrap";
 import { GrGithub } from "react-icons/gr";
-import { useNavigate } from "react-router-dom";
-import { Button, Modal } from "react-bootstrap";
-import { FaArrowLeft } from "react-icons/fa";
+import { FaStar } from "react-icons/fa";
+import LandingHeader from "../components/landing/LandingHeader";
+import LandingFooter from "../components/landing/LandingFooter";
+import "./Inicio.css";
+import "./Equipo.css";
 
 type Grupo = "Manejo" | "Desarrolladores";
 
@@ -13,12 +15,13 @@ type Miembro = {
   github?: string;
   avatar: string;
   grupo: Grupo;
+  destacado?: boolean;
 };
 
 const avatarFallback = (nombre: string) =>
   `https://ui-avatars.com/api/?name=${encodeURIComponent(
     nombre
-  )}&background=1a1a1a&color=fff&size=176&bold=true&format=png`;
+  )}&background=0B3D2E&color=fff&size=176&bold=true&format=png`;
 
 const equipoActual: Miembro[] = [
   {
@@ -29,17 +32,17 @@ const equipoActual: Miembro[] = [
   },
   {
     nombre: "Alex Jhoan Chaguendo",
-    rol: "Full Stack  · Scrum Master",
+    rol: "Líder de proyecto · Full Stack · Scrum Master",
     github: "ALexjh117",
     avatar: "/avatars/alex.jpg",
     grupo: "Desarrolladores",
+    destacado: true,
   },
   {
     nombre: "Maikol Estiven Daza",
     rol: "Backend",
-     avatar: "/avatars/maikol-sg.jpeg",
+    avatar: "/avatars/maikol-sg.jpeg",
     github: "maiKol269",
-    
     grupo: "Desarrolladores",
   },
   {
@@ -59,7 +62,7 @@ const equipoActual: Miembro[] = [
   {
     nombre: "Sofia Bonilla Gallego ",
     rol: "Frontend",
-     avatar: "/avatars/sofia-sg.jpeg",
+    avatar: "/avatars/sofia-sg.jpeg",
     github: "sofiaboni06",
     grupo: "Desarrolladores",
   },
@@ -175,77 +178,68 @@ function TarjetaMiembro({
   ampliables?: boolean;
   onVerFoto?: (m: Miembro) => void;
 }) {
-  const size = compacto ? 64 : 88;
   const src = m.avatar || avatarFallback(m.nombre);
   const sePuedeAmpliar = ampliables && Boolean(m.avatar);
+  const top = Boolean(m.destacado && !compacto);
 
   const foto = (
-    <img
-      src={src}
-      alt={m.nombre}
-      onError={(e) => {
-        e.currentTarget.src = avatarFallback(m.nombre);
-      }}
-      style={{
-        width: size,
-        height: size,
-        borderRadius: "50%",
-        objectFit: "cover",
-        flexShrink: 0,
-        background: "#f0f0f0",
-        display: "block",
-      }}
-    />
+    <span className="eq-avatar-wrap">
+      <img
+        src={src}
+        alt={m.nombre}
+        className="eq-avatar"
+        onError={(e) => {
+          e.currentTarget.src = avatarFallback(m.nombre);
+        }}
+      />
+      {top ? (
+        <span className="eq-mark" aria-hidden>
+          <FaStar />
+        </span>
+      ) : null}
+    </span>
   );
 
   return (
-    <div
-      style={{
-        display: "flex",
-        alignItems: "center",
-        gap: "1rem",
-        minWidth: 0,
-        width: "100%",
-      }}
-    >
+    <article className={`eq-card${top ? " top" : ""}`}>
       {sePuedeAmpliar ? (
         <button
           type="button"
+          className="eq-avatar-wrap"
           onClick={() => onVerFoto?.(m)}
           aria-label={`Ver foto de ${m.nombre}`}
-          style={{
-            padding: 0,
-            border: "none",
-            background: "none",
-            borderRadius: "50%",
-            cursor: "pointer",
-            flexShrink: 0,
-          }}
         >
-          {foto}
+          <img
+            src={src}
+            alt={m.nombre}
+            className="eq-avatar"
+            onError={(e) => {
+              e.currentTarget.src = avatarFallback(m.nombre);
+            }}
+          />
+          {top ? (
+            <span className="eq-mark" aria-hidden>
+              <FaStar />
+            </span>
+          ) : null}
         </button>
       ) : (
         foto
       )}
-      <div style={{ minWidth: 0 }}>
-        <strong style={{ wordBreak: "break-word" }}>{m.nombre}</strong>
-        <p style={{ margin: 0, fontSize: compacto ? "0.9rem" : "1rem", color: "#555" }}>
-          {m.rol}
-        </p>
+      <div className="eq-copy">
+        <strong>{m.nombre}</strong>
+        <p>{m.rol}</p>
         {m.github ? (
-          <p style={{ margin: "0.15rem 0 0", fontSize: "0.9rem" }}>
-            <a
-              href={`https://github.com/${m.github}`}
-              target="_blank"
-              rel="noopener noreferrer"
-              style={{ textDecoration: "none", color: "#000" }}
-            >
-              <GrGithub /> {m.github}
-            </a>
-          </p>
+          <a
+            href={`https://github.com/${m.github}`}
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <GrGithub /> {m.github}
+          </a>
         ) : null}
       </div>
-    </div>
+    </article>
   );
 }
 
@@ -256,7 +250,7 @@ function BloqueEquipo({
   ampliables,
   onVerFoto,
 }: {
-  titulo: string;
+  titulo?: string;
   miembros: Miembro[];
   compacto?: boolean;
   ampliables?: boolean;
@@ -264,30 +258,20 @@ function BloqueEquipo({
 }) {
   const grupos: Grupo[] = ["Manejo", "Desarrolladores"];
   return (
-    <section style={{ marginBottom: "3rem" }}>
-      <h2 style={{ fontSize: "clamp(1.2rem, 4vw, 1.45rem)", marginBottom: "1.25rem" }}>
-        {titulo}
-      </h2>
+    <section className="eq-block">
+      {titulo ? <h2>{titulo}</h2> : null}
       {grupos.map((grupo) => {
         const lista = miembros.filter((m) => m.grupo === grupo);
         if (lista.length === 0) return null;
         return (
-          <div key={grupo} style={{ marginBottom: "2rem" }}>
-            <h3 style={{ fontSize: "1.05rem", marginBottom: "1rem", color: "#444" }}>
+          <div key={grupo}>
+            <p className="eq-label">
               {grupo === "Manejo" ? "Manejo del proyecto" : "Desarrolladores"}
-            </h3>
-            <div
-              style={{
-                display: "grid",
-                gridTemplateColumns: compacto
-                  ? "repeat(auto-fit, minmax(min(100%, 240px), 1fr))"
-                  : "repeat(auto-fit, minmax(min(100%, 280px), 1fr))",
-                gap: compacto ? "1.25rem" : "1.5rem",
-              }}
-            >
+            </p>
+            <div className={`eq-grid${compacto ? " compact" : ""}`}>
               {lista.map((m) => (
                 <TarjetaMiembro
-                  key={`${titulo}-${m.nombre}-${m.rol}`}
+                  key={`${titulo ?? "archivo"}-${m.nombre}-${m.rol}`}
                   m={m}
                   compacto={compacto}
                   ampliables={ampliables}
@@ -303,55 +287,38 @@ function BloqueEquipo({
 }
 
 const Equipo: React.FC = () => {
-  const navigate = useNavigate();
   const [fotoGrande, setFotoGrande] = useState<Miembro | null>(null);
 
   return (
-    <main
-      style={{
-        padding: "clamp(1rem, 4vw, 2rem)",
-        maxWidth: 1100,
-        margin: "0 auto",
-      }}
-    >
-      <div className="mb-3">
-        <Button
-          variant="light"
-          size="sm"
-          onClick={() => navigate(-1)}
-          className="d-flex align-items-center gap-2"
-        >
-          <FaArrowLeft /> Volver
-        </Button>
-      </div>
-      <div className="d-flex justify-content-center justify-content-md-start align-items-center gap-2 mb-3">
-        <img src={Sigeva} alt="Logo SIGEVA" height={40} />
-      </div>
+    <div className="landing">
+      <LandingHeader />
 
-      <p style={{ color: "#555", fontWeight: 700, marginBottom: "0.35rem", letterSpacing: "0.02em" }}>
-        SOBRE NOSOTROS
-      </p>
-      <h1 style={{ fontSize: "clamp(1.5rem, 5vw, 2rem)", marginBottom: "0.5rem" }}>
-        Nuestro equipo
-      </h1>
-      <p style={{ color: "#555", marginBottom: "2.5rem", maxWidth: 720 }}>
-        Detrás de cada voto hay un equipo que cree que elegir en el SENA puede ser más
-        cercano, más claro y más justo. Esto lo hacemos juntos.
-      </p>
+      <main className="eq-page">
+        <header className="eq-intro">
+          <p className="eq-kicker">Fábrica de Software</p>
+          <h1>Nuestro equipo</h1>
+          <p>
+            Detrás de cada voto hay un equipo que cree que elegir puede ser más
+            cercano, más claro y más justo. Esto lo hacemos juntos.
+          </p>
+        </header>
 
-      <BloqueEquipo
-        titulo="Esta versión"
-        miembros={equipoActual}
-        ampliables
-        onVerFoto={setFotoGrande}
-      />
+        <BloqueEquipo
+          titulo="Esta versión"
+          miembros={equipoActual}
+          ampliables
+          onVerFoto={setFotoGrande}
+        />
 
-      <hr style={{ border: "none", borderTop: "1px solid #e5e5e5", margin: "1rem 0 2.5rem" }} />
+        <div className="eq-archive">
+          <p className="eq-kicker">Archivo</p>
+          <h2>Versión anterior</h2>
+          <p className="eq-archive-lead">Gracias a quienes abrieron el camino.</p>
+          <BloqueEquipo miembros={equipoAnterior} compacto />
+        </div>
+      </main>
 
-      <p style={{ color: "#666", marginBottom: "1.25rem", maxWidth: 720 }}>
-        Gracias a quienes abrieron el camino.
-      </p>
-      <BloqueEquipo titulo="Versión anterior" miembros={equipoAnterior} compacto />
+      <LandingFooter />
 
       <Modal
         show={Boolean(fotoGrande)}
@@ -389,7 +356,7 @@ const Equipo: React.FC = () => {
           -webkit-backdrop-filter: blur(10px);
         }
       `}</style>
-    </main>
+    </div>
   );
 };
 

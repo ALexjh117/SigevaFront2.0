@@ -8,6 +8,7 @@ import {
 import "./App.css";
 import VotacionesActivasPage from "./pages/aprendiz/VotacionesActivasPage";
 import Login from "./pages/Login";
+import RecuperarContrasena from "./pages/RecuperarContrasena";
 import ElegirJornadaPage from "./pages/aprendiz/ElegirJornadaPage";
 import CandidateSelectionPage from "./pages/aprendiz/SeleccionarCandidatoPage";
 import ConfirmarVoto from "./pages/aprendiz/ConfirmarVoto";
@@ -80,6 +81,7 @@ function App() {
           <Route path="/" element={<Inicio />} />
           <Route path="/login" element={<Login perfil="gestor" />} />
           <Route path="/login-aprendiz" element={<Login perfil="aprendiz" />} />
+          <Route path="/recuperar-contrasena" element={<RecuperarContrasena />} />
           <Route path="/equipo" element={<Equipo />} />
         </Route>
 

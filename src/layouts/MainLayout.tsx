@@ -10,6 +10,7 @@ import {
   inicialesDeUsuario,
   nombreDeUsuario,
 } from '../utils/usuario';
+import { SigevaName } from '../components/landing/SigevaMark';
 
 interface MainLayoutProps {
   children: ReactNode;
@@ -49,7 +50,9 @@ const MainLayout = ({ children, showSidebar = true, role = 'funcionario' }: Main
               />
               <span className="admin-topbar-sep" aria-hidden />
               <div className="admin-topbar-product">
-                <p className="admin-topbar-kicker">SIGEVA</p>
+                <p className="admin-topbar-kicker">
+                  <SigevaName />
+                </p>
                 <p className="admin-topbar-title">{tituloDeRuta(pathname)}</p>
               </div>
             </div>

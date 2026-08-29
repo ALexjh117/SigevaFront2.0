@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 500" role="img" aria-label="Tablero de resultados">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#e8f6df"/>
+      <stop offset="1" stop-color="#cfe8c4"/>
+    </linearGradient>
+  </defs>
+  <rect width="800" height="500" fill="url(#bg)"/>
+  <rect x="90" y="70" width="620" height="360" rx="18" fill="#0b3d2e"/>
+  <rect x="110" y="90" width="580" height="300" rx="8" fill="#f7fbf5"/>
+  <rect x="140" y="120" width="160" height="72" rx="10" fill="#e7f5dc"/>
+  <rect x="320" y="120" width="160" height="72" rx="10" fill="#e7f5dc"/>
+  <rect x="500" y="120" width="160" height="72" rx="10" fill="#e7f5dc"/>
+  <rect x="155" y="138" width="70" height="10" rx="5" fill="#39a900"/>
+  <rect x="155" y="156" width="110" height="18" rx="4" fill="#0b3d2e"/>
+  <rect x="335" y="138" width="70" height="10" rx="5" fill="#39a900"/>
+  <rect x="335" y="156" width="90" height="18" rx="4" fill="#0b3d2e"/>
+  <rect x="515" y="138" width="70" height="10" rx="5" fill="#39a900"/>
+  <rect x="515" y="156" width="100" height="18" rx="4" fill="#0b3d2e"/>
+  <polyline points="150,330 220,280 290,300 370,230 450,250 530,190 620,210" fill="none" stroke="#39a900" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/>
+  <circle cx="220" cy="280" r="7" fill="#0b3d2e"/>
+  <circle cx="370" cy="230" r="7" fill="#0b3d2e"/>
+  <circle cx="530" cy="190" r="7" fill="#0b3d2e"/>
+  <rect x="150" y="350" width="80" height="10" rx="5" fill="#d5e5cc"/>
+  <rect x="250" y="350" width="120" height="10" rx="5" fill="#d5e5cc"/>
+  <rect x="240" y="430" width="320" height="18" rx="6" fill="#0b3d2e"/>
+</svg>

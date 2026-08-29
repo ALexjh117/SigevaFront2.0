@@ -1,0 +1,234 @@
+import { createHotContext as __vite__createHotContext } from "/@vite/client";import.meta.hot = __vite__createHotContext("/src/theme/DiosIcons.tsx");import __vite__cjsImport0_react_jsxDevRuntime from "/node_modules/.vite/deps/react_jsx-dev-runtime.js?v=de8689fd"; const jsxDEV = __vite__cjsImport0_react_jsxDevRuntime["jsxDEV"];
+const stroke = {
+  fill: "none",
+  stroke: "currentColor",
+  strokeWidth: 1.7,
+  strokeLinecap: "round",
+  strokeLinejoin: "round"
+};
+export function DiosChip({ className }) {
+  return /* @__PURE__ */ jsxDEV("svg", { viewBox: "0 0 48 48", className, "aria-hidden": true, children: [
+    /* @__PURE__ */ jsxDEV("rect", { x: "15", y: "15", width: "18", height: "18", rx: "2.2", ...stroke }, void 0, false, {
+      fileName: "C:/Users/Alex/sigevaFront/src/theme/DiosIcons.tsx",
+      lineNumber: 15,
+      columnNumber: 7
+    }, this),
+    /* @__PURE__ */ jsxDEV("rect", { x: "19.5", y: "19.5", width: "9", height: "9", rx: "1", ...stroke }, void 0, false, {
+      fileName: "C:/Users/Alex/sigevaFront/src/theme/DiosIcons.tsx",
+      lineNumber: 16,
+      columnNumber: 7
+    }, this),
+    /* @__PURE__ */ jsxDEV("path", { d: "M24 15V8M24 40v-7M15 24H8M40 24h-7", ...stroke }, void 0, false, {
+      fileName: "C:/Users/Alex/sigevaFront/src/theme/DiosIcons.tsx",
+      lineNumber: 17,
+      columnNumber: 7
+    }, this),
+    /* @__PURE__ */ jsxDEV("path", { d: "M17.6 17.6 12 12M30.4 17.6 36 12M17.6 30.4 12 36M30.4 30.4 36 36", ...stroke }, void 0, false, {
+      fileName: "C:/Users/Alex/sigevaFront/src/theme/DiosIcons.tsx",
+      lineNumber: 18,
+      columnNumber: 7
+    }, this),
+    /* @__PURE__ */ jsxDEV("circle", { cx: "24", cy: "8", r: "1.35", fill: "currentColor" }, void 0, false, {
+      fileName: "C:/Users/Alex/sigevaFront/src/theme/DiosIcons.tsx",
+      lineNumber: 19,
+      columnNumber: 7
+    }, this),
+    /* @__PURE__ */ jsxDEV("circle", { cx: "24", cy: "40", r: "1.35", fill: "currentColor" }, void 0, false, {
+      fileName: "C:/Users/Alex/sigevaFront/src/theme/DiosIcons.tsx",
+      lineNumber: 20,
+      columnNumber: 7
+    }, this),
+    /* @__PURE__ */ jsxDEV("circle", { cx: "8", cy: "24", r: "1.35", fill: "currentColor" }, void 0, false, {
+      fileName: "C:/Users/Alex/sigevaFront/src/theme/DiosIcons.tsx",
+      lineNumber: 21,
+      columnNumber: 7
+    }, this),
+    /* @__PURE__ */ jsxDEV("circle", { cx: "40", cy: "24", r: "1.35", fill: "currentColor" }, void 0, false, {
+      fileName: "C:/Users/Alex/sigevaFront/src/theme/DiosIcons.tsx",
+      lineNumber: 22,
+      columnNumber: 7
+    }, this),
+    /* @__PURE__ */ jsxDEV("circle", { cx: "12", cy: "12", r: "1.2", fill: "currentColor" }, void 0, false, {
+      fileName: "C:/Users/Alex/sigevaFront/src/theme/DiosIcons.tsx",
+      lineNumber: 23,
+      columnNumber: 7
+    }, this),
+    /* @__PURE__ */ jsxDEV("circle", { cx: "36", cy: "12", r: "1.2", fill: "currentColor" }, void 0, false, {
+      fileName: "C:/Users/Alex/sigevaFront/src/theme/DiosIcons.tsx",
+      lineNumber: 24,
+      columnNumber: 7
+    }, this),
+    /* @__PURE__ */ jsxDEV("circle", { cx: "12", cy: "36", r: "1.2", fill: "currentColor" }, void 0, false, {
+      fileName: "C:/Users/Alex/sigevaFront/src/theme/DiosIcons.tsx",
+      lineNumber: 25,
+      columnNumber: 7
+    }, this),
+    /* @__PURE__ */ jsxDEV("circle", { cx: "36", cy: "36", r: "1.2", fill: "currentColor" }, void 0, false, {
+      fileName: "C:/Users/Alex/sigevaFront/src/theme/DiosIcons.tsx",
+      lineNumber: 26,
+      columnNumber: 7
+    }, this)
+  ] }, void 0, true, {
+    fileName: "C:/Users/Alex/sigevaFront/src/theme/DiosIcons.tsx",
+    lineNumber: 14,
+    columnNumber: 5
+  }, this);
+}
+_c = DiosChip;
+export function DiosBulb({ className }) {
+  return /* @__PURE__ */ jsxDEV("svg", { viewBox: "0 0 48 48", className, "aria-hidden": true, children: [
+    /* @__PURE__ */ jsxDEV(
+      "path",
+      {
+        d: "M16.5 20.5a7.5 7.5 0 1 1 11.4 6.4c-.9.6-1.4 1.6-1.4 2.7v1.2h-7.5v-1.2c0-1.1-.5-2.1-1.4-2.7a7.48 7.48 0 0 1-1.1-6.4Z",
+        ...stroke
+      },
+      void 0,
+      false,
+      {
+        fileName: "C:/Users/Alex/sigevaFront/src/theme/DiosIcons.tsx",
+        lineNumber: 35,
+        columnNumber: 7
+      },
+      this
+    ),
+    /* @__PURE__ */ jsxDEV("path", { d: "M20.2 31.8h7.6M21.2 35h5.6", ...stroke }, void 0, false, {
+      fileName: "C:/Users/Alex/sigevaFront/src/theme/DiosIcons.tsx",
+      lineNumber: 39,
+      columnNumber: 7
+    }, this),
+    /* @__PURE__ */ jsxDEV("path", { d: "M24 16.2v4.2M21.2 22.2h5.6", ...stroke }, void 0, false, {
+      fileName: "C:/Users/Alex/sigevaFront/src/theme/DiosIcons.tsx",
+      lineNumber: 40,
+      columnNumber: 7
+    }, this),
+    /* @__PURE__ */ jsxDEV("circle", { cx: "24", cy: "16.2", r: "1.15", fill: "currentColor" }, void 0, false, {
+      fileName: "C:/Users/Alex/sigevaFront/src/theme/DiosIcons.tsx",
+      lineNumber: 41,
+      columnNumber: 7
+    }, this),
+    /* @__PURE__ */ jsxDEV("circle", { cx: "21.2", cy: "22.2", r: "1.05", fill: "currentColor" }, void 0, false, {
+      fileName: "C:/Users/Alex/sigevaFront/src/theme/DiosIcons.tsx",
+      lineNumber: 42,
+      columnNumber: 7
+    }, this),
+    /* @__PURE__ */ jsxDEV("circle", { cx: "26.8", cy: "22.2", r: "1.05", fill: "currentColor" }, void 0, false, {
+      fileName: "C:/Users/Alex/sigevaFront/src/theme/DiosIcons.tsx",
+      lineNumber: 43,
+      columnNumber: 7
+    }, this)
+  ] }, void 0, true, {
+    fileName: "C:/Users/Alex/sigevaFront/src/theme/DiosIcons.tsx",
+    lineNumber: 34,
+    columnNumber: 5
+  }, this);
+}
+_c2 = DiosBulb;
+export function DiosTarget({ className }) {
+  return /* @__PURE__ */ jsxDEV("svg", { viewBox: "0 0 48 48", className, "aria-hidden": true, children: [
+    /* @__PURE__ */ jsxDEV("circle", { cx: "24", cy: "24", r: "13.5", ...stroke }, void 0, false, {
+      fileName: "C:/Users/Alex/sigevaFront/src/theme/DiosIcons.tsx",
+      lineNumber: 52,
+      columnNumber: 7
+    }, this),
+    /* @__PURE__ */ jsxDEV("path", { d: "M24 7.5V12M24 36v4.5M7.5 24H12M36 24h4.5", ...stroke }, void 0, false, {
+      fileName: "C:/Users/Alex/sigevaFront/src/theme/DiosIcons.tsx",
+      lineNumber: 53,
+      columnNumber: 7
+    }, this),
+    /* @__PURE__ */ jsxDEV("rect", { x: "18.2", y: "19.2", width: "11.6", height: "9.2", rx: "1.2", ...stroke }, void 0, false, {
+      fileName: "C:/Users/Alex/sigevaFront/src/theme/DiosIcons.tsx",
+      lineNumber: 54,
+      columnNumber: 7
+    }, this),
+    /* @__PURE__ */ jsxDEV("path", { d: "M21 19.2v-1.3a3 3 0 0 1 6 0v1.3", ...stroke }, void 0, false, {
+      fileName: "C:/Users/Alex/sigevaFront/src/theme/DiosIcons.tsx",
+      lineNumber: 55,
+      columnNumber: 7
+    }, this)
+  ] }, void 0, true, {
+    fileName: "C:/Users/Alex/sigevaFront/src/theme/DiosIcons.tsx",
+    lineNumber: 51,
+    columnNumber: 5
+  }, this);
+}
+_c3 = DiosTarget;
+export function DiosLeaf({ className }) {
+  return /* @__PURE__ */ jsxDEV("svg", { viewBox: "0 0 48 48", className, "aria-hidden": true, children: [
+    /* @__PURE__ */ jsxDEV(
+      "path",
+      {
+        d: "M16 30c0-8.5 6.2-16.4 16.8-18.2-1 10.4-8.2 17.4-16.8 18.2Z",
+        ...stroke
+      },
+      void 0,
+      false,
+      {
+        fileName: "C:/Users/Alex/sigevaFront/src/theme/DiosIcons.tsx",
+        lineNumber: 64,
+        columnNumber: 7
+      },
+      this
+    ),
+    /* @__PURE__ */ jsxDEV("path", { d: "M18.2 28.4c3.4-2.2 7.6-7.2 9.4-13.6", ...stroke }, void 0, false, {
+      fileName: "C:/Users/Alex/sigevaFront/src/theme/DiosIcons.tsx",
+      lineNumber: 68,
+      columnNumber: 7
+    }, this),
+    /* @__PURE__ */ jsxDEV("path", { d: "M14.5 18.5c-3.2 3-4.4 7.2-3.2 11.2", ...stroke }, void 0, false, {
+      fileName: "C:/Users/Alex/sigevaFront/src/theme/DiosIcons.tsx",
+      lineNumber: 69,
+      columnNumber: 7
+    }, this),
+    /* @__PURE__ */ jsxDEV("path", { d: "M11.6 26.2 14.8 29l-3.6.8", ...stroke }, void 0, false, {
+      fileName: "C:/Users/Alex/sigevaFront/src/theme/DiosIcons.tsx",
+      lineNumber: 70,
+      columnNumber: 7
+    }, this),
+    /* @__PURE__ */ jsxDEV("path", { d: "M33.5 29.5c3.2-3 4.4-7.2 3.2-11.2", ...stroke }, void 0, false, {
+      fileName: "C:/Users/Alex/sigevaFront/src/theme/DiosIcons.tsx",
+      lineNumber: 71,
+      columnNumber: 7
+    }, this),
+    /* @__PURE__ */ jsxDEV("path", { d: "M36.4 21.8 33.2 19l3.6-.8", ...stroke }, void 0, false, {
+      fileName: "C:/Users/Alex/sigevaFront/src/theme/DiosIcons.tsx",
+      lineNumber: 72,
+      columnNumber: 7
+    }, this)
+  ] }, void 0, true, {
+    fileName: "C:/Users/Alex/sigevaFront/src/theme/DiosIcons.tsx",
+    lineNumber: 63,
+    columnNumber: 5
+  }, this);
+}
+_c4 = DiosLeaf;
+var _c, _c2, _c3, _c4;
+$RefreshReg$(_c, "DiosChip");
+$RefreshReg$(_c2, "DiosBulb");
+$RefreshReg$(_c3, "DiosTarget");
+$RefreshReg$(_c4, "DiosLeaf");
+import * as RefreshRuntime from "/@react-refresh";
+const inWebWorker = typeof WorkerGlobalScope !== "undefined" && self instanceof WorkerGlobalScope;
+if (import.meta.hot && !inWebWorker) {
+  if (!window.$RefreshReg$) {
+    throw new Error(
+      "@vitejs/plugin-react can't detect preamble. Something is wrong."
+    );
+  }
+  RefreshRuntime.__hmr_import(import.meta.url).then((currentExports) => {
+    RefreshRuntime.registerExportsForReactRefresh("C:/Users/Alex/sigevaFront/src/theme/DiosIcons.tsx", currentExports);
+    import.meta.hot.accept((nextExports) => {
+      if (!nextExports) return;
+      const invalidateMessage = RefreshRuntime.validateRefreshBoundaryAndEnqueueUpdate("C:/Users/Alex/sigevaFront/src/theme/DiosIcons.tsx", currentExports, nextExports);
+      if (invalidateMessage) import.meta.hot.invalidate(invalidateMessage);
+    });
+  });
+}
+function $RefreshReg$(type, id) {
+  return RefreshRuntime.register(type, "C:/Users/Alex/sigevaFront/src/theme/DiosIcons.tsx " + id);
+}
+function $RefreshSig$() {
+  return RefreshRuntime.createSignatureFunctionForTransform();
+}
+
+//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJtYXBwaW5ncyI6IkFBY007QUFaTixNQUFNQSxTQUFTO0FBQUEsRUFDYkMsTUFBTTtBQUFBLEVBQ05ELFFBQVE7QUFBQSxFQUNSRSxhQUFhO0FBQUEsRUFDYkMsZUFBZTtBQUFBLEVBQ2ZDLGdCQUFnQjtBQUNsQjtBQUdPLGdCQUFTQyxTQUFTLEVBQUVDLFVBQXFCLEdBQUc7QUFDakQsU0FDRSx1QkFBQyxTQUFJLFNBQVEsYUFBWSxXQUFzQixlQUFXLE1BQ3hEO0FBQUEsMkJBQUMsVUFBSyxHQUFFLE1BQUssR0FBRSxNQUFLLE9BQU0sTUFBSyxRQUFPLE1BQUssSUFBRyxPQUFNLEdBQUlOLFVBQXhEO0FBQUE7QUFBQTtBQUFBO0FBQUEsV0FBK0Q7QUFBQSxJQUMvRCx1QkFBQyxVQUFLLEdBQUUsUUFBTyxHQUFFLFFBQU8sT0FBTSxLQUFJLFFBQU8sS0FBSSxJQUFHLEtBQUksR0FBSUEsVUFBeEQ7QUFBQTtBQUFBO0FBQUE7QUFBQSxXQUErRDtBQUFBLElBQy9ELHVCQUFDLFVBQUssR0FBRSxzQ0FBcUMsR0FBSUEsVUFBakQ7QUFBQTtBQUFBO0FBQUE7QUFBQSxXQUF3RDtBQUFBLElBQ3hELHVCQUFDLFVBQUssR0FBRSxvRUFBbUUsR0FBSUEsVUFBL0U7QUFBQTtBQUFBO0FBQUE7QUFBQSxXQUFzRjtBQUFBLElBQ3RGLHVCQUFDLFlBQU8sSUFBRyxNQUFLLElBQUcsS0FBSSxHQUFFLFFBQU8sTUFBSyxrQkFBckM7QUFBQTtBQUFBO0FBQUE7QUFBQSxXQUFtRDtBQUFBLElBQ25ELHVCQUFDLFlBQU8sSUFBRyxNQUFLLElBQUcsTUFBSyxHQUFFLFFBQU8sTUFBSyxrQkFBdEM7QUFBQTtBQUFBO0FBQUE7QUFBQSxXQUFvRDtBQUFBLElBQ3BELHVCQUFDLFlBQU8sSUFBRyxLQUFJLElBQUcsTUFBSyxHQUFFLFFBQU8sTUFBSyxrQkFBckM7QUFBQTtBQUFBO0FBQUE7QUFBQSxXQUFtRDtBQUFBLElBQ25ELHVCQUFDLFlBQU8sSUFBRyxNQUFLLElBQUcsTUFBSyxHQUFFLFFBQU8sTUFBSyxrQkFBdEM7QUFBQTtBQUFBO0FBQUE7QUFBQSxXQUFvRDtBQUFBLElBQ3BELHVCQUFDLFlBQU8sSUFBRyxNQUFLLElBQUcsTUFBSyxHQUFFLE9BQU0sTUFBSyxrQkFBckM7QUFBQTtBQUFBO0FBQUE7QUFBQSxXQUFtRDtBQUFBLElBQ25ELHVCQUFDLFlBQU8sSUFBRyxNQUFLLElBQUcsTUFBSyxHQUFFLE9BQU0sTUFBSyxrQkFBckM7QUFBQTtBQUFBO0FBQUE7QUFBQSxXQUFtRDtBQUFBLElBQ25ELHVCQUFDLFlBQU8sSUFBRyxNQUFLLElBQUcsTUFBSyxHQUFFLE9BQU0sTUFBSyxrQkFBckM7QUFBQTtBQUFBO0FBQUE7QUFBQSxXQUFtRDtBQUFBLElBQ25ELHVCQUFDLFlBQU8sSUFBRyxNQUFLLElBQUcsTUFBSyxHQUFFLE9BQU0sTUFBSyxrQkFBckM7QUFBQTtBQUFBO0FBQUE7QUFBQSxXQUFtRDtBQUFBLE9BWnJEO0FBQUE7QUFBQTtBQUFBO0FBQUEsU0FhQTtBQUVKO0FBRUFPLEtBbkJnQkY7QUFvQlQsZ0JBQVNHLFNBQVMsRUFBRUYsVUFBcUIsR0FBRztBQUNqRCxTQUNFLHVCQUFDLFNBQUksU0FBUSxhQUFZLFdBQXNCLGVBQVcsTUFDeEQ7QUFBQTtBQUFBLE1BQUM7QUFBQTtBQUFBLFFBQ0MsR0FBRTtBQUFBLFFBQ0YsR0FBSU47QUFBQUE7QUFBQUEsTUFGTjtBQUFBO0FBQUE7QUFBQTtBQUFBO0FBQUE7QUFBQTtBQUFBO0FBQUEsSUFFYTtBQUFBLElBRWIsdUJBQUMsVUFBSyxHQUFFLDhCQUE2QixHQUFJQSxVQUF6QztBQUFBO0FBQUE7QUFBQTtBQUFBLFdBQWdEO0FBQUEsSUFDaEQsdUJBQUMsVUFBSyxHQUFFLDhCQUE2QixHQUFJQSxVQUF6QztBQUFBO0FBQUE7QUFBQTtBQUFBLFdBQWdEO0FBQUEsSUFDaEQsdUJBQUMsWUFBTyxJQUFHLE1BQUssSUFBRyxRQUFPLEdBQUUsUUFBTyxNQUFLLGtCQUF4QztBQUFBO0FBQUE7QUFBQTtBQUFBLFdBQXNEO0FBQUEsSUFDdEQsdUJBQUMsWUFBTyxJQUFHLFFBQU8sSUFBRyxRQUFPLEdBQUUsUUFBTyxNQUFLLGtCQUExQztBQUFBO0FBQUE7QUFBQTtBQUFBLFdBQXdEO0FBQUEsSUFDeEQsdUJBQUMsWUFBTyxJQUFHLFFBQU8sSUFBRyxRQUFPLEdBQUUsUUFBTyxNQUFLLGtCQUExQztBQUFBO0FBQUE7QUFBQTtBQUFBLFdBQXdEO0FBQUEsT0FUMUQ7QUFBQTtBQUFBO0FBQUE7QUFBQSxTQVVBO0FBRUo7QUFFQVMsTUFoQmdCRDtBQWlCVCxnQkFBU0UsV0FBVyxFQUFFSixVQUFxQixHQUFHO0FBQ25ELFNBQ0UsdUJBQUMsU0FBSSxTQUFRLGFBQVksV0FBc0IsZUFBVyxNQUN4RDtBQUFBLDJCQUFDLFlBQU8sSUFBRyxNQUFLLElBQUcsTUFBSyxHQUFFLFFBQU8sR0FBSU4sVUFBckM7QUFBQTtBQUFBO0FBQUE7QUFBQSxXQUE0QztBQUFBLElBQzVDLHVCQUFDLFVBQUssR0FBRSw0Q0FBMkMsR0FBSUEsVUFBdkQ7QUFBQTtBQUFBO0FBQUE7QUFBQSxXQUE4RDtBQUFBLElBQzlELHVCQUFDLFVBQUssR0FBRSxRQUFPLEdBQUUsUUFBTyxPQUFNLFFBQU8sUUFBTyxPQUFNLElBQUcsT0FBTSxHQUFJQSxVQUEvRDtBQUFBO0FBQUE7QUFBQTtBQUFBLFdBQXNFO0FBQUEsSUFDdEUsdUJBQUMsVUFBSyxHQUFFLG1DQUFrQyxHQUFJQSxVQUE5QztBQUFBO0FBQUE7QUFBQTtBQUFBLFdBQXFEO0FBQUEsT0FKdkQ7QUFBQTtBQUFBO0FBQUE7QUFBQSxTQUtBO0FBRUo7QUFFQVcsTUFYZ0JEO0FBWVQsZ0JBQVNFLFNBQVMsRUFBRU4sVUFBcUIsR0FBRztBQUNqRCxTQUNFLHVCQUFDLFNBQUksU0FBUSxhQUFZLFdBQXNCLGVBQVcsTUFDeEQ7QUFBQTtBQUFBLE1BQUM7QUFBQTtBQUFBLFFBQ0MsR0FBRTtBQUFBLFFBQ0YsR0FBSU47QUFBQUE7QUFBQUEsTUFGTjtBQUFBO0FBQUE7QUFBQTtBQUFBO0FBQUE7QUFBQTtBQUFBO0FBQUEsSUFFYTtBQUFBLElBRWIsdUJBQUMsVUFBSyxHQUFFLHVDQUFzQyxHQUFJQSxVQUFsRDtBQUFBO0FBQUE7QUFBQTtBQUFBLFdBQXlEO0FBQUEsSUFDekQsdUJBQUMsVUFBSyxHQUFFLHNDQUFxQyxHQUFJQSxVQUFqRDtBQUFBO0FBQUE7QUFBQTtBQUFBLFdBQXdEO0FBQUEsSUFDeEQsdUJBQUMsVUFBSyxHQUFFLDZCQUE0QixHQUFJQSxVQUF4QztBQUFBO0FBQUE7QUFBQTtBQUFBLFdBQStDO0FBQUEsSUFDL0MsdUJBQUMsVUFBSyxHQUFFLHFDQUFvQyxHQUFJQSxVQUFoRDtBQUFBO0FBQUE7QUFBQTtBQUFBLFdBQXVEO0FBQUEsSUFDdkQsdUJBQUMsVUFBSyxHQUFFLDZCQUE0QixHQUFJQSxVQUF4QztBQUFBO0FBQUE7QUFBQTtBQUFBLFdBQStDO0FBQUEsT0FUakQ7QUFBQTtBQUFBO0FBQUE7QUFBQSxTQVVBO0FBRUo7QUFBQ2EsTUFkZUQ7QUFBUSxJQUFBTCxJQUFBRSxLQUFBRSxLQUFBRTtBQUFBLGFBQUFOLElBQUE7QUFBQSxhQUFBRSxLQUFBO0FBQUEsYUFBQUUsS0FBQTtBQUFBLGFBQUFFLEtBQUEiLCJuYW1lcyI6WyJzdHJva2UiLCJmaWxsIiwic3Ryb2tlV2lkdGgiLCJzdHJva2VMaW5lY2FwIiwic3Ryb2tlTGluZWpvaW4iLCJEaW9zQ2hpcCIsImNsYXNzTmFtZSIsIl9jIiwiRGlvc0J1bGIiLCJfYzIiLCJEaW9zVGFyZ2V0IiwiX2MzIiwiRGlvc0xlYWYiLCJfYzQiXSwiaWdub3JlTGlzdCI6W10sInNvdXJjZXMiOlsiRGlvc0ljb25zLnRzeCJdLCJzb3VyY2VzQ29udGVudCI6WyJ0eXBlIEljb25Qcm9wcyA9IHsgY2xhc3NOYW1lPzogc3RyaW5nIH07XHJcblxyXG5jb25zdCBzdHJva2UgPSB7XHJcbiAgZmlsbDogXCJub25lXCIsXHJcbiAgc3Ryb2tlOiBcImN1cnJlbnRDb2xvclwiLFxyXG4gIHN0cm9rZVdpZHRoOiAxLjcsXHJcbiAgc3Ryb2tlTGluZWNhcDogXCJyb3VuZFwiIGFzIGNvbnN0LFxyXG4gIHN0cm9rZUxpbmVqb2luOiBcInJvdW5kXCIgYXMgY29uc3QsXHJcbn07XHJcblxyXG4vKiogTWljcm9jaGlwIOKAlCBEaWdpdGFsICovXHJcbmV4cG9ydCBmdW5jdGlvbiBEaW9zQ2hpcCh7IGNsYXNzTmFtZSB9OiBJY29uUHJvcHMpIHtcclxuICByZXR1cm4gKFxyXG4gICAgPHN2ZyB2aWV3Qm94PVwiMCAwIDQ4IDQ4XCIgY2xhc3NOYW1lPXtjbGFzc05hbWV9IGFyaWEtaGlkZGVuPlxyXG4gICAgICA8cmVjdCB4PVwiMTVcIiB5PVwiMTVcIiB3aWR0aD1cIjE4XCIgaGVpZ2h0PVwiMThcIiByeD1cIjIuMlwiIHsuLi5zdHJva2V9IC8+XHJcbiAgICAgIDxyZWN0IHg9XCIxOS41XCIgeT1cIjE5LjVcIiB3aWR0aD1cIjlcIiBoZWlnaHQ9XCI5XCIgcng9XCIxXCIgey4uLnN0cm9rZX0gLz5cclxuICAgICAgPHBhdGggZD1cIk0yNCAxNVY4TTI0IDQwdi03TTE1IDI0SDhNNDAgMjRoLTdcIiB7Li4uc3Ryb2tlfSAvPlxyXG4gICAgICA8cGF0aCBkPVwiTTE3LjYgMTcuNiAxMiAxMk0zMC40IDE3LjYgMzYgMTJNMTcuNiAzMC40IDEyIDM2TTMwLjQgMzAuNCAzNiAzNlwiIHsuLi5zdHJva2V9IC8+XHJcbiAgICAgIDxjaXJjbGUgY3g9XCIyNFwiIGN5PVwiOFwiIHI9XCIxLjM1XCIgZmlsbD1cImN1cnJlbnRDb2xvclwiIC8+XHJcbiAgICAgIDxjaXJjbGUgY3g9XCIyNFwiIGN5PVwiNDBcIiByPVwiMS4zNVwiIGZpbGw9XCJjdXJyZW50Q29sb3JcIiAvPlxyXG4gICAgICA8Y2lyY2xlIGN4PVwiOFwiIGN5PVwiMjRcIiByPVwiMS4zNVwiIGZpbGw9XCJjdXJyZW50Q29sb3JcIiAvPlxyXG4gICAgICA8Y2lyY2xlIGN4PVwiNDBcIiBjeT1cIjI0XCIgcj1cIjEuMzVcIiBmaWxsPVwiY3VycmVudENvbG9yXCIgLz5cclxuICAgICAgPGNpcmNsZSBjeD1cIjEyXCIgY3k9XCIxMlwiIHI9XCIxLjJcIiBmaWxsPVwiY3VycmVudENvbG9yXCIgLz5cclxuICAgICAgPGNpcmNsZSBjeD1cIjM2XCIgY3k9XCIxMlwiIHI9XCIxLjJcIiBmaWxsPVwiY3VycmVudENvbG9yXCIgLz5cclxuICAgICAgPGNpcmNsZSBjeD1cIjEyXCIgY3k9XCIzNlwiIHI9XCIxLjJcIiBmaWxsPVwiY3VycmVudENvbG9yXCIgLz5cclxuICAgICAgPGNpcmNsZSBjeD1cIjM2XCIgY3k9XCIzNlwiIHI9XCIxLjJcIiBmaWxsPVwiY3VycmVudENvbG9yXCIgLz5cclxuICAgIDwvc3ZnPlxyXG4gICk7XHJcbn1cclxuXHJcbi8qKiBCb21iaWxsYSBjb24gZmlsYW1lbnRvIGRlIGNpcmN1aXRvIOKAlCBJbm5vdmFkb3IgKi9cclxuZXhwb3J0IGZ1bmN0aW9uIERpb3NCdWxiKHsgY2xhc3NOYW1lIH06IEljb25Qcm9wcykge1xyXG4gIHJldHVybiAoXHJcbiAgICA8c3ZnIHZpZXdCb3g9XCIwIDAgNDggNDhcIiBjbGFzc05hbWU9e2NsYXNzTmFtZX0gYXJpYS1oaWRkZW4+XHJcbiAgICAgIDxwYXRoXHJcbiAgICAgICAgZD1cIk0xNi41IDIwLjVhNy41IDcuNSAwIDEgMSAxMS40IDYuNGMtLjkuNi0xLjQgMS42LTEuNCAyLjd2MS4yaC03LjV2LTEuMmMwLTEuMS0uNS0yLjEtMS40LTIuN2E3LjQ4IDcuNDggMCAwIDEtMS4xLTYuNFpcIlxyXG4gICAgICAgIHsuLi5zdHJva2V9XHJcbiAgICAgIC8+XHJcbiAgICAgIDxwYXRoIGQ9XCJNMjAuMiAzMS44aDcuNk0yMS4yIDM1aDUuNlwiIHsuLi5zdHJva2V9IC8+XHJcbiAgICAgIDxwYXRoIGQ9XCJNMjQgMTYuMnY0LjJNMjEuMiAyMi4yaDUuNlwiIHsuLi5zdHJva2V9IC8+XHJcbiAgICAgIDxjaXJjbGUgY3g9XCIyNFwiIGN5PVwiMTYuMlwiIHI9XCIxLjE1XCIgZmlsbD1cImN1cnJlbnRDb2xvclwiIC8+XHJcbiAgICAgIDxjaXJjbGUgY3g9XCIyMS4yXCIgY3k9XCIyMi4yXCIgcj1cIjEuMDVcIiBmaWxsPVwiY3VycmVudENvbG9yXCIgLz5cclxuICAgICAgPGNpcmNsZSBjeD1cIjI2LjhcIiBjeT1cIjIyLjJcIiByPVwiMS4wNVwiIGZpbGw9XCJjdXJyZW50Q29sb3JcIiAvPlxyXG4gICAgPC9zdmc+XHJcbiAgKTtcclxufVxyXG5cclxuLyoqIE1hbGV0w61uIGVuIG1pcmEg4oCUIE9mZXJ0YSBwZXJ0aW5lbnRlICovXHJcbmV4cG9ydCBmdW5jdGlvbiBEaW9zVGFyZ2V0KHsgY2xhc3NOYW1lIH06IEljb25Qcm9wcykge1xyXG4gIHJldHVybiAoXHJcbiAgICA8c3ZnIHZpZXdCb3g9XCIwIDAgNDggNDhcIiBjbGFzc05hbWU9e2NsYXNzTmFtZX0gYXJpYS1oaWRkZW4+XHJcbiAgICAgIDxjaXJjbGUgY3g9XCIyNFwiIGN5PVwiMjRcIiByPVwiMTMuNVwiIHsuLi5zdHJva2V9IC8+XHJcbiAgICAgIDxwYXRoIGQ9XCJNMjQgNy41VjEyTTI0IDM2djQuNU03LjUgMjRIMTJNMzYgMjRoNC41XCIgey4uLnN0cm9rZX0gLz5cclxuICAgICAgPHJlY3QgeD1cIjE4LjJcIiB5PVwiMTkuMlwiIHdpZHRoPVwiMTEuNlwiIGhlaWdodD1cIjkuMlwiIHJ4PVwiMS4yXCIgey4uLnN0cm9rZX0gLz5cclxuICAgICAgPHBhdGggZD1cIk0yMSAxOS4ydi0xLjNhMyAzIDAgMCAxIDYgMHYxLjNcIiB7Li4uc3Ryb2tlfSAvPlxyXG4gICAgPC9zdmc+XHJcbiAgKTtcclxufVxyXG5cclxuLyoqIEhvamEgZW4gY2ljbG8g4oCUIFNvc3RlbmliaWxpZGFkICovXHJcbmV4cG9ydCBmdW5jdGlvbiBEaW9zTGVhZih7IGNsYXNzTmFtZSB9OiBJY29uUHJvcHMpIHtcclxuICByZXR1cm4gKFxyXG4gICAgPHN2ZyB2aWV3Qm94PVwiMCAwIDQ4IDQ4XCIgY2xhc3NOYW1lPXtjbGFzc05hbWV9IGFyaWEtaGlkZGVuPlxyXG4gICAgICA8cGF0aFxyXG4gICAgICAgIGQ9XCJNMTYgMzBjMC04LjUgNi4yLTE2LjQgMTYuOC0xOC4yLTEgMTAuNC04LjIgMTcuNC0xNi44IDE4LjJaXCJcclxuICAgICAgICB7Li4uc3Ryb2tlfVxyXG4gICAgICAvPlxyXG4gICAgICA8cGF0aCBkPVwiTTE4LjIgMjguNGMzLjQtMi4yIDcuNi03LjIgOS40LTEzLjZcIiB7Li4uc3Ryb2tlfSAvPlxyXG4gICAgICA8cGF0aCBkPVwiTTE0LjUgMTguNWMtMy4yIDMtNC40IDcuMi0zLjIgMTEuMlwiIHsuLi5zdHJva2V9IC8+XHJcbiAgICAgIDxwYXRoIGQ9XCJNMTEuNiAyNi4yIDE0LjggMjlsLTMuNi44XCIgey4uLnN0cm9rZX0gLz5cclxuICAgICAgPHBhdGggZD1cIk0zMy41IDI5LjVjMy4yLTMgNC40LTcuMiAzLjItMTEuMlwiIHsuLi5zdHJva2V9IC8+XHJcbiAgICAgIDxwYXRoIGQ9XCJNMzYuNCAyMS44IDMzLjIgMTlsMy42LS44XCIgey4uLnN0cm9rZX0gLz5cclxuICAgIDwvc3ZnPlxyXG4gICk7XHJcbn1cclxuIl0sImZpbGUiOiJDOi9Vc2Vycy9BbGV4L3NpZ2V2YUZyb250L3NyYy90aGVtZS9EaW9zSWNvbnMudHN4In0=

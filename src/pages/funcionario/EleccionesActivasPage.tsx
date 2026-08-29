@@ -17,6 +17,7 @@ import {
   LupaDetalle,
   textoCorto,
 } from "../../components/tabla/detalleTabla";
+import { SigevaName } from "../../components/landing/SigevaMark";
 
 interface Aprendiz {
   nombres: string;
@@ -338,7 +339,7 @@ export default function EleccionesActivasPage() {
         <>
           <h3 className="fw-bold">Bienvenido</h3>
           <p className="text-muted">
-            Aquí tiene un resumen de la actividad reciente en SIGEVA.
+            Aquí tiene un resumen de la actividad reciente en <SigevaName />.
           </p>
           <h5 className="fw-semibold mt-4">Resumen de Elecciones Activas</h5>
           <h3 className="fw-bold ">

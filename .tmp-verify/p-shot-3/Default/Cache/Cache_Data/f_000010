@@ -1,0 +1,393 @@
+import { createHotContext as __vite__createHotContext } from "/@vite/client";import.meta.hot = __vite__createHotContext("/src/pages/funcionario/PanelMetricas.tsx");import __vite__cjsImport0_react_jsxDevRuntime from "/node_modules/.vite/deps/react_jsx-dev-runtime.js?v=de8689fd"; const jsxDEV = __vite__cjsImport0_react_jsxDevRuntime["jsxDEV"];
+import Container from "/node_modules/.vite/deps/react-bootstrap_Container.js?v=de8689fd";
+import Table from "/node_modules/.vite/deps/react-bootstrap_Table.js?v=de8689fd";
+import Button from "/node_modules/.vite/deps/react-bootstrap_Button.js?v=de8689fd";
+import ProgressBar from "/node_modules/.vite/deps/react-bootstrap_ProgressBar.js?v=de8689fd";
+export default function PanelMetricas() {
+  return /* @__PURE__ */ jsxDEV("div", { children: [
+    /* @__PURE__ */ jsxDEV(Container, { children: [
+      /* @__PURE__ */ jsxDEV("h1", { className: "fw-bold ", children: "Panel de Métricas y Resultados" }, void 0, false, {
+        fileName: "C:/Users/Alex/sigevaFront/src/pages/funcionario/PanelMetricas.tsx",
+        lineNumber: 11,
+        columnNumber: 17
+      }, this),
+      /* @__PURE__ */ jsxDEV("p", { className: "text-primary", children: "Elección de representante de Aprendices " }, void 0, false, {
+        fileName: "C:/Users/Alex/sigevaFront/src/pages/funcionario/PanelMetricas.tsx",
+        lineNumber: 12,
+        columnNumber: 17
+      }, this)
+    ] }, void 0, true, {
+      fileName: "C:/Users/Alex/sigevaFront/src/pages/funcionario/PanelMetricas.tsx",
+      lineNumber: 10,
+      columnNumber: 13
+    }, this),
+    /* @__PURE__ */ jsxDEV(Container, { className: "d-flex gap-3 mb-3", children: [
+      /* @__PURE__ */ jsxDEV("div", { className: "border rounded p-3 flex-fill w-75", children: [
+        /* @__PURE__ */ jsxDEV("div", { children: /* @__PURE__ */ jsxDEV("h3", { className: "fw-bold mb-3", children: "Resumen General" }, void 0, false, {
+          fileName: "C:/Users/Alex/sigevaFront/src/pages/funcionario/PanelMetricas.tsx",
+          lineNumber: 20,
+          columnNumber: 25
+        }, this) }, void 0, false, {
+          fileName: "C:/Users/Alex/sigevaFront/src/pages/funcionario/PanelMetricas.tsx",
+          lineNumber: 19,
+          columnNumber: 21
+        }, this),
+        /* @__PURE__ */ jsxDEV("div", { className: "d-flex justify-content-between mb-3", children: [
+          /* @__PURE__ */ jsxDEV("div", { children: [
+            /* @__PURE__ */ jsxDEV("p", { className: "text-primary fw-bold", children: "Aprendices Habilitados" }, void 0, false, {
+              fileName: "C:/Users/Alex/sigevaFront/src/pages/funcionario/PanelMetricas.tsx",
+              lineNumber: 25,
+              columnNumber: 29
+            }, this),
+            /* @__PURE__ */ jsxDEV("p", { children: "500" }, void 0, false, {
+              fileName: "C:/Users/Alex/sigevaFront/src/pages/funcionario/PanelMetricas.tsx",
+              lineNumber: 26,
+              columnNumber: 29
+            }, this)
+          ] }, void 0, true, {
+            fileName: "C:/Users/Alex/sigevaFront/src/pages/funcionario/PanelMetricas.tsx",
+            lineNumber: 24,
+            columnNumber: 25
+          }, this),
+          /* @__PURE__ */ jsxDEV("div", { children: [
+            /* @__PURE__ */ jsxDEV("p", { className: "text-primary fw-bold", children: "Votos Emitidos" }, void 0, false, {
+              fileName: "C:/Users/Alex/sigevaFront/src/pages/funcionario/PanelMetricas.tsx",
+              lineNumber: 29,
+              columnNumber: 29
+            }, this),
+            /* @__PURE__ */ jsxDEV("p", { children: "450" }, void 0, false, {
+              fileName: "C:/Users/Alex/sigevaFront/src/pages/funcionario/PanelMetricas.tsx",
+              lineNumber: 30,
+              columnNumber: 29
+            }, this)
+          ] }, void 0, true, {
+            fileName: "C:/Users/Alex/sigevaFront/src/pages/funcionario/PanelMetricas.tsx",
+            lineNumber: 28,
+            columnNumber: 25
+          }, this),
+          /* @__PURE__ */ jsxDEV("div", { children: [
+            /* @__PURE__ */ jsxDEV("p", { className: "text-primary fw-bold", children: "Participación" }, void 0, false, {
+              fileName: "C:/Users/Alex/sigevaFront/src/pages/funcionario/PanelMetricas.tsx",
+              lineNumber: 33,
+              columnNumber: 29
+            }, this),
+            /* @__PURE__ */ jsxDEV("p", { children: "90%" }, void 0, false, {
+              fileName: "C:/Users/Alex/sigevaFront/src/pages/funcionario/PanelMetricas.tsx",
+              lineNumber: 34,
+              columnNumber: 29
+            }, this)
+          ] }, void 0, true, {
+            fileName: "C:/Users/Alex/sigevaFront/src/pages/funcionario/PanelMetricas.tsx",
+            lineNumber: 32,
+            columnNumber: 25
+          }, this),
+          /* @__PURE__ */ jsxDEV("div", { children: [
+            /* @__PURE__ */ jsxDEV("p", { className: "text-primary fw-bold", children: "Inicio" }, void 0, false, {
+              fileName: "C:/Users/Alex/sigevaFront/src/pages/funcionario/PanelMetricas.tsx",
+              lineNumber: 37,
+              columnNumber: 29
+            }, this),
+            /* @__PURE__ */ jsxDEV("p", { children: "2025-07-21" }, void 0, false, {
+              fileName: "C:/Users/Alex/sigevaFront/src/pages/funcionario/PanelMetricas.tsx",
+              lineNumber: 38,
+              columnNumber: 29
+            }, this)
+          ] }, void 0, true, {
+            fileName: "C:/Users/Alex/sigevaFront/src/pages/funcionario/PanelMetricas.tsx",
+            lineNumber: 36,
+            columnNumber: 25
+          }, this)
+        ] }, void 0, true, {
+          fileName: "C:/Users/Alex/sigevaFront/src/pages/funcionario/PanelMetricas.tsx",
+          lineNumber: 23,
+          columnNumber: 21
+        }, this),
+        /* @__PURE__ */ jsxDEV("div", { className: "d-flex justify-content-between", children: [
+          /* @__PURE__ */ jsxDEV("div", { children: [
+            /* @__PURE__ */ jsxDEV("p", { className: "text-primary fw-bold", children: "Centro de formación" }, void 0, false, {
+              fileName: "C:/Users/Alex/sigevaFront/src/pages/funcionario/PanelMetricas.tsx",
+              lineNumber: 46,
+              columnNumber: 33
+            }, this),
+            /* @__PURE__ */ jsxDEV("p", { children: "Centro de servicios Empresariales" }, void 0, false, {
+              fileName: "C:/Users/Alex/sigevaFront/src/pages/funcionario/PanelMetricas.tsx",
+              lineNumber: 47,
+              columnNumber: 33
+            }, this)
+          ] }, void 0, true, {
+            fileName: "C:/Users/Alex/sigevaFront/src/pages/funcionario/PanelMetricas.tsx",
+            lineNumber: 45,
+            columnNumber: 29
+          }, this),
+          /* @__PURE__ */ jsxDEV("div", { children: [
+            /* @__PURE__ */ jsxDEV("p", { className: "text-primary fw-bold", children: "Jornada" }, void 0, false, {
+              fileName: "C:/Users/Alex/sigevaFront/src/pages/funcionario/PanelMetricas.tsx",
+              lineNumber: 51,
+              columnNumber: 33
+            }, this),
+            /* @__PURE__ */ jsxDEV("p", { children: "Mañana" }, void 0, false, {
+              fileName: "C:/Users/Alex/sigevaFront/src/pages/funcionario/PanelMetricas.tsx",
+              lineNumber: 52,
+              columnNumber: 33
+            }, this)
+          ] }, void 0, true, {
+            fileName: "C:/Users/Alex/sigevaFront/src/pages/funcionario/PanelMetricas.tsx",
+            lineNumber: 50,
+            columnNumber: 29
+          }, this),
+          /* @__PURE__ */ jsxDEV("div", { children: [
+            /* @__PURE__ */ jsxDEV("p", { className: "text-primary fw-bold", children: "Cierre" }, void 0, false, {
+              fileName: "C:/Users/Alex/sigevaFront/src/pages/funcionario/PanelMetricas.tsx",
+              lineNumber: 56,
+              columnNumber: 33
+            }, this),
+            /* @__PURE__ */ jsxDEV("p", { children: "2024-07-22" }, void 0, false, {
+              fileName: "C:/Users/Alex/sigevaFront/src/pages/funcionario/PanelMetricas.tsx",
+              lineNumber: 57,
+              columnNumber: 33
+            }, this)
+          ] }, void 0, true, {
+            fileName: "C:/Users/Alex/sigevaFront/src/pages/funcionario/PanelMetricas.tsx",
+            lineNumber: 55,
+            columnNumber: 29
+          }, this)
+        ] }, void 0, true, {
+          fileName: "C:/Users/Alex/sigevaFront/src/pages/funcionario/PanelMetricas.tsx",
+          lineNumber: 44,
+          columnNumber: 21
+        }, this)
+      ] }, void 0, true, {
+        fileName: "C:/Users/Alex/sigevaFront/src/pages/funcionario/PanelMetricas.tsx",
+        lineNumber: 17,
+        columnNumber: 17
+      }, this),
+      /* @__PURE__ */ jsxDEV("div", { className: "border rounded p-3 flex-fill", children: [
+        /* @__PURE__ */ jsxDEV("div", { children: /* @__PURE__ */ jsxDEV("h3", { className: "fw-bold", children: "Distribución De Votos" }, void 0, false, {
+          fileName: "C:/Users/Alex/sigevaFront/src/pages/funcionario/PanelMetricas.tsx",
+          lineNumber: 65,
+          columnNumber: 25
+        }, this) }, void 0, false, {
+          fileName: "C:/Users/Alex/sigevaFront/src/pages/funcionario/PanelMetricas.tsx",
+          lineNumber: 64,
+          columnNumber: 21
+        }, this),
+        /* @__PURE__ */ jsxDEV("div", { children: [
+          /* @__PURE__ */ jsxDEV("p", { children: "Sofia Ramirez" }, void 0, false, {
+            fileName: "C:/Users/Alex/sigevaFront/src/pages/funcionario/PanelMetricas.tsx",
+            lineNumber: 68,
+            columnNumber: 25
+          }, this),
+          /* @__PURE__ */ jsxDEV(ProgressBar, { now: 44.4, label: `44.4%`, className: "mb-2" }, void 0, false, {
+            fileName: "C:/Users/Alex/sigevaFront/src/pages/funcionario/PanelMetricas.tsx",
+            lineNumber: 69,
+            columnNumber: 25
+          }, this)
+        ] }, void 0, true, {
+          fileName: "C:/Users/Alex/sigevaFront/src/pages/funcionario/PanelMetricas.tsx",
+          lineNumber: 67,
+          columnNumber: 21
+        }, this),
+        /* @__PURE__ */ jsxDEV("div", { children: [
+          /* @__PURE__ */ jsxDEV("p", { children: "Carlos Mendoza" }, void 0, false, {
+            fileName: "C:/Users/Alex/sigevaFront/src/pages/funcionario/PanelMetricas.tsx",
+            lineNumber: 72,
+            columnNumber: 25
+          }, this),
+          /* @__PURE__ */ jsxDEV(ProgressBar, { now: 33.3, label: `33.3%`, className: "mb-2" }, void 0, false, {
+            fileName: "C:/Users/Alex/sigevaFront/src/pages/funcionario/PanelMetricas.tsx",
+            lineNumber: 73,
+            columnNumber: 25
+          }, this)
+        ] }, void 0, true, {
+          fileName: "C:/Users/Alex/sigevaFront/src/pages/funcionario/PanelMetricas.tsx",
+          lineNumber: 71,
+          columnNumber: 21
+        }, this),
+        /* @__PURE__ */ jsxDEV("div", { children: [
+          /* @__PURE__ */ jsxDEV("p", { children: "Laura García" }, void 0, false, {
+            fileName: "C:/Users/Alex/sigevaFront/src/pages/funcionario/PanelMetricas.tsx",
+            lineNumber: 76,
+            columnNumber: 25
+          }, this),
+          /* @__PURE__ */ jsxDEV(ProgressBar, { now: 22.2, label: `22.2%`, className: "mb-2" }, void 0, false, {
+            fileName: "C:/Users/Alex/sigevaFront/src/pages/funcionario/PanelMetricas.tsx",
+            lineNumber: 77,
+            columnNumber: 25
+          }, this)
+        ] }, void 0, true, {
+          fileName: "C:/Users/Alex/sigevaFront/src/pages/funcionario/PanelMetricas.tsx",
+          lineNumber: 75,
+          columnNumber: 21
+        }, this)
+      ] }, void 0, true, {
+        fileName: "C:/Users/Alex/sigevaFront/src/pages/funcionario/PanelMetricas.tsx",
+        lineNumber: 63,
+        columnNumber: 17
+      }, this)
+    ] }, void 0, true, {
+      fileName: "C:/Users/Alex/sigevaFront/src/pages/funcionario/PanelMetricas.tsx",
+      lineNumber: 15,
+      columnNumber: 13
+    }, this),
+    /* @__PURE__ */ jsxDEV(Container, { className: "mb-3", children: /* @__PURE__ */ jsxDEV("div", { className: "flex-fill border rounded p-3 w-75", children: [
+      /* @__PURE__ */ jsxDEV("h3", { children: "Resultados por Candidato" }, void 0, false, {
+        fileName: "C:/Users/Alex/sigevaFront/src/pages/funcionario/PanelMetricas.tsx",
+        lineNumber: 85,
+        columnNumber: 17
+      }, this),
+      /* @__PURE__ */ jsxDEV("div", { className: "d-flex justify-content-start", children: /* @__PURE__ */ jsxDEV(Table, { className: "w-100", children: [
+        /* @__PURE__ */ jsxDEV("thead", { children: /* @__PURE__ */ jsxDEV("tr", { children: [
+          /* @__PURE__ */ jsxDEV("th", { children: "Candidato" }, void 0, false, {
+            fileName: "C:/Users/Alex/sigevaFront/src/pages/funcionario/PanelMetricas.tsx",
+            lineNumber: 91,
+            columnNumber: 33
+          }, this),
+          /* @__PURE__ */ jsxDEV("th", { children: "Votos" }, void 0, false, {
+            fileName: "C:/Users/Alex/sigevaFront/src/pages/funcionario/PanelMetricas.tsx",
+            lineNumber: 92,
+            columnNumber: 33
+          }, this),
+          /* @__PURE__ */ jsxDEV("th", { children: "Porcentaje" }, void 0, false, {
+            fileName: "C:/Users/Alex/sigevaFront/src/pages/funcionario/PanelMetricas.tsx",
+            lineNumber: 93,
+            columnNumber: 33
+          }, this)
+        ] }, void 0, true, {
+          fileName: "C:/Users/Alex/sigevaFront/src/pages/funcionario/PanelMetricas.tsx",
+          lineNumber: 90,
+          columnNumber: 29
+        }, this) }, void 0, false, {
+          fileName: "C:/Users/Alex/sigevaFront/src/pages/funcionario/PanelMetricas.tsx",
+          lineNumber: 89,
+          columnNumber: 25
+        }, this),
+        /* @__PURE__ */ jsxDEV("tbody", { children: [
+          /* @__PURE__ */ jsxDEV("tr", { children: [
+            /* @__PURE__ */ jsxDEV("td", { children: "Sofia Ramirez" }, void 0, false, {
+              fileName: "C:/Users/Alex/sigevaFront/src/pages/funcionario/PanelMetricas.tsx",
+              lineNumber: 98,
+              columnNumber: 33
+            }, this),
+            /* @__PURE__ */ jsxDEV("td", { className: "text-primary fw-bold", children: "200" }, void 0, false, {
+              fileName: "C:/Users/Alex/sigevaFront/src/pages/funcionario/PanelMetricas.tsx",
+              lineNumber: 99,
+              columnNumber: 33
+            }, this),
+            /* @__PURE__ */ jsxDEV("td", { className: "text-primary fw-bold", children: "44.4%" }, void 0, false, {
+              fileName: "C:/Users/Alex/sigevaFront/src/pages/funcionario/PanelMetricas.tsx",
+              lineNumber: 100,
+              columnNumber: 33
+            }, this)
+          ] }, void 0, true, {
+            fileName: "C:/Users/Alex/sigevaFront/src/pages/funcionario/PanelMetricas.tsx",
+            lineNumber: 97,
+            columnNumber: 29
+          }, this),
+          /* @__PURE__ */ jsxDEV("tr", { children: [
+            /* @__PURE__ */ jsxDEV("td", { children: "Carlos Mendoza" }, void 0, false, {
+              fileName: "C:/Users/Alex/sigevaFront/src/pages/funcionario/PanelMetricas.tsx",
+              lineNumber: 103,
+              columnNumber: 33
+            }, this),
+            /* @__PURE__ */ jsxDEV("td", { className: "text-primary fw-bold", children: "150" }, void 0, false, {
+              fileName: "C:/Users/Alex/sigevaFront/src/pages/funcionario/PanelMetricas.tsx",
+              lineNumber: 104,
+              columnNumber: 33
+            }, this),
+            /* @__PURE__ */ jsxDEV("td", { className: "text-primary fw-bold", children: "33.3%" }, void 0, false, {
+              fileName: "C:/Users/Alex/sigevaFront/src/pages/funcionario/PanelMetricas.tsx",
+              lineNumber: 105,
+              columnNumber: 33
+            }, this)
+          ] }, void 0, true, {
+            fileName: "C:/Users/Alex/sigevaFront/src/pages/funcionario/PanelMetricas.tsx",
+            lineNumber: 102,
+            columnNumber: 29
+          }, this),
+          /* @__PURE__ */ jsxDEV("tr", { children: [
+            /* @__PURE__ */ jsxDEV("td", { children: "Laura García" }, void 0, false, {
+              fileName: "C:/Users/Alex/sigevaFront/src/pages/funcionario/PanelMetricas.tsx",
+              lineNumber: 108,
+              columnNumber: 33
+            }, this),
+            /* @__PURE__ */ jsxDEV("td", { className: "text-primary fw-bold", children: "100" }, void 0, false, {
+              fileName: "C:/Users/Alex/sigevaFront/src/pages/funcionario/PanelMetricas.tsx",
+              lineNumber: 109,
+              columnNumber: 33
+            }, this),
+            /* @__PURE__ */ jsxDEV("td", { className: "text-primary fw-bold", children: "22.2%" }, void 0, false, {
+              fileName: "C:/Users/Alex/sigevaFront/src/pages/funcionario/PanelMetricas.tsx",
+              lineNumber: 110,
+              columnNumber: 33
+            }, this)
+          ] }, void 0, true, {
+            fileName: "C:/Users/Alex/sigevaFront/src/pages/funcionario/PanelMetricas.tsx",
+            lineNumber: 107,
+            columnNumber: 29
+          }, this)
+        ] }, void 0, true, {
+          fileName: "C:/Users/Alex/sigevaFront/src/pages/funcionario/PanelMetricas.tsx",
+          lineNumber: 96,
+          columnNumber: 25
+        }, this)
+      ] }, void 0, true, {
+        fileName: "C:/Users/Alex/sigevaFront/src/pages/funcionario/PanelMetricas.tsx",
+        lineNumber: 88,
+        columnNumber: 21
+      }, this) }, void 0, false, {
+        fileName: "C:/Users/Alex/sigevaFront/src/pages/funcionario/PanelMetricas.tsx",
+        lineNumber: 87,
+        columnNumber: 17
+      }, this)
+    ] }, void 0, true, {
+      fileName: "C:/Users/Alex/sigevaFront/src/pages/funcionario/PanelMetricas.tsx",
+      lineNumber: 84,
+      columnNumber: 17
+    }, this) }, void 0, false, {
+      fileName: "C:/Users/Alex/sigevaFront/src/pages/funcionario/PanelMetricas.tsx",
+      lineNumber: 83,
+      columnNumber: 13
+    }, this),
+    /* @__PURE__ */ jsxDEV(Container, { className: "d-flex justify-content-end ", children: /* @__PURE__ */ jsxDEV(Button, { variant: "success", children: "Exportar informe PDF" }, void 0, false, {
+      fileName: "C:/Users/Alex/sigevaFront/src/pages/funcionario/PanelMetricas.tsx",
+      lineNumber: 119,
+      columnNumber: 17
+    }, this) }, void 0, false, {
+      fileName: "C:/Users/Alex/sigevaFront/src/pages/funcionario/PanelMetricas.tsx",
+      lineNumber: 118,
+      columnNumber: 13
+    }, this)
+  ] }, void 0, true, {
+    fileName: "C:/Users/Alex/sigevaFront/src/pages/funcionario/PanelMetricas.tsx",
+    lineNumber: 9,
+    columnNumber: 5
+  }, this);
+}
+_c = PanelMetricas;
+var _c;
+$RefreshReg$(_c, "PanelMetricas");
+import * as RefreshRuntime from "/@react-refresh";
+const inWebWorker = typeof WorkerGlobalScope !== "undefined" && self instanceof WorkerGlobalScope;
+if (import.meta.hot && !inWebWorker) {
+  if (!window.$RefreshReg$) {
+    throw new Error(
+      "@vitejs/plugin-react can't detect preamble. Something is wrong."
+    );
+  }
+  RefreshRuntime.__hmr_import(import.meta.url).then((currentExports) => {
+    RefreshRuntime.registerExportsForReactRefresh("C:/Users/Alex/sigevaFront/src/pages/funcionario/PanelMetricas.tsx", currentExports);
+    import.meta.hot.accept((nextExports) => {
+      if (!nextExports) return;
+      const invalidateMessage = RefreshRuntime.validateRefreshBoundaryAndEnqueueUpdate("C:/Users/Alex/sigevaFront/src/pages/funcionario/PanelMetricas.tsx", currentExports, nextExports);
+      if (invalidateMessage) import.meta.hot.invalidate(invalidateMessage);
+    });
+  });
+}
+function $RefreshReg$(type, id) {
+  return RefreshRuntime.register(type, "C:/Users/Alex/sigevaFront/src/pages/funcionario/PanelMetricas.tsx " + id);
+}
+function $RefreshSig$() {
+  return RefreshRuntime.createSignatureFunctionForTransform();
+}
+
+//# sourceMappingURL=data:application/json;base64,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QSxZQUNoQix1QkFBQyxRQUFHLFdBQVUsd0JBQXVCLG1CQUFyQztBQUFBO0FBQUE7QUFBQTtBQUFBLG1CQUF3QztBQUFBLFlBQ3hDLHVCQUFDLFFBQUcsV0FBVSx3QkFBdUIscUJBQXJDO0FBQUE7QUFBQTtBQUFBO0FBQUEsbUJBQTBDO0FBQUEsZUFIOUM7QUFBQTtBQUFBO0FBQUE7QUFBQSxpQkFJQTtBQUFBLGFBZko7QUFBQTtBQUFBO0FBQUE7QUFBQSxlQWdCQTtBQUFBLFdBeEJKO0FBQUE7QUFBQTtBQUFBO0FBQUEsYUF5QkEsS0ExQko7QUFBQTtBQUFBO0FBQUE7QUFBQSxhQTJCQTtBQUFBLFNBOUJBO0FBQUE7QUFBQTtBQUFBO0FBQUEsV0ErQkEsS0FoQ0o7QUFBQTtBQUFBO0FBQUE7QUFBQSxXQWlDQTtBQUFBLElBRUEsdUJBQUMsYUFBVSxXQUFVLCtCQUNqQixpQ0FBQyxVQUFPLFNBQVEsV0FBVSxvQ0FBMUI7QUFBQTtBQUFBO0FBQUE7QUFBQSxXQUE4QyxLQURsRDtBQUFBO0FBQUE7QUFBQTtBQUFBLFdBRUE7QUFBQSxPQS9HSjtBQUFBO0FBQUE7QUFBQTtBQUFBLFNBaUhBO0FBRVI7QUFBQ0MsS0F0SHVCRDtBQUFhLElBQUFDO0FBQUEsYUFBQUEsSUFBQSIsIm5hbWVzIjpbIkNvbnRhaW5lciIsIlRhYmxlIiwiQnV0dG9uIiwiUHJvZ3Jlc3NCYXIiLCJQYW5lbE1ldHJpY2FzIiwiX2MiXSwiaWdub3JlTGlzdCI6W10sInNvdXJjZXMiOlsiUGFuZWxNZXRyaWNhcy50c3giXSwic291cmNlc0NvbnRlbnQiOlsiaW1wb3J0IENvbnRhaW5lciBmcm9tIFwicmVhY3QtYm9vdHN0cmFwL0NvbnRhaW5lclwiXHJcbmltcG9ydCBUYWJsZSBmcm9tIFwicmVhY3QtYm9vdHN0cmFwL1RhYmxlXCJcclxuaW1wb3J0IEJ1dHRvbiBmcm9tIFwicmVhY3QtYm9vdHN0cmFwL0J1dHRvblwiXHJcbmltcG9ydCBQcm9ncmVzc0JhciBmcm9tICdyZWFjdC1ib290c3RyYXAvUHJvZ3Jlc3NCYXInO1xyXG5cclxuZXhwb3J0IGRlZmF1bHQgZnVuY3Rpb24gUGFuZWxNZXRyaWNhcygpe1xyXG5cclxuICAgIHJldHVybihcclxuICAgICAgICA8ZGl2PiAgICAgICBcclxuICAgICAgICAgICAgPENvbnRhaW5lcj5cclxuICAgICAgICAgICAgICAgIDxoMSBjbGFzc05hbWU9XCJmdy1ib2xkIFwiPlBhbmVsIGRlIE3DqXRyaWNhcyB5IFJlc3VsdGFkb3M8L2gxPlxyXG4gICAgICAgICAgICAgICAgPHAgY2xhc3NOYW1lPVwidGV4dC1wcmltYXJ5XCI+RWxlY2Npw7NuIGRlIHJlcHJlc2VudGFudGUgZGUgQXByZW5kaWNlcyA8L3A+XHJcbiAgICAgICAgICAgIDwvQ29udGFpbmVyPlxyXG5cclxuICAgICAgICAgICAgPENvbnRhaW5lciBjbGFzc05hbWU9XCJkLWZsZXggZ2FwLTMgbWItM1wiPlxyXG4gICAgICAgICAgICAgICAgey8qUkVTVU1FTiBHRU5FUkFMICovfVxyXG4gICAgICAgICAgICAgICAgPGRpdiBjbGFzc05hbWU9XCJib3JkZXIgcm91bmRlZCBwLTMgZmxleC1maWxsIHctNzVcIiA+XHJcbiAgICAgICAgICAgICAgICAgICAgXHJcbiAgICAgICAgICAgICAgICAgICAgPGRpdiA+XHJcbiAgICAgICAgICAgICAgICAgICAgICAgIDxoMyBjbGFzc05hbWU9XCJmdy1ib2xkIG1iLTNcIj5SZXN1bWVuIEdlbmVyYWw8L2gzPlxyXG4gICAgICAgICAgICAgICAgICAgIDwvZGl2PlxyXG4gICAgICAgICAgICAgICAgICAgIHsvKiBwYXJ0ZSAxICovfVxyXG4gICAgICAgICAgICAgICAgICAgIDxkaXYgY2xhc3NOYW1lPVwiZC1mbGV4IGp1c3RpZnktY29udGVudC1iZXR3ZWVuIG1iLTNcIj5cclxuICAgICAgICAgICAgICAgICAgICAgICAgPGRpdiA+XHJcbiAgICAgICAgICAgICAgICAgICAgICAgICAgICA8cCBjbGFzc05hbWU9XCJ0ZXh0LXByaW1hcnkgZnctYm9sZFwiID5BcHJlbmRpY2VzIEhhYmlsaXRhZG9zPC9wPlxyXG4gICAgICAgICAgICAgICAgICAgICAgICAgICAgPHA+NTAwPC9wPlxyXG4gICAgICAgICAgICAgICAgICAgICAgICA8L2Rpdj5cclxuICAgICAgICAgICAgICAgICAgICAgICAgPGRpdj5cclxuICAgICAgICAgICAgICAgICAgICAgICAgICAgIDxwIGNsYXNzTmFtZT1cInRleHQtcHJpbWFyeSBmdy1ib2xkXCI+Vm90b3MgRW1pdGlkb3M8L3A+XHJcbiAgICAgICAgICAgICAgICAgICAgICAgICAgICA8cD40NTA8L3A+XHJcbiAgICAgICAgICAgICAgICAgICAgICAgIDwvZGl2PlxyXG4gICAgICAgICAgICAgICAgICAgICAgICA8ZGl2PlxyXG4gICAgICAgICAgICAgICAgICAgICAgICAgICAgPHAgY2xhc3NOYW1lPVwidGV4dC1wcmltYXJ5IGZ3LWJvbGRcIiA+UGFydGljaXBhY2nDs248L3A+XHJcbiAgICAgICAgICAgICAgICAgICAgICAgICAgICA8cD45MCU8L3A+XHJcbiAgICAgICAgICAgICAgICAgICAgICAgIDwvZGl2PlxyXG4gICAgICAgICAgICAgICAgICAgICAgICA8ZGl2PlxyXG4gICAgICAgICAgICAgICAgICAgICAgICAgICAgPHAgY2xhc3NOYW1lPVwidGV4dC1wcmltYXJ5IGZ3LWJvbGRcIj5JbmljaW88L3A+XHJcbiAgICAgICAgICAgICAgICAgICAgICAgICAgICA8cD4yMDI1LTA3LTIxPC9wPlxyXG4gICAgICAgICAgICAgICAgICAgICAgICA8L2Rpdj5cclxuICAgICAgICAgICAgICAgICAgICA8L2Rpdj4gICAgXHJcblxyXG4gICAgICAgICAgICAgICAgICAgIHsvKiBwYXJ0ZSAyICovfVxyXG5cclxuICAgICAgICAgICAgICAgICAgICA8ZGl2IGNsYXNzTmFtZT1cImQtZmxleCBqdXN0aWZ5LWNvbnRlbnQtYmV0d2VlblwiPlxyXG4gICAgICAgICAgICAgICAgICAgICAgICAgICAgPGRpdj5cclxuICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICA8cCBjbGFzc05hbWU9XCJ0ZXh0LXByaW1hcnkgZnctYm9sZFwiPkNlbnRybyBkZSBmb3JtYWNpw7NuPC9wPlxyXG4gICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIDxwPkNlbnRybyBkZSBzZXJ2aWNpb3MgRW1wcmVzYXJpYWxlczwvcD5cclxuICAgICAgICAgICAgICAgICAgICAgICAgICAgIDwvZGl2PlxyXG4gICAgICAgICAgICAgICAgICAgICAgICAgICAgXHJcbiAgICAgICAgICAgICAgICAgICAgICAgICAgICA8ZGl2PlxyXG4gICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIDxwIGNsYXNzTmFtZT1cInRleHQtcHJpbWFyeSBmdy1ib2xkXCI+Sm9ybmFkYTwvcD5cclxuICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICA8cD5NYcOxYW5hPC9wPlxyXG4gICAgICAgICAgICAgICAgICAgICAgICAgICAgPC9kaXY+XHJcblxyXG4gICAgICAgICAgICAgICAgICAgICAgICAgICAgPGRpdj5cclxuICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICA8cCBjbGFzc05hbWU9XCJ0ZXh0LXByaW1hcnkgZnctYm9sZFwiPkNpZXJyZTwvcD5cclxuICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICA8cD4yMDI0LTA3LTIyPC9wPlxyXG4gICAgICAgICAgICAgICAgICAgICAgICAgICAgPC9kaXY+XHJcbiAgICAgICAgICAgICAgICAgICAgPC9kaXY+XHJcbiAgICAgICAgICAgICAgICA8L2Rpdj5cclxuXHJcbiAgICAgICAgICAgICAgICB7LyogRElTVFJJQlVDScOTTiBERSBWT1RPUyAqL31cclxuICAgICAgICAgICAgICAgIDxkaXYgY2xhc3NOYW1lPVwiYm9yZGVyIHJvdW5kZWQgcC0zIGZsZXgtZmlsbFwiPlxyXG4gICAgICAgICAgICAgICAgICAgIDxkaXY+XHJcbiAgICAgICAgICAgICAgICAgICAgICAgIDxoMyBjbGFzc05hbWU9XCJmdy1ib2xkXCI+RGlzdHJpYnVjacOzbiBEZSBWb3RvczwvaDM+XHJcbiAgICAgICAgICAgICAgICAgICAgPC9kaXY+XHJcbiAgICAgICAgICAgICAgICAgICAgPGRpdj5cclxuICAgICAgICAgICAgICAgICAgICAgICAgPHAgPlNvZmlhIFJhbWlyZXo8L3A+XHJcbiAgICAgICAgICAgICAgICAgICAgICAgIDxQcm9ncmVzc0JhciBub3c9ezQ0LjR9IGxhYmVsPXtgNDQuNCVgfSBjbGFzc05hbWU9XCJtYi0yXCIvPlxyXG4gICAgICAgICAgICAgICAgICAgIDwvZGl2PlxyXG4gICAgICAgICAgICAgICAgICAgIDxkaXY+XHJcbiAgICAgICAgICAgICAgICAgICAgICAgIDxwPkNhcmxvcyBNZW5kb3phPC9wPlxyXG4gICAgICAgICAgICAgICAgICAgICAgICA8UHJvZ3Jlc3NCYXIgbm93PXszMy4zfSBsYWJlbD17YDMzLjMlYH0gY2xhc3NOYW1lPVwibWItMlwiLz5cclxuICAgICAgICAgICAgICAgICAgICA8L2Rpdj5cclxuICAgICAgICAgICAgICAgICAgICA8ZGl2PlxyXG4gICAgICAgICAgICAgICAgICAgICAgICA8cD5MYXVyYSBHYXJjw61hPC9wPlxyXG4gICAgICAgICAgICAgICAgICAgICAgICA8UHJvZ3Jlc3NCYXIgbm93PXsyMi4yfSBsYWJlbD17YDIyLjIlYH0gY2xhc3NOYW1lPVwibWItMlwiLz5cclxuICAgICAgICAgICAgICAgICAgICA8L2Rpdj5cclxuICAgICAgICAgICAgICAgIDwvZGl2PlxyXG4gICAgICAgICAgICA8L0NvbnRhaW5lcj5cclxuXHJcblxyXG4gICAgICAgICAgICA8Q29udGFpbmVyIGNsYXNzTmFtZT1cIm1iLTNcIiA+XHJcbiAgICAgICAgICAgICAgICA8ZGl2IGNsYXNzTmFtZT1cImZsZXgtZmlsbCBib3JkZXIgcm91bmRlZCBwLTMgdy03NVwiPlxyXG4gICAgICAgICAgICAgICAgPGgzPlJlc3VsdGFkb3MgcG9yIENhbmRpZGF0bzwvaDM+XHJcblxyXG4gICAgICAgICAgICAgICAgPGRpdiAgY2xhc3NOYW1lPVwiZC1mbGV4IGp1c3RpZnktY29udGVudC1zdGFydFwiID5cclxuICAgICAgICAgICAgICAgICAgICA8VGFibGUgY2xhc3NOYW1lPVwidy0xMDBcIj5cclxuICAgICAgICAgICAgICAgICAgICAgICAgPHRoZWFkPlxyXG4gICAgICAgICAgICAgICAgICAgICAgICAgICAgPHRyPlxyXG4gICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIDx0aD5DYW5kaWRhdG88L3RoPlxyXG4gICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIDx0aD5Wb3RvczwvdGg+XHJcbiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgPHRoPlBvcmNlbnRhamU8L3RoPlxyXG4gICAgICAgICAgICAgICAgICAgICAgICAgICAgPC90cj5cclxuICAgICAgICAgICAgICAgICAgICAgICAgPC90aGVhZD5cclxuICAgICAgICAgICAgICAgICAgICAgICAgPHRib2R5PlxyXG4gICAgICAgICAgICAgICAgICAgICAgICAgICAgPHRyPlxyXG4gICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIDx0ZD5Tb2ZpYSBSYW1pcmV6PC90ZD5cclxuICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICA8dGQgY2xhc3NOYW1lPVwidGV4dC1wcmltYXJ5IGZ3LWJvbGRcIj4yMDA8L3RkPlxyXG4gICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIDx0ZCBjbGFzc05hbWU9XCJ0ZXh0LXByaW1hcnkgZnctYm9sZFwiPjQ0LjQlPC90ZD5cclxuICAgICAgICAgICAgICAgICAgICAgICAgICAgIDwvdHI+XHJcbiAgICAgICAgICAgICAgICAgICAgICAgICAgICA8dHI+XHJcbiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgPHRkPkNhcmxvcyBNZW5kb3phPC90ZD5cclxuICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICA8dGQgY2xhc3NOYW1lPVwidGV4dC1wcmltYXJ5IGZ3LWJvbGRcIj4xNTA8L3RkPlxyXG4gICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIDx0ZCBjbGFzc05hbWU9XCJ0ZXh0LXByaW1hcnkgZnctYm9sZFwiPjMzLjMlPC90ZD5cclxuICAgICAgICAgICAgICAgICAgICAgICAgICAgIDwvdHI+XHJcbiAgICAgICAgICAgICAgICAgICAgICAgICAgICA8dHI+XHJcbiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgPHRkPkxhdXJhIEdhcmPDrWE8L3RkPlxyXG4gICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIDx0ZCBjbGFzc05hbWU9XCJ0ZXh0LXByaW1hcnkgZnctYm9sZFwiPjEwMDwvdGQ+XHJcbiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgPHRkIGNsYXNzTmFtZT1cInRleHQtcHJpbWFyeSBmdy1ib2xkXCI+MjIuMiU8L3RkPlxyXG4gICAgICAgICAgICAgICAgICAgICAgICAgICAgPC90cj5cclxuICAgICAgICAgICAgICAgICAgICAgICAgPC90Ym9keT5cclxuICAgICAgICAgICAgICAgICAgICA8L1RhYmxlPlxyXG4gICAgICAgICAgICAgICAgPC9kaXY+XHJcbiAgICAgICAgICAgICAgICA8L2Rpdj5cclxuICAgICAgICAgICAgPC9Db250YWluZXI+XHJcblxyXG4gICAgICAgICAgICA8Q29udGFpbmVyIGNsYXNzTmFtZT1cImQtZmxleCBqdXN0aWZ5LWNvbnRlbnQtZW5kIFwiPlxyXG4gICAgICAgICAgICAgICAgPEJ1dHRvbiB2YXJpYW50PVwic3VjY2Vzc1wiPkV4cG9ydGFyIGluZm9ybWUgUERGPC9CdXR0b24+XHJcbiAgICAgICAgICAgIDwvQ29udGFpbmVyPlxyXG5cclxuICAgICAgICA8L2Rpdj5cclxuICAgIClcclxufSJdLCJmaWxlIjoiQzovVXNlcnMvQWxleC9zaWdldmFGcm9udC9zcmMvcGFnZXMvZnVuY2lvbmFyaW8vUGFuZWxNZXRyaWNhcy50c3gifQ==
