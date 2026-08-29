@@ -1,5 +1,7 @@
 import jsPDF from "jspdf";
 import autoTable from "jspdf-autotable";
+import { esJornada } from "../constants/jornada";
+import { bloquesPorJornada } from "./resultadosJornada";
 
 export interface Candidato {
   id: number;
@@ -8,6 +10,7 @@ export interface Candidato {
   votos: number;
   porcentaje: number;
   numeroTarjeton?: string;
+  jornada?: string;
   propuesta?: string;
 }
 
@@ -188,7 +191,19 @@ export async function generarReporte(eleccion: Eleccion) {
   ensureSpace(lineGap * 6 + 4);
   doc.text(`Nombre: ${eleccion.nombre}`, margin, currentY); currentY += lineGap;
   doc.text(`Centro: ${eleccion.centro}`, margin, currentY); currentY += lineGap;
-  doc.text(`Jornada: ${eleccion.jornada}`, margin, currentY); currentY += lineGap;
+  const candidatosTodos = eleccion.candidatos ?? [];
+  const jornadasEnDatos = new Set(
+    candidatosTodos.map((c) => c.jornada).filter(esJornada)
+  );
+  const reportePorJornada = jornadasEnDatos.size > 1;
+  doc.text(
+    reportePorJornada
+      ? "Jornadas: Mañana, Tarde y Noche"
+      : `Jornada: ${eleccion.jornada}`,
+    margin,
+    currentY
+  );
+  currentY += lineGap;
   doc.text(`Estado: ${eleccion.estado}`, margin, currentY); currentY += lineGap;
   doc.text(`Fecha: ${eleccion.fechaInicio} a ${eleccion.fechaFin}`, margin, currentY); currentY += lineGap;
   doc.text(`Total Votos: ${eleccion.totalVotos}`, margin, currentY); currentY += lineGap;
@@ -197,77 +212,249 @@ export async function generarReporte(eleccion: Eleccion) {
     currentY += lineGap;
   }
 
-  // Ganador
-  const ganador = eleccion.candidatos && eleccion.candidatos.length > 0
-    ? [...eleccion.candidatos].sort((a, b) => b.votos - a.votos)[0]
-    : null;
+  if (reportePorJornada) {
+    const bloques = bloquesPorJornada(candidatosTodos, true);
 
-  doc.setFontSize(14);
-  doc.setFont("helvetica", "bold");
-  doc.setTextColor(0, 128, 0);
-  ensureSpace(12);
-  doc.text("GANADOR", margin, currentY);
-  currentY += 8;
-  doc.setFontSize(12);
-  doc.setTextColor(0, 0, 0);
-  if (ganador) {
-    doc.text(`${ganador.nombre} ${ganador.apellido} - ${ganador.votos} votos (${ganador.porcentaje.toFixed(2)}%)`, margin, currentY);
-  } else {
-    doc.text("No hay candidatos registrados.", margin, currentY);
-  }
-  currentY += 10;
+    doc.setFontSize(14);
+    doc.setFont("helvetica", "bold");
+    doc.setTextColor(0, 128, 0);
+    ensureSpace(14);
+    doc.text("GANADORES POR JORNADA", margin, currentY);
+    currentY += 6;
 
-  // Resultados por candidato (tabla)
-  if (eleccion.candidatos?.length) {
-    ensureSpace(20);
     autoTable(doc, {
       startY: currentY,
-      head: [["Candidato", "Tarjetón", "Votos", "Porcentaje", "Estado"]],
-      body: eleccion.candidatos.map(c => [
-        `${c.nombre} ${c.apellido}`,
-        c.numeroTarjeton || "-",
-        c.votos,
-        `${c.porcentaje.toFixed(2)}%`,
-        c.id === ganador?.id ? "Ganador" : "Candidato",
+      head: [["Jornada", "Ganador", "Votos", "%", "Ventaja vs 2°"]],
+      body: bloques.map((b) => [
+        b.jornada,
+        b.ganador ? `${b.ganador.nombre} ${b.ganador.apellido}` : "Sin candidatos",
+        b.ganador ? b.ganador.votos : "—",
+        b.ganador ? `${b.ganador.porcentaje.toFixed(2)}%` : "—",
+        b.ventaja != null ? `${b.ventaja} votos` : "—",
       ]),
       theme: "grid",
-      headStyles: { fillColor: [59, 130, 246], textColor: 255 },
+      headStyles: { fillColor: [57, 169, 0], textColor: 255 },
       alternateRowStyles: { fillColor: [245, 245, 245] },
-      styles: { overflow: 'linebreak' },
       margin: { left: margin, right: margin },
     });
-    currentY = (doc as any).lastAutoTable.finalY + 8;
+    currentY = (doc as any).lastAutoTable.finalY + 12;
+
+    for (const bloque of bloques) {
+      ensureSpace(28);
+      doc.setFontSize(13);
+      doc.setFont("helvetica", "bold");
+      doc.setTextColor(0, 100, 0);
+      doc.text(`JORNADA ${bloque.jornada.toUpperCase()}`, margin, currentY);
+      currentY += 7;
+      doc.setFontSize(12);
+      doc.setTextColor(0, 0, 0);
+      doc.setFont("helvetica", "normal");
+
+      if (!bloque.ganador) {
+        doc.text("Sin candidatos en esta jornada.", margin, currentY);
+        currentY += 12;
+        continue;
+      }
+
+      doc.setFont("helvetica", "bold");
+      doc.text(
+        `Ganador: ${bloque.ganador.nombre} ${bloque.ganador.apellido} — ${bloque.ganador.votos} votos (${bloque.ganador.porcentaje.toFixed(2)}%)`,
+        margin,
+        currentY
+      );
+      currentY += 7;
+      doc.setFont("helvetica", "normal");
+      if (bloque.segundo && bloque.ventaja != null) {
+        doc.text(
+          `Ventaja: ${bloque.ventaja} voto${bloque.ventaja === 1 ? "" : "s"} sobre ${bloque.segundo.nombre} ${bloque.segundo.apellido} (${bloque.segundo.votos} votos).`,
+          margin,
+          currentY
+        );
+      } else {
+        doc.text("Único candidato de esta jornada.", margin, currentY);
+      }
+      currentY += 8;
+
+      autoTable(doc, {
+        startY: currentY,
+        head: [["Candidato", "Tarjetón", "Votos", "Porcentaje", "Estado"]],
+        body: bloque.lista.map((c) => [
+          `${c.nombre} ${c.apellido}`,
+          c.numeroTarjeton || "-",
+          c.votos,
+          `${c.porcentaje.toFixed(2)}%`,
+          c.id === bloque.ganador?.id ? "Ganador" : "Candidato",
+        ]),
+        theme: "grid",
+        headStyles: { fillColor: [59, 130, 246], textColor: 255 },
+        alternateRowStyles: { fillColor: [245, 245, 245] },
+        styles: { overflow: "linebreak" },
+        margin: { left: margin, right: margin },
+      });
+      currentY = (doc as any).lastAutoTable.finalY + 6;
+
+      if (bloque.lista.some((c) => c.propuesta && c.propuesta.trim().length > 0)) {
+        autoTable(doc, {
+          startY: currentY,
+          head: [["Candidato", "Propuesta"]],
+          body: bloque.lista.map((c) => [
+            `${c.nombre} ${c.apellido}`,
+            c.propuesta ? c.propuesta : "-",
+          ]),
+          theme: "grid",
+          headStyles: { fillColor: [99, 102, 241], textColor: 255 },
+          styles: { cellWidth: "wrap", overflow: "linebreak" },
+          columnStyles: { 0: { cellWidth: 60 }, 1: { cellWidth: "auto" } },
+          margin: { left: margin, right: margin },
+        });
+        currentY = (doc as any).lastAutoTable.finalY + 6;
+      }
+
+      const chartHeight = Math.min(90, 24 + bloque.lista.length * 22);
+      const chartWidth = pageWidth - margin * 2;
+      ensureSpace(chartHeight + 16);
+      doc.setFontSize(11);
+      doc.setFont("helvetica", "bold");
+      doc.text(`Votos jornada ${bloque.jornada}`, pageWidth / 2, currentY, { align: "center" });
+      currentY += 5;
+      drawBarChart(
+        doc,
+        margin,
+        currentY,
+        chartWidth,
+        chartHeight,
+        bloque.lista.map((c) => ({
+          label: `${c.nombre} ${c.apellido}`.slice(0, 18),
+          value: c.votos,
+        }))
+      );
+      currentY += chartHeight + 10;
+    }
+  } else {
+    const ganador = candidatosTodos.length
+      ? [...candidatosTodos].sort((a, b) => b.votos - a.votos)[0]
+      : null;
+
+    doc.setFontSize(14);
+    doc.setFont("helvetica", "bold");
+    doc.setTextColor(0, 128, 0);
+    ensureSpace(12);
+    doc.text("GANADOR", margin, currentY);
+    currentY += 8;
+    doc.setFontSize(12);
+    doc.setTextColor(0, 0, 0);
+    if (ganador) {
+      doc.text(
+        `${ganador.nombre} ${ganador.apellido} - ${ganador.votos} votos (${ganador.porcentaje.toFixed(2)}%)`,
+        margin,
+        currentY
+      );
+      currentY += 7;
+      const segundo = [...candidatosTodos].sort((a, b) => b.votos - a.votos)[1];
+      doc.setFont("helvetica", "normal");
+      if (segundo) {
+        const ventaja = ganador.votos - segundo.votos;
+        doc.text(
+          `Ventaja: ${ventaja} voto${ventaja === 1 ? "" : "s"} sobre ${segundo.nombre} ${segundo.apellido} (${segundo.votos} votos).`,
+          margin,
+          currentY
+        );
+      } else {
+        doc.text("Único candidato de esta jornada.", margin, currentY);
+      }
+    } else {
+      doc.text("No hay candidatos registrados.", margin, currentY);
+    }
+    currentY += 10;
+
+    if (candidatosTodos.length) {
+      ensureSpace(20);
+      autoTable(doc, {
+        startY: currentY,
+        head: [["Candidato", "Tarjetón", "Votos", "Porcentaje", "Estado"]],
+        body: candidatosTodos.map((c) => [
+          `${c.nombre} ${c.apellido}`,
+          c.numeroTarjeton || "-",
+          c.votos,
+          `${c.porcentaje.toFixed(2)}%`,
+          c.id === ganador?.id ? "Ganador" : "Candidato",
+        ]),
+        theme: "grid",
+        headStyles: { fillColor: [59, 130, 246], textColor: 255 },
+        alternateRowStyles: { fillColor: [245, 245, 245] },
+        styles: { overflow: "linebreak" },
+        margin: { left: margin, right: margin },
+      });
+      currentY = (doc as any).lastAutoTable.finalY + 8;
+    }
+
+    if (candidatosTodos.some((c) => c.propuesta && c.propuesta.trim().length > 0)) {
+      ensureSpace(20);
+      autoTable(doc, {
+        startY: currentY,
+        head: [["Candidato", "Propuesta"]],
+        body: candidatosTodos.map((c) => [
+          `${c.nombre} ${c.apellido}`,
+          c.propuesta ? c.propuesta : "-",
+        ]),
+        theme: "grid",
+        headStyles: { fillColor: [99, 102, 241], textColor: 255 },
+        styles: { cellWidth: "wrap", overflow: "linebreak" },
+        columnStyles: { 0: { cellWidth: 60 }, 1: { cellWidth: "auto" } },
+        margin: { left: margin, right: margin },
+      });
+      currentY = (doc as any).lastAutoTable.finalY + 8;
+    }
+
+    if (candidatosTodos.length) {
+      const totalVotos = candidatosTodos.reduce((sum, c) => sum + c.votos, 0);
+      const promedio = totalVotos / candidatosTodos.length;
+      const max = Math.max(...candidatosTodos.map((c) => c.votos));
+      const min = Math.min(...candidatosTodos.map((c) => c.votos));
+      const segundoLugar = [...candidatosTodos].sort((a, b) => b.votos - a.votos)[1]?.votos || 0;
+
+      ensureSpace(20);
+      doc.setFontSize(14);
+      doc.setFont("helvetica", "bold");
+      doc.setTextColor(0, 0, 0);
+      doc.text("ESTADÍSTICAS", margin, currentY);
+      doc.setFontSize(12);
+      doc.setFont("helvetica", "normal");
+      currentY += 8;
+      doc.text(`• Total votos: ${totalVotos}`, margin, currentY); currentY += 6;
+      doc.text(`• Promedio por candidato: ${promedio.toFixed(1)}`, margin, currentY); currentY += 6;
+      doc.text(`• Máximo de votos: ${max}`, margin, currentY); currentY += 6;
+      doc.text(`• Mínimo de votos: ${min}`, margin, currentY); currentY += 6;
+      doc.text(`• Diferencia 1° y 2° lugar: ${max - segundoLugar}`, margin, currentY); currentY += 8;
+
+      const chartHeight = 90;
+      const chartWidth = pageWidth - margin * 2;
+      ensureSpace(chartHeight + 16);
+      doc.setFontSize(12);
+      doc.setFont("helvetica", "bold");
+      doc.text("CANTIDAD DE VOTOS POR CANDIDATO", pageWidth / 2, currentY, { align: "center" });
+      currentY += 6;
+      drawBarChart(
+        doc,
+        margin,
+        currentY,
+        chartWidth,
+        chartHeight,
+        candidatosTodos.map((c) => ({
+          label: `${c.nombre} ${c.apellido}`.slice(0, 18),
+          value: c.votos,
+        }))
+      );
+      currentY += chartHeight + 6;
+    }
   }
 
-  // Propuestas por candidato (tabla)
-  if (eleccion.candidatos?.some(c => c.propuesta && c.propuesta.trim().length > 0)) {
-    ensureSpace(20);
-    autoTable(doc, {
-      startY: currentY,
-      head: [["Candidato", "Propuesta"]],
-      body: eleccion.candidatos.map(c => [
-        `${c.nombre} ${c.apellido}`,
-        c.propuesta ? c.propuesta : "-",
-      ]),
-      theme: "grid",
-      headStyles: { fillColor: [99, 102, 241], textColor: 255 },
-      styles: { cellWidth: 'wrap', overflow: 'linebreak' },
-      columnStyles: {
-        0: { cellWidth: 60 },
-        1: { cellWidth: 'auto' },
-      },
-      margin: { left: margin, right: margin },
-    });
-    currentY = (doc as any).lastAutoTable.finalY + 8;
-  }
-
-  // Participantes (tabla)
   if (eleccion.participantes?.length) {
     ensureSpace(20);
     autoTable(doc, {
       startY: currentY,
       head: [["Nombre", "Documento", "Fecha de Voto"]],
-      body: eleccion.participantes.map(p => [
+      body: eleccion.participantes.map((p) => [
         `${p.nombre} ${p.apellido}`,
         p.documento,
         new Date(p.fechaVoto).toLocaleDateString("es-ES"),
@@ -275,54 +462,18 @@ export async function generarReporte(eleccion: Eleccion) {
       theme: "grid",
       headStyles: { fillColor: [16, 185, 129], textColor: 255 },
       alternateRowStyles: { fillColor: [240, 253, 244] },
-      styles: { overflow: 'linebreak' },
+      styles: { overflow: "linebreak" },
       margin: { left: margin, right: margin },
     });
-    currentY = (doc as any).lastAutoTable.finalY + 8;
   }
 
-  // Estadísticas + gráfica
-  if (eleccion.candidatos?.length) {
-    const totalVotos = eleccion.candidatos.reduce((sum, c) => sum + c.votos, 0);
-    const promedio = totalVotos / eleccion.candidatos.length;
-    const max = Math.max(...eleccion.candidatos.map(c => c.votos));
-    const min = Math.min(...eleccion.candidatos.map(c => c.votos));
-    const segundoLugar = [...eleccion.candidatos].sort((a, b) => b.votos - a.votos)[1]?.votos || 0;
-
-    ensureSpace(20);
-
-    doc.setFontSize(14);
-    doc.setFont("helvetica", "bold");
-    doc.setTextColor(0, 0, 0);
-    doc.text("ESTADÍSTICAS", margin, currentY);
-
-    doc.setFontSize(12);
-    doc.setFont("helvetica", "normal");
-    currentY += 8;
-    doc.text(`• Total votos: ${totalVotos}`, margin, currentY); currentY += 6;
-    doc.text(`• Promedio por candidato: ${promedio.toFixed(1)}`, margin, currentY); currentY += 6;
-    doc.text(`• Máximo de votos: ${max}`, margin, currentY); currentY += 6;
-    doc.text(`• Mínimo de votos: ${min}`, margin, currentY); currentY += 6;
-    doc.text(`• Diferencia 1° y 2° lugar: ${max - segundoLugar}`, margin, currentY); currentY += 8;
-
-    // Título de la gráfica
-    doc.setFontSize(12);
-    doc.setFont("helvetica", "bold");
-    const chartTitle = "CANTIDAD DE VOTOS POR CANDIDATO";
-    ensureSpace(8);
-    doc.text(chartTitle, pageWidth / 2, currentY, { align: "center" });
-    currentY += 6;
-
-    // Gráfica de barras dibujada directamente en el PDF
-    const chartHeight = 90;
-    const chartWidth = pageWidth - margin * 2;
-    ensureSpace(chartHeight + 10);
-    drawBarChart(doc, margin, currentY, chartWidth, chartHeight,
-      eleccion.candidatos.map(c => ({ label: `${c.nombre} ${c.apellido}`.slice(0, 18), value: c.votos }))
-    );
-    currentY += chartHeight + 6;
-  }
-
-  const nombreArchivo = `Reporte_Eleccion_${eleccion.nombre.replace(/\s+/g, "_")}_${new Date().toISOString().split("T")[0]}.pdf`;
+  const jornadaUnica = jornadasEnDatos.size === 1 ? [...jornadasEnDatos][0] : "";
+  const nombreArchivo = `Reporte_Eleccion_${eleccion.nombre.replace(/\s+/g, "_")}${
+    reportePorJornada
+      ? "_ganadores_por_jornada"
+      : jornadaUnica
+        ? `_jornada_${jornadaUnica.replace(/\s+/g, "_")}`
+        : ""
+  }_${new Date().toISOString().split("T")[0]}.pdf`;
   doc.save(nombreArchivo);
 }

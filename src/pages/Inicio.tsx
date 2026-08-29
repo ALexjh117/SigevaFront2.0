@@ -148,12 +148,10 @@ const Inicio: React.FC = () => {
 
       <section className="lp-hero">
         <picture>
-          <source srcSet="/landing/hero-votacion.webp" type="image/webp" />
           <img
             className="lp-hero-photo"
-            src="/landing/hero-votacion.jpg"
-            alt=""
-            aria-hidden
+            src="/landing/hero-campus.jpg"
+            alt="Aprendices consultando información en un celular y una tableta"
             fetchPriority="high"
           />
         </picture>

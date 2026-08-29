@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { Button, Col, Container, Form, Row, Table } from "react-bootstrap";
 import { FaArrowLeft } from "react-icons/fa";
+import { FaFilePdf } from "react-icons/fa6";
 import DataTable from "react-data-table-component";
 import type { TableColumn } from "react-data-table-component";
 import { api } from "../../api";
@@ -11,6 +12,12 @@ import { GraficaBarras } from "../../components/graficas/GraficaBarras";
 import { GraficaDona } from "../../components/graficas/GraficaDona";
 import type { DatoGrafica } from "../../components/graficas/tipos";
 import { generarReporte } from "../../utils/generarReporte";
+import { JORNADAS, type Jornada } from "../../constants/jornada";
+import {
+  jornadasPresentes,
+  mapaJornadaCandidatos,
+  bloquesPorJornada,
+} from "../../utils/resultadosJornada";
 import { adminTableStyles } from "../../theme/adminTableStyles";
 import { LupaDetalle, textoCorto } from "../../components/tabla/detalleTabla";
 import "../../components/graficas/graficas.css";
@@ -41,6 +48,7 @@ type CandidatoResultado = {
   apellido: string;
   votos: number;
   porcentaje: number;
+  jornada?: string;
 };
 
 type CentroRaw = {
@@ -150,7 +158,7 @@ export default function PanelMetricas() {
   const [idEleccion, setIdEleccion] = useState<string>("");
   const [cargandoLista, setCargandoLista] = useState(true);
   const [cargando, setCargando] = useState(false);
-  const [exportando, setExportando] = useState(false);
+  const [exportando, setExportando] = useState<Jornada | "todas" | "">("");
   const [habilitados, setHabilitados] = useState(0);
   const [candidatos, setCandidatos] = useState<CandidatoResultado[]>([]);
   const [jornada, setJornada] = useState("—");
@@ -415,14 +423,20 @@ export default function PanelMetricas() {
         }
 
         const totalVotos = resultados.reduce((s, c) => s + c.votos, 0);
-        setCandidatos(
-          resultados
-            .map((c) => ({
-              ...c,
-              porcentaje: totalVotos > 0 ? (c.votos / totalVotos) * 100 : 0,
-            }))
-            .sort((a, b) => b.votos - a.votos)
-        );
+        let conJornada = resultados.map((c) => ({
+          ...c,
+          porcentaje: totalVotos > 0 ? (c.votos / totalVotos) * 100 : 0,
+        }));
+        try {
+          const mapa = await mapaJornadaCandidatos(Number(idEleccion));
+          conJornada = conJornada.map((c) => ({
+            ...c,
+            jornada: mapa.get(c.id) || c.jornada,
+          }));
+        } catch {
+          /* sin mapa de jornada */
+        }
+        setCandidatos(conJornada.sort((a, b) => b.votos - a.votos));
       } catch (error) {
         console.error("Error al cargar métricas:", error);
         setCandidatos([]);
@@ -434,18 +448,21 @@ export default function PanelMetricas() {
     void cargarDetalle();
   }, [idEleccion, idCentro, elecciones]);
 
-  const totalVotos = useMemo(
-    () => candidatos.reduce((s, c) => s + c.votos, 0),
+  const bloques = useMemo(
+    () => bloquesPorJornada(candidatos, true),
     [candidatos]
   );
+  const jornadasEleccion = useMemo(
+    () => jornadasPresentes(candidatos),
+    [candidatos]
+  );
+  const hayJornadas = jornadasEleccion.length > 0;
+
+  const totalVotos = candidatos.reduce((s, c) => s + c.votos, 0);
   const participacion =
     habilitados > 0 ? Math.min(100, (totalVotos / habilitados) * 100) : 0;
 
-  const barras: DatoGrafica[] = candidatos.map((c) => ({
-    etiqueta: `${c.nombre} ${c.apellido}`.trim(),
-    valor: c.votos,
-  }));
-  const dona: DatoGrafica[] = candidatos.map((c) => ({
+  const barrasTodas: DatoGrafica[] = candidatos.map((c) => ({
     etiqueta: `${c.nombre} ${c.apellido}`.trim(),
     valor: c.votos,
   }));
@@ -462,26 +479,49 @@ export default function PanelMetricas() {
     irArriba();
   };
 
-  const exportar = async () => {
-    setExportando(true);
+  const baseReporte = {
+    id: idEleccion,
+    nombre: titulo,
+    fechaInicio: inicio,
+    fechaFin: cierre,
+    estado: "En curso",
+    centro: centroNombre,
+    totalParticipantes: habilitados,
+    participantes: [] as [],
+  };
+
+  const exportarJornada = async (jornadaPdf: Jornada) => {
+    const bloque = bloques.find((b) => b.jornada === jornadaPdf);
+    if (!bloque?.lista.length) return;
+    setExportando(jornadaPdf);
     try {
       await generarReporte({
-        id: idEleccion,
-        nombre: titulo,
-        fechaInicio: inicio,
-        fechaFin: cierre,
-        estado: "En curso",
-        centro: centroNombre,
-        jornada,
-        totalVotos,
-        totalParticipantes: habilitados,
-        candidatos,
-        participantes: [],
+        ...baseReporte,
+        jornada: jornadaPdf,
+        totalVotos: bloque.totalVotos,
+        candidatos: bloque.lista,
       });
     } catch (error) {
       console.error("Error al exportar PDF:", error);
     } finally {
-      setExportando(false);
+      setExportando("");
+    }
+  };
+
+  const exportarTodas = async () => {
+    if (!candidatos.length) return;
+    setExportando("todas");
+    try {
+      await generarReporte({
+        ...baseReporte,
+        jornada: hayJornadas ? "Mañana, Tarde y Noche" : jornada,
+        totalVotos,
+        candidatos,
+      });
+    } catch (error) {
+      console.error("Error al exportar PDF:", error);
+    } finally {
+      setExportando("");
     }
   };
 
@@ -605,61 +645,216 @@ export default function PanelMetricas() {
                   </Col>
                 </Row>
 
-                <p className="text-muted small mb-4">
-                  {titulo} · Jornada {jornada} · {inicio} — {cierre}
+                <p className="text-muted small mb-3">
+                  {titulo} · {inicio} — {cierre}
                   {cargando ? " · Cargando…" : ""}
                 </p>
 
-                <div className="grafica-grid grafica-grid--2 mb-4">
-                  <GraficaBarras
-                    titulo="Votos por candidato"
-                    datos={barras}
-                    horizontal
-                    unidad="votos"
-                  />
-                  <GraficaDona titulo="Distribución de votos" datos={dona} />
-                </div>
+                {hayJornadas ? (
+                  <>
+                    <div className="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-3">
+                      <p className="mb-0 fw-semibold">
+                        Quién va ganando en cada jornada
+                      </p>
+                      <Button
+                        variant="outline-success"
+                        disabled={!!exportando || candidatos.length === 0}
+                        onClick={() => void exportarTodas()}
+                      >
+                        <FaFilePdf className="me-2" />
+                        {exportando === "todas"
+                          ? "Generando…"
+                          : "PDF de las 3 jornadas"}
+                      </Button>
+                    </div>
 
-                <div className="admin-table-shell mb-4">
-                  <Table responsive className="mb-0">
-                    <thead>
-                      <tr>
-                        <th>Candidato</th>
-                        <th>Votos</th>
-                        <th>Porcentaje</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {candidatos.length === 0 ? (
-                        <tr>
-                          <td colSpan={3} className="text-muted">
-                            No hay resultados para esta elección todavía.
-                          </td>
-                        </tr>
-                      ) : (
-                        candidatos.map((c) => (
-                          <tr key={c.id || `${c.nombre}-${c.apellido}`}>
-                            <td>
-                              {c.nombre} {c.apellido}
-                            </td>
-                            <td className="fw-bold app-accent">{c.votos}</td>
-                            <td>{c.porcentaje.toFixed(1)}%</td>
+                    {JORNADAS.map((j) => {
+                      const bloque = bloques.find((b) => b.jornada === j);
+                      const ganador = bloque?.ganador;
+                      const segundo = bloque?.segundo;
+                      return (
+                        <section
+                          key={j}
+                          className="mb-4 p-3 p-md-4"
+                          style={{
+                            border: "1px solid #e4e9e5",
+                            borderRadius: 12,
+                            background: "#fff",
+                          }}
+                        >
+                          <div className="d-flex flex-wrap justify-content-between align-items-start gap-3 mb-3">
+                            <div>
+                              <p className="admin-dash-eyebrow mb-1">
+                                Sección PDF
+                              </p>
+                              <h3 className="h5 fw-bold mb-1">Jornada {j}</h3>
+                              {ganador ? (
+                                <>
+                                  <p className="mb-1">
+                                    Va ganando{" "}
+                                    <strong>
+                                      {ganador.nombre} {ganador.apellido}
+                                    </strong>{" "}
+                                    con {ganador.votos} votos (
+                                    {ganador.porcentaje.toFixed(1)}%).
+                                  </p>
+                                  {segundo && bloque?.ventaja != null ? (
+                                    <p className="text-muted mb-0 small">
+                                      Le saca {bloque.ventaja} voto
+                                      {bloque.ventaja === 1 ? "" : "s"} a{" "}
+                                      {segundo.nombre} {segundo.apellido} (
+                                      {segundo.votos} votos).
+                                    </p>
+                                  ) : (
+                                    <p className="text-muted mb-0 small">
+                                      Único candidato de esta jornada.
+                                    </p>
+                                  )}
+                                </>
+                              ) : (
+                                <p className="text-muted mb-0">
+                                  Todavía no hay candidatos en esta jornada.
+                                </p>
+                              )}
+                            </div>
+                            <Button
+                              variant="success"
+                              disabled={!!exportando || !ganador}
+                              onClick={() => void exportarJornada(j)}
+                            >
+                              <FaFilePdf className="me-2" />
+                              {exportando === j
+                                ? "Generando…"
+                                : `Generar PDF · ${j}`}
+                            </Button>
+                          </div>
+
+                          {bloque && bloque.lista.length > 0 && (
+                            <>
+                              <div className="grafica-grid grafica-grid--2 mb-3">
+                                <GraficaBarras
+                                  titulo={`Votos · ${j}`}
+                                  datos={bloque.lista.map((c) => ({
+                                    etiqueta: `${c.nombre} ${c.apellido}`.trim(),
+                                    valor: c.votos,
+                                  }))}
+                                  horizontal
+                                  unidad="votos"
+                                  alto="sm"
+                                />
+                                <GraficaDona
+                                  titulo={`Distribución · ${j}`}
+                                  datos={bloque.lista.map((c) => ({
+                                    etiqueta: `${c.nombre} ${c.apellido}`.trim(),
+                                    valor: c.votos,
+                                  }))}
+                                  alto="sm"
+                                />
+                              </div>
+                              <Table responsive className="mb-0">
+                                <thead>
+                                  <tr>
+                                    <th>Candidato</th>
+                                    <th>Votos</th>
+                                    <th>%</th>
+                                    <th>Estado</th>
+                                  </tr>
+                                </thead>
+                                <tbody>
+                                  {bloque.lista.map((c, i) => (
+                                    <tr key={`${j}-${c.id}`}>
+                                      <td>
+                                        {c.nombre} {c.apellido}
+                                      </td>
+                                      <td className="fw-bold app-accent">
+                                        {c.votos}
+                                      </td>
+                                      <td>{c.porcentaje.toFixed(1)}%</td>
+                                      <td>
+                                        {i === 0 ? (
+                                          <span className="badge text-bg-success">
+                                            Va ganando
+                                          </span>
+                                        ) : i === 1 ? (
+                                          <span className="text-muted">
+                                            Segundo
+                                          </span>
+                                        ) : (
+                                          <span className="text-muted">
+                                            Candidato
+                                          </span>
+                                        )}
+                                      </td>
+                                    </tr>
+                                  ))}
+                                </tbody>
+                              </Table>
+                            </>
+                          )}
+                        </section>
+                      );
+                    })}
+                  </>
+                ) : (
+                  <>
+                    <div className="grafica-grid grafica-grid--2 mb-4">
+                      <GraficaBarras
+                        titulo="Votos por candidato"
+                        datos={barrasTodas}
+                        horizontal
+                        unidad="votos"
+                      />
+                      <GraficaDona
+                        titulo="Distribución de votos"
+                        datos={barrasTodas}
+                      />
+                    </div>
+
+                    <div className="admin-table-shell mb-4">
+                      <Table responsive className="mb-0">
+                        <thead>
+                          <tr>
+                            <th>Candidato</th>
+                            <th>Votos</th>
+                            <th>Porcentaje</th>
                           </tr>
-                        ))
-                      )}
-                    </tbody>
-                  </Table>
-                </div>
+                        </thead>
+                        <tbody>
+                          {candidatos.length === 0 ? (
+                            <tr>
+                              <td colSpan={3} className="text-muted">
+                                No hay resultados todavía.
+                              </td>
+                            </tr>
+                          ) : (
+                            candidatos.map((c) => (
+                              <tr key={c.id || `${c.nombre}-${c.apellido}`}>
+                                <td>
+                                  {c.nombre} {c.apellido}
+                                </td>
+                                <td className="fw-bold app-accent">{c.votos}</td>
+                                <td>{c.porcentaje.toFixed(1)}%</td>
+                              </tr>
+                            ))
+                          )}
+                        </tbody>
+                      </Table>
+                    </div>
 
-                <div className="d-flex justify-content-end">
-                  <Button
-                    variant="primary"
-                    onClick={() => void exportar()}
-                    disabled={exportando || candidatos.length === 0}
-                  >
-                    {exportando ? "Generando PDF…" : "Exportar informe PDF"}
-                  </Button>
-                </div>
+                    <div className="d-flex justify-content-end">
+                      <Button
+                        variant="primary"
+                        onClick={() => void exportarTodas()}
+                        disabled={!!exportando || candidatos.length === 0}
+                      >
+                        <FaFilePdf className="me-2" />
+                        {exportando === "todas"
+                          ? "Generando PDF…"
+                          : "Exportar PDF"}
+                      </Button>
+                    </div>
+                  </>
+                )}
               </>
             )}
           </>
