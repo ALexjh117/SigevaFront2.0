@@ -1,11 +1,14 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { FaHome, FaUserTie, FaUsers, FaSignOutAlt, FaClipboardList, FaUserGraduate, FaUserPlus, FaChevronDown } from 'react-icons/fa';
+import { FaHome, FaUserTie, FaUsers, FaSignOutAlt, FaClipboardList, FaUserGraduate, FaUserPlus, FaChevronDown, FaChartBar, FaVoteYea } from 'react-icons/fa';
 import { Button, Dropdown } from 'react-bootstrap';
 import { BsList } from 'react-icons/bs';
 import "./sidebar.css";
 import { useAuth } from '../context/auth/auth.context';
-import { esAdministradorRed, esRolDeCentro } from '../utils/roles';
+import { esAdministradorRed, esAprendiz, esRolDeCentro, usaTemaAdmin } from '../utils/roles';
+import { jornadaDelAprendiz } from '../utils/jornadaAprendiz';
+import { CarruselCandidatosSidebar } from '../components/aprendiz/CarruselCandidatosNav';
+import { SigevaWordmark } from '../components/landing/SigevaMark';
 
 interface SidebarProps {
   onNavigate?: () => void;
@@ -23,8 +26,9 @@ const Sidebar: React.FC<SidebarProps> = ({ onNavigate }) => {
   const navigate = useNavigate();
 
   const { user, logout } = useAuth();
-  const isAdmin = esAdministradorRed(user?.perfil);
+  const isAdmin = usaTemaAdmin(user?.perfil);
   const sidebarClass = isAdmin ? 'admin-sidebar' : '';
+  const jornadaAprendiz = jornadaDelAprendiz(user);
 
   // No se usan directamente, se controla con setShowSidebar en eventos
 
@@ -48,9 +52,16 @@ const Sidebar: React.FC<SidebarProps> = ({ onNavigate }) => {
 
     const commonItems: NavItem[] = [];
 
+    if (esAprendiz(user.perfil)) {
+      return [
+        { to: '/votaciones', icon: <FaVoteYea />, text: 'Votos', type: 'link' },
+      ];
+    }
+
     if (esRolDeCentro(user.perfil)) {
       return [
         { to: '/dashboard', icon: <FaHome />, text: 'Inicio', type: 'link' },
+        { to: '/panel-metricas', icon: <FaChartBar />, text: 'Estadísticas', type: 'link' },
         { 
           type: 'dropdown', 
           text: 'Gestión de Usuarios', 
@@ -67,6 +78,7 @@ const Sidebar: React.FC<SidebarProps> = ({ onNavigate }) => {
     if (esAdministradorRed(user.perfil)) {
       return [
         { to: '/dashboard-admin', icon: <FaHome />, text: 'Dashboard', type: 'link' },
+        { to: '/panel-metricas', icon: <FaChartBar />, text: 'Estadísticas', type: 'link' },
         { to: '/elecciones', icon: <FaClipboardList />, text: 'Elecciones de la red', type: 'link' },
         { to: '/aprendices', icon: <FaUserGraduate />, text: 'Aprendices', type: 'link' },
         { 
@@ -95,7 +107,17 @@ const Sidebar: React.FC<SidebarProps> = ({ onNavigate }) => {
   };
 
   const navItems = getNavItems();
-  const isActive = (to: string) => location.pathname === to;
+  const isActive = (to: string) => {
+    const path = to.split('?')[0].split('#')[0];
+    if (path === '/votaciones') {
+      return (
+        location.pathname === '/votaciones' ||
+        location.pathname.startsWith('/seleccion') ||
+        location.pathname.startsWith('/confirmar-voto')
+      );
+    }
+    return location.pathname === path;
+  };
 
   return (
     <>
@@ -119,13 +141,11 @@ const Sidebar: React.FC<SidebarProps> = ({ onNavigate }) => {
       )}
 
       {/* Contenido del Sidebar */}
-      <div className={`sidebar-container ${sidebarClass} ${showSidebar ? 'open' : ''}`}>
+      <div className={`sidebar-container ${sidebarClass} ${showSidebar ? 'open' : ''}${esAprendiz(user?.perfil) ? ' has-carrusel' : ''}`}>
         <div className="sidebar-logo">
-          <img 
-            src="/src/assets/icon-sena-sigeva.svg" 
-            alt="SENA" 
-            className="logo-sena" 
-          />
+          <img src="/sena.png" alt="SENA" className="logo-sena" />
+          <span className="sidebar-logo-sep" aria-hidden />
+          <SigevaWordmark />
         </div>
         
         <nav className="sidebar-nav">
@@ -169,19 +189,21 @@ const Sidebar: React.FC<SidebarProps> = ({ onNavigate }) => {
             );
           })}
         </nav>
-        {isAdmin && (
-          <div className="sidebar-motto">
+        {esAprendiz(user?.perfil) ? <CarruselCandidatosSidebar /> : null}
+        {isAdmin && !esAprendiz(user?.perfil) && (
+          <blockquote className="sidebar-motto">
             <p>
-              La inteligencia no es un don para guardar.
-              Es un privilegio, un regalo.
-              Se honra cuando se usa para el bien de los demás.
+              La inteligencia es un privilegio: cobra valor cuando se comparte
+              y se usa para el bien de los demás.
             </p>
-          </div>
+          </blockquote>
         )}
         <div className="sidebar-footer">
-          {isAdmin && user?.email && (
+          {esAprendiz(user?.perfil) && jornadaAprendiz ? (
+            <span className="sidebar-user">Jornada {jornadaAprendiz}</span>
+          ) : isAdmin && user?.email ? (
             <span className="sidebar-user">{user.email}</span>
-          )}
+          ) : null}
           <button
             className="sidebar-link"
             onClick={(e) => {

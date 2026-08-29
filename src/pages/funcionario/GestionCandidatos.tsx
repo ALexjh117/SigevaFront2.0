@@ -12,6 +12,7 @@ import {
   LupaDetalle,
   textoCorto,
 } from "../../components/tabla/detalleTabla";
+import { MiniGraficas, contarPor } from "../../components/graficas/MiniGraficas";
 
 interface Eleccion {
   ideleccion: number;
@@ -198,6 +199,18 @@ const GestionCandidatos = () => {
       {loading && candidatos.length === 0 ? (
         <p className="text-muted">Cargando candidatos...</p>
       ) : null}
+
+      <MiniGraficas
+        barras={{
+          titulo: "Candidatos por jornada",
+          datos: contarPor(candidatos, (c) => c.jornada || "Sin jornada"),
+          unidad: "candidatos",
+        }}
+        dona={{
+          titulo: "Distribución por jornada",
+          datos: contarPor(candidatos, (c) => c.jornada || "Sin jornada"),
+        }}
+      />
 
       {JORNADAS.map((jornada: Jornada) => {
         const lista = candidatos.filter((c) => c.jornada === jornada);

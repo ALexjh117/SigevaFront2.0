@@ -1,9 +1,11 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Form, Button, Container, Row, Col, FormLabel } from "react-bootstrap";
+import { Form, Button, Container, Row, Col } from "react-bootstrap";
+import Swal from "sweetalert2";
 import "../funcionario/form.css";
 import { useAuth } from "../../context/auth/auth.context";
 import { api } from "../../api";
+import { ADMIN_PALETTE } from "../../theme/tokens";
 
 function FormEleccion() {
 
@@ -33,26 +35,26 @@ function FormEleccion() {
             hora_inicio: `${fecha_inicio} ${hora_inicio}:00`,
             hora_fin: `${fecha_fin} ${hora_fin}:00`,
             
-          })
+          });
 
-      alert("Elección creada exitosamente");
+      await Swal.fire({
+        title: "Elección creada",
+        text: "La votación ya quedó lista en tu centro.",
+        icon: "success",
+        confirmButtonText: "Ver elecciones",
+        confirmButtonColor: ADMIN_PALETTE.confirm,
+      });
       navigate("/elecciones");
-      
-
-     } catch (error: any) {
-  console.log("STATUS:", error.response?.status);
-  console.log("RESPUESTA BACKEND:", error.response?.data);
-  console.log("DATOS ENVIADOS:", {
-    idcentro_formacion: user?.centroFormacion,
-    nombre,
-    fecha_inicio,
-    fecha_fin,
-    hora_inicio: `${fecha_inicio} ${hora_inicio}:00`,
-    hora_fin: `${fecha_fin} ${hora_fin}:00`,
-  });
-
-  console.error("Error al crear eleccion", error);
-}
+    } catch (error: unknown) {
+      const err = error as { response?: { data?: { message?: string } } };
+      await Swal.fire({
+        title: "No se pudo crear",
+        text: err.response?.data?.message || "Revisa los datos e inténtalo de nuevo.",
+        icon: "error",
+        confirmButtonText: "Aceptar",
+        confirmButtonColor: ADMIN_PALETTE.confirm,
+      });
+    }
   }
   
 

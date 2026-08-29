@@ -11,7 +11,8 @@ import { FuncionarioDetalleModal } from "./modals/FuncionarioDetalleModal";
 import { api } from "../../api";
 import { ADMIN_PALETTE } from "../../theme/tokens";
 import { adminTableStyles } from "../../theme/adminTableStyles";
-import { LupaDetalle, SemaforoEstado, textoCorto } from "../../components/tabla/detalleTabla";
+import { LupaDetalle, SemaforoEstado, etiquetaEstado, textoCorto } from "../../components/tabla/detalleTabla";
+import { MiniGraficas, contarPor, topN } from "../../components/graficas/MiniGraficas";
 
 // ----------------- Interfaces -----------------
 interface Regional {
@@ -367,6 +368,24 @@ const Funcionarios: React.FC = () => {
           Consulta, crea y actualiza los perfiles del equipo de Bienestar encargados de coordinar los procesos electorales en cada centro de formación.
         </p>
       </div>
+      <MiniGraficas
+        barras={{
+          titulo: "Funcionarios por regional",
+          datos: topN(
+            contarPor(
+              funcionarios,
+              (f) => f.centroFormacion?.regional?.regional || "Sin regional"
+            ),
+            8
+          ),
+          horizontal: true,
+          unidad: "funcionarios",
+        }}
+        dona={{
+          titulo: "Por estado",
+          datos: contarPor(funcionarios, (f) => etiquetaEstado(f.estado)),
+        }}
+      />
       {/* Buscador + Botón */}
       <div className="d-flex justify-content-between align-items-center mb-4">
         <div className="w-50">

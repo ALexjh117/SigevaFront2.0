@@ -2,8 +2,8 @@ import { useState, type PropsWithChildren } from "react";
 import { AuthContext } from "./auth.context";
 import type { Gestor, ResponseType, User, UserNormalizado } from "./types/authTypes";
 import toast from "react-hot-toast";
-import type { Jornada } from "../../constants/jornada";
-import { getJornadaGuardada, guardarJornada } from "../../utils/jornadaAprendiz";
+import { esJornada, type Jornada } from "../../constants/jornada";
+import { getJornadaGuardada, guardarJornada, idDelAprendiz } from "../../utils/jornadaAprendiz";
 import { setActorHeader } from "../../api";
 
 function centroDe(rawUser: User): number | undefined {
@@ -45,15 +45,23 @@ export function AuthProvider({ children }: PropsWithChildren) {
 
     const rawUser = response.data!;
     const centro = centroDe(rawUser);
+    const idAprendiz = idDelAprendiz(rawUser) ?? Number(rawUser.id);
+    const jornadaApi =
+      "jornada" in rawUser && esJornada(rawUser.jornada) ? rawUser.jornada : null;
+    const jornadaLocal =
+      rawUser.perfil === "Aprendiz" && idAprendiz ? getJornadaGuardada(idAprendiz) : null;
+    const jornada = jornadaApi || jornadaLocal;
 
-    const jornadaGuardada =
-      rawUser.perfil === "Aprendiz" ? getJornadaGuardada(rawUser.id) : null;
+    if (rawUser.perfil === "Aprendiz" && jornada && idAprendiz) {
+      guardarJornada(idAprendiz, jornada);
+    }
 
     const normalizado: UserNormalizado = {
       ...rawUser,
+      id: idAprendiz || rawUser.id,
       centroFormacion: centro ?? (rawUser as Gestor).centroFormacion,
       CentroFormacion: centro,
-      jornada: jornadaGuardada,
+      jornada,
     };
 
     setIsAuthenticated(true);
@@ -74,10 +82,12 @@ export function AuthProvider({ children }: PropsWithChildren) {
   };
 
   const setJornada = (jornada: Jornada) => {
-    if (user) {
-      guardarJornada(user.id, jornada);
-    }
-    setUser((prev) => (prev ? { ...prev, jornada } : prev));
+    setUser((prev) => {
+      if (!prev) return prev;
+      const id = idDelAprendiz(prev);
+      if (id) guardarJornada(id, jornada);
+      return { ...prev, jornada };
+    });
   };
 
   return (

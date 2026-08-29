@@ -1,6 +1,8 @@
 import React, { useState, useEffect, useMemo } from "react";
 import { FaFilePdf } from "react-icons/fa6";
 import { generarReporte } from "../../utils/generarReporte";
+import { GraficaBarras } from "../../components/graficas/GraficaBarras";
+import { GraficaDona } from "../../components/graficas/GraficaDona";
 
 interface Candidato {
   id: number;
@@ -126,6 +128,29 @@ const GeneracionReporte: React.FC<GeneracionReporteProps> = ({ eleccion: eleccio
           )}
         </button>
       </div>
+
+      {eleccion?.candidatos && eleccion.candidatos.length > 0 && (
+        <div className="grafica-grid grafica-grid--2 mb-4">
+          <GraficaBarras
+            titulo="Votos por candidato"
+            datos={eleccion.candidatos.map((c) => ({
+              etiqueta: `${c.nombre} ${c.apellido}`.trim(),
+              valor: c.votos,
+            }))}
+            horizontal
+            unidad="votos"
+            alto="sm"
+          />
+          <GraficaDona
+            titulo="Distribución de votos"
+            datos={eleccion.candidatos.map((c) => ({
+              etiqueta: `${c.nombre} ${c.apellido}`.trim(),
+              valor: c.votos,
+            }))}
+            alto="sm"
+          />
+        </div>
+      )}
 
       {/* Preview de candidatos */}
       {eleccion?.candidatos && eleccion.candidatos.length > 0 && (

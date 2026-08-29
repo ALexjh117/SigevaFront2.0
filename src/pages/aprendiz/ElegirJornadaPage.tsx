@@ -1,9 +1,7 @@
-import { Button, Card, Col, Container, Row } from "react-bootstrap";
-import { Navigate, useNavigate } from "react-router-dom";
-import { useAuth } from "../../context/auth/auth.context";
 import { JORNADAS, type Jornada } from "../../constants/jornada";
-import Navbar from "../../components/aprendiz/Navbar";
-import { jornadaDelAprendiz } from "../../utils/jornadaAprendiz";
+import { useAuth } from "../../context/auth/auth.context";
+import { useNavigate } from "react-router-dom";
+import { DiosBulb, DiosChip, DiosLeaf } from "../../theme/DiosIcons";
 
 const DETALLE: Record<Jornada, string> = {
   Mañana: "Verás la elección de tu centro y solo los candidatos de la mañana.",
@@ -11,13 +9,21 @@ const DETALLE: Record<Jornada, string> = {
   Noche: "Verás la elección de tu centro y solo los candidatos de la noche.",
 };
 
-export default function ElegirJornadaPage() {
-  const { user, setJornada } = useAuth();
-  const navigate = useNavigate();
+const ICONO: Record<Jornada, typeof DiosChip> = {
+  Mañana: DiosChip,
+  Tarde: DiosBulb,
+  Noche: DiosLeaf,
+};
 
-  if (user?.perfil === "Aprendiz" && jornadaDelAprendiz(user)) {
-    return <Navigate to="/votaciones" replace />;
-  }
+const CLASE: Record<Jornada, string> = {
+  Mañana: "admin-shortcut--digital",
+  Tarde: "admin-shortcut--innovador",
+  Noche: "admin-shortcut--sostenible",
+};
+
+export default function ElegirJornadaPage() {
+  const { setJornada } = useAuth();
+  const navigate = useNavigate();
 
   const elegir = (jornada: Jornada) => {
     setJornada(jornada);
@@ -25,29 +31,39 @@ export default function ElegirJornadaPage() {
   };
 
   return (
-    <>
-      <Navbar />
-      <Container className="my-4" style={{ maxWidth: 960 }}>
-        <h3 className="fw-bold">Elegir jornada</h3>
-        <p className="text-muted">
-          Elige tu jornada. La próxima vez que entres no te la volveremos a pedir.
+    <div className="admin-dash">
+      <header className="admin-dash-hero">
+        <p className="admin-dash-eyebrow">Antes de votar</p>
+        <h1>
+          Elige tu <span>jornada</span>
+        </h1>
+        <p className="admin-dash-lead">
+          Así te mostramos solo la elección y los candidatos de tu turno. La
+          próxima vez que entres en este equipo no te la volveremos a pedir.
         </p>
-        <Row className="g-4 my-2">
-          {JORNADAS.map((jornada) => (
-            <Col key={jornada} xs={12} md={4}>
-              <Card className="h-100 border-success border-1">
-                <Card.Body className="d-flex flex-column">
-                  <Card.Title className="fw-bold">{jornada}</Card.Title>
-                  <Card.Text className="text-muted flex-grow-1">{DETALLE[jornada]}</Card.Text>
-                  <Button className="btn-gradient w-100 mt-2" onClick={() => elegir(jornada)}>
-                    Elegir jornada {jornada}
-                  </Button>
-                </Card.Body>
-              </Card>
-            </Col>
-          ))}
-        </Row>
-      </Container>
-    </>
+      </header>
+
+      <div className="admin-shortcut-grid" style={{ marginTop: "1.6rem" }}>
+        {JORNADAS.map((jornada) => {
+          const Icono = ICONO[jornada];
+          return (
+            <button
+              key={jornada}
+              type="button"
+              className={`admin-shortcut ${CLASE[jornada]}`}
+              onClick={() => elegir(jornada)}
+            >
+              <span className="admin-shortcut-icon">
+                <Icono />
+              </span>
+              <span>
+                <strong>{jornada}</strong>
+                <small>{DETALLE[jornada]}</small>
+              </span>
+            </button>
+          );
+        })}
+      </div>
+    </div>
   );
 }

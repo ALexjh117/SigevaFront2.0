@@ -1,14 +1,12 @@
-import Container from "react-bootstrap/Container";
 import Modal from "react-bootstrap/Modal";
-import Button from "react-bootstrap/Button";
-import Row from "react-bootstrap/Row";
-import Col from "react-bootstrap/Col";
 import { useNavigate, useParams } from "react-router-dom";
 import { api } from "../../api";
 import Form from "react-bootstrap/Form";
 import { useState } from "react";
 import { useAuth } from "../../context/auth/auth.context";
 import Swal from "sweetalert2";
+import { FaTimes, FaEnvelope } from "react-icons/fa";
+import { ADMIN_PALETTE } from "../../theme/tokens";
 
 interface Props {
   show: boolean;
@@ -33,6 +31,7 @@ export default function SelecionarCandidato({
 
   const [shotModal, setShowModal] = useState(false);
   const [otp, setOtp] = useState("");
+  const [enviando, setEnviando] = useState(false);
   const { user } = useAuth();
 
   if (!candidato) return null;
@@ -73,10 +72,11 @@ export default function SelecionarCandidato({
         error?.response?.data ||
         error?.message;
       Swal.fire({
-        title: "No se pudo enviar OTP",
+        title: "No se pudo enviar el código",
         text: String(serverMsg),
         icon: "error",
-        confirmButtonText: "Ok",
+        confirmButtonText: "Aceptar",
+        confirmButtonColor: ADMIN_PALETTE.confirm,
       });
 
       return false;
@@ -86,17 +86,19 @@ export default function SelecionarCandidato({
   /**
    * manejador que espera a que enviarOTP termine antes de abrir modal
    */
+  const cerrarOtp = () => {
+    setShowModal(false);
+    setOtp("");
+  };
+
   const handleVoteClick = async () => {
-    // cerramos modal candidato primero (como tenías)
-    onHide();
-    // llamamos y esperamos
+    if (enviando) return;
+    setEnviando(true);
     const ok = await enviarOTP();
-    
+    setEnviando(false);
     if (ok) {
+      onHide();
       setShowModal(true);
-    } else {
-      // si falló, opcionalmente podrías reabrir el modal o navegar
-      // navigate("/votaciones");
     }
   };
 
@@ -177,121 +179,115 @@ export default function SelecionarCandidato({
           });
         }
       } else {
-        console.warn("[submit] validarOtp devolvió success !== true:", data);
         Swal.fire({
-          title: "Código OTP Incorrecto, Intenta nuevamente",
+          title: "Código incorrecto",
+          text: "Revisa el correo e inténtalo de nuevo. El modal se queda abierto.",
           icon: "error",
-          confirmButtonText: "Intentar de nuevo",
-        }).then((result) => {
-          if (result.isConfirmed) {
-            navigate("/votaciones");
-          }
+          confirmButtonText: "Seguir aquí",
         });
       }
     } catch (error: any) {
-      console.error("[submit] error al validar OTP:", error);
-      console.error("[submit] error.response?.data:", error?.response?.data);
       Swal.fire({
-        title: "Código OTP Incorrecto, Intenta nuevamente",
+        title: "Código incorrecto",
         text: String(error?.response?.data || error?.message),
         icon: "error",
-        confirmButtonText: "Intentar de nuevo",
-      }).then((result) => {
-        if (result.isConfirmed) {
-          navigate("/votaciones");
-        }
+        confirmButtonText: "Seguir aquí",
       });
     }
   };
 
   return (
-    <Container>
-      <Modal show={show} onHide={onHide} centered size="lg">
-        <Modal.Header></Modal.Header>
-        <Modal.Body>
-          <Row className="align-items-center">
-            {/* Columna de la imagen */}
-            <Col xs={12} md={4} className="text-center mb-3 mb-md-0">
-              <img
-                src={candidato.foto}
-                alt="foto"
-                className="img-fluid rounded"
-                style={{
-                  width: "100%",
-                  height: "100%",
-                  objectFit: "contain",
-                  backgroundColor: "#f5f5f5",
-                  borderRadius: "10px",
-                }}
-              />
-            </Col>
-
-            {/* Columna de la información */}
-            <Col xs={12} md={8}>
-              <Row className="align-items-center mb-2">
-                <Col>
-                  <h4 className="fw-bold m-0">{candidato.nombre}</h4>
-                </Col>
-                <Col xs="auto">
-                  <h5 className="text-success fw-bold">
-                    {candidato.numeroTarjeton}
-                  </h5>
-                </Col>
-              </Row>
-
-              <p style={{ textAlign: "justify" }}>{candidato.propuesta}</p>
-            </Col>
-          </Row>
-          <Container className="d-flex justify-content-between gap-3 mt-4">
-            <Button variant="danger" onClick={onHide}>
-              Cancelar
-            </Button>
-            {/* ahora usamos handleVoteClick que espera a enviarOTP */}
-            <Button variant="success" onClick={handleVoteClick}>
-              Votar por este candidato
-            </Button>
-          </Container>
+    <>
+      <Modal
+        show={show}
+        onHide={() => {
+          if (!enviando) onHide();
+        }}
+        centered
+        scrollable
+        size="lg"
+        dialogClassName="apz-modal apz-modal--ficha"
+      >
+        <Modal.Header className="apz-ficha-head">
+          <button
+            type="button"
+            className="apz-modal-x"
+            aria-label="Cerrar"
+            onClick={onHide}
+            disabled={enviando}
+          >
+            <FaTimes />
+          </button>
+          <img src={candidato.foto} alt="" className="apz-ficha-foto" />
+          <div className="apz-ficha-id">
+            <p className="admin-dash-eyebrow mb-1">Tarjetón {candidato.numeroTarjeton}</p>
+            <h2>{candidato.nombre}</h2>
+            <p>{candidato.programa}</p>
+          </div>
+        </Modal.Header>
+        <Modal.Body className="apz-ficha-body">
+          <p className="admin-dash-eyebrow mb-2">Propuesta</p>
+          {candidato.propuesta?.trim() ? (
+            <p className="apz-ficha-propuesta">{candidato.propuesta}</p>
+          ) : (
+            <p className="apz-ficha-propuesta is-empty">
+              Este candidato aún no publicó propuesta.
+            </p>
+          )}
         </Modal.Body>
+        <Modal.Footer className="apz-modal-actions apz-modal-actions--footer">
+          <button type="button" className="apz-btn apz-btn--ghost" onClick={onHide} disabled={enviando}>
+            Cancelar
+          </button>
+          <button type="button" className="apz-btn" onClick={handleVoteClick} disabled={enviando}>
+            {enviando ? (
+              <>
+                <span className="spinner-border spinner-border-sm" aria-hidden />
+                Enviando código…
+              </>
+            ) : (
+              "Votar por este candidato"
+            )}
+          </button>
+        </Modal.Footer>
       </Modal>
 
-      <Modal show={shotModal} centered dialogClassName="modal-compact">
-        <Modal.Header
-          closeButton
-          onClick={() => {
-            setShowModal(false);
-            setOtp("");
-          }}
-        ></Modal.Header>
-        <Modal.Body
-          className="bg-white p-5 rounded"
-          style={{ maxWidth: "450px", margin: "0 auto" }}
-        >
-          <h1 className="fw-bold text-center">Confirmar Voto</h1>
-          <p className="text-center">
-            Ingresa el código de 6 dígitos enviado a tu correo.
-          </p>
-
-          <Form onSubmit={submit}>
-            <Form.Group className="mb-4">
-              <Form.Control
-                type="text"
-              
-               
-                maxLength={6}
-                placeholder=" - - - - - - "
-                className="text-center border-success"
-                onChange={(e) => setOtp(e.target.value)}
-                value={otp}
-              />
-            </Form.Group>
-            <Form.Group>
-              <Button type="submit" className="w-100">
-                Confirmar Voto
-              </Button>
-            </Form.Group>
-          </Form>
+      <Modal show={shotModal} centered dialogClassName="apz-modal apz-modal--otp" onHide={cerrarOtp}>
+        <Modal.Body className="apz-modal-body">
+          <button type="button" className="apz-modal-x" aria-label="Cerrar" onClick={cerrarOtp}>
+            <FaTimes />
+          </button>
+          <div className="apz-otp">
+            <div className="apz-otp-icon" aria-hidden>
+              <FaEnvelope />
+            </div>
+            <p className="admin-dash-eyebrow">Paso final</p>
+            <h2>Confirma tu voto</h2>
+            <p>
+              Enviamos un código de 6 caracteres a tu correo. Escríbelo para
+              registrar el voto. Nadie verá por quién votaste.
+            </p>
+            <Form onSubmit={submit}>
+              <Form.Group className="mb-4">
+                <Form.Control
+                  type="text"
+                  inputMode="text"
+                  autoFocus
+                  maxLength={6}
+                  placeholder="------"
+                  autoComplete="one-time-code"
+                  className="apz-otp-input"
+                  onChange={(e) => setOtp(e.target.value.trim())}
+                  value={otp}
+                />
+              </Form.Group>
+              <button type="submit" className="apz-btn" disabled={otp.length !== 6}>
+                Confirmar voto
+              </button>
+            </Form>
+          </div>
         </Modal.Body>
       </Modal>
-    </Container>
+    </>
   );
 }
