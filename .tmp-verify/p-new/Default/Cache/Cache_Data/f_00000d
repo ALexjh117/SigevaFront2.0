@@ -1,0 +1,295 @@
+import { createHotContext as __vite__createHotContext } from "/@vite/client";import.meta.hot = __vite__createHotContext("/src/pages/RecuperarContrasena.tsx");import __vite__cjsImport0_react_jsxDevRuntime from "/node_modules/.vite/deps/react_jsx-dev-runtime.js?v=de8689fd"; const jsxDEV = __vite__cjsImport0_react_jsxDevRuntime["jsxDEV"];
+var _s = $RefreshSig$();
+import __vite__cjsImport1_react from "/node_modules/.vite/deps/react.js?v=de8689fd"; const useState = __vite__cjsImport1_react["useState"];
+import toast from "/node_modules/.vite/deps/react-hot-toast.js?v=de8689fd";
+import Form from "/node_modules/.vite/deps/react-bootstrap_Form.js?v=de8689fd";
+import Button from "/node_modules/.vite/deps/react-bootstrap_Button.js?v=de8689fd";
+import { Link, useSearchParams } from "/node_modules/.vite/deps/react-router-dom.js?v=de8689fd";
+import { FaArrowLeft, FaEnvelope, FaUser } from "/node_modules/.vite/deps/react-icons_fa.js?v=de8689fd";
+import { api } from "/src/api.ts";
+import { SigevaWordmark } from "/src/components/landing/SigevaMark.tsx?t=1788026549950";
+import "/src/pages/Login.css?t=1788029218495";
+export default function RecuperarContrasena() {
+  _s();
+  const [params] = useSearchParams();
+  const esFuncionario = params.get("desde") === "funcionario";
+  const volverA = esFuncionario ? "/login" : "/login-aprendiz";
+  const [documento, setDocumento] = useState("");
+  const [error, setError] = useState("");
+  const [enviando, setEnviando] = useState(false);
+  const validar = (valor) => {
+    if (!valor.trim()) return "El número de documento es obligatorio";
+    if (!/^[0-9]{6,15}$/.test(valor.trim())) {
+      return "Ingresa un número de documento válido (6 a 15 dígitos)";
+    }
+    return "";
+  };
+  const onSubmit = async (e) => {
+    e.preventDefault();
+    const mensaje = validar(documento);
+    if (mensaje) {
+      setError(mensaje);
+      return;
+    }
+    setError("");
+    setEnviando(true);
+    try {
+      const endpoint = esFuncionario ? "/api/usuarios/recuperar-contrasena" : "/api/aprendiz/recuperar-contrasena";
+      await api.post(endpoint, { numero_documento: documento.trim() });
+    } catch {
+    } finally {
+      setEnviando(false);
+      toast.success(
+        "Si el documento está registrado, te enviaremos las instrucciones para restablecer tu contraseña."
+      );
+    }
+  };
+  return /* @__PURE__ */ jsxDEV("div", { className: "login-page", children: /* @__PURE__ */ jsxDEV("section", { className: "login-card", "aria-label": "Recuperar contraseña", children: [
+    /* @__PURE__ */ jsxDEV("aside", { className: "login-visual login-visual--recover", children: [
+      /* @__PURE__ */ jsxDEV(
+        "img",
+        {
+          className: "login-visual-photo",
+          src: "/landing/convocatorias.jpg",
+          alt: "Aprendiz presentando ante sus compañeros en el SENA"
+        },
+        void 0,
+        false,
+        {
+          fileName: "C:/Users/Alex/sigevaFront/src/pages/RecuperarContrasena.tsx",
+          lineNumber: 56,
+          columnNumber: 11
+        },
+        this
+      ),
+      /* @__PURE__ */ jsxDEV("div", { className: "login-visual-copy", children: [
+        /* @__PURE__ */ jsxDEV("p", { className: "login-visual-kicker", children: "Recupera tu acceso," }, void 0, false, {
+          fileName: "C:/Users/Alex/sigevaFront/src/pages/RecuperarContrasena.tsx",
+          lineNumber: 62,
+          columnNumber: 13
+        }, this),
+        /* @__PURE__ */ jsxDEV("h2", { className: "login-visual-headline", children: "Sigue participando" }, void 0, false, {
+          fileName: "C:/Users/Alex/sigevaFront/src/pages/RecuperarContrasena.tsx",
+          lineNumber: 63,
+          columnNumber: 13
+        }, this),
+        /* @__PURE__ */ jsxDEV("p", { children: "Restablece tu contraseña y continúa haciendo parte de SIGEVA." }, void 0, false, {
+          fileName: "C:/Users/Alex/sigevaFront/src/pages/RecuperarContrasena.tsx",
+          lineNumber: 64,
+          columnNumber: 13
+        }, this)
+      ] }, void 0, true, {
+        fileName: "C:/Users/Alex/sigevaFront/src/pages/RecuperarContrasena.tsx",
+        lineNumber: 61,
+        columnNumber: 11
+      }, this)
+    ] }, void 0, true, {
+      fileName: "C:/Users/Alex/sigevaFront/src/pages/RecuperarContrasena.tsx",
+      lineNumber: 55,
+      columnNumber: 9
+    }, this),
+    /* @__PURE__ */ jsxDEV("div", { className: "login-panel", children: [
+      /* @__PURE__ */ jsxDEV("div", { className: "login-panel-brands", children: [
+        /* @__PURE__ */ jsxDEV("div", { className: "login-brand-sigeva", children: [
+          /* @__PURE__ */ jsxDEV(SigevaWordmark, {}, void 0, false, {
+            fileName: "C:/Users/Alex/sigevaFront/src/pages/RecuperarContrasena.tsx",
+            lineNumber: 71,
+            columnNumber: 15
+          }, this),
+          /* @__PURE__ */ jsxDEV("small", { children: "Sistema Electoral SENA" }, void 0, false, {
+            fileName: "C:/Users/Alex/sigevaFront/src/pages/RecuperarContrasena.tsx",
+            lineNumber: 72,
+            columnNumber: 15
+          }, this)
+        ] }, void 0, true, {
+          fileName: "C:/Users/Alex/sigevaFront/src/pages/RecuperarContrasena.tsx",
+          lineNumber: 70,
+          columnNumber: 13
+        }, this),
+        /* @__PURE__ */ jsxDEV("span", { className: "login-brand-sep", "aria-hidden": true }, void 0, false, {
+          fileName: "C:/Users/Alex/sigevaFront/src/pages/RecuperarContrasena.tsx",
+          lineNumber: 74,
+          columnNumber: 13
+        }, this),
+        /* @__PURE__ */ jsxDEV(
+          "img",
+          {
+            src: "/logo_fabrica.png",
+            alt: "Fábrica de Software SENA",
+            className: "login-brand-fab"
+          },
+          void 0,
+          false,
+          {
+            fileName: "C:/Users/Alex/sigevaFront/src/pages/RecuperarContrasena.tsx",
+            lineNumber: 75,
+            columnNumber: 13
+          },
+          this
+        )
+      ] }, void 0, true, {
+        fileName: "C:/Users/Alex/sigevaFront/src/pages/RecuperarContrasena.tsx",
+        lineNumber: 69,
+        columnNumber: 11
+      }, this),
+      /* @__PURE__ */ jsxDEV("h1", { className: "login-panel-title", children: [
+        "Recuperar ",
+        /* @__PURE__ */ jsxDEV("span", { children: "contraseña" }, void 0, false, {
+          fileName: "C:/Users/Alex/sigevaFront/src/pages/RecuperarContrasena.tsx",
+          lineNumber: 83,
+          columnNumber: 23
+        }, this)
+      ] }, void 0, true, {
+        fileName: "C:/Users/Alex/sigevaFront/src/pages/RecuperarContrasena.tsx",
+        lineNumber: 82,
+        columnNumber: 11
+      }, this),
+      /* @__PURE__ */ jsxDEV("p", { className: "login-panel-lead", children: "Ingresa tu número de documento y te enviaremos instrucciones para restablecer tu contraseña." }, void 0, false, {
+        fileName: "C:/Users/Alex/sigevaFront/src/pages/RecuperarContrasena.tsx",
+        lineNumber: 85,
+        columnNumber: 11
+      }, this),
+      /* @__PURE__ */ jsxDEV(Form, { onSubmit, children: [
+        /* @__PURE__ */ jsxDEV(Form.Group, { className: "mb-4", children: [
+          /* @__PURE__ */ jsxDEV(Form.Label, { children: "Número de documento" }, void 0, false, {
+            fileName: "C:/Users/Alex/sigevaFront/src/pages/RecuperarContrasena.tsx",
+            lineNumber: 92,
+            columnNumber: 15
+          }, this),
+          /* @__PURE__ */ jsxDEV("div", { className: "login-input-icon", children: [
+            /* @__PURE__ */ jsxDEV(FaUser, {}, void 0, false, {
+              fileName: "C:/Users/Alex/sigevaFront/src/pages/RecuperarContrasena.tsx",
+              lineNumber: 94,
+              columnNumber: 17
+            }, this),
+            /* @__PURE__ */ jsxDEV(
+              Form.Control,
+              {
+                id: "documento",
+                type: "text",
+                inputMode: "numeric",
+                autoComplete: "username",
+                placeholder: "Ingresa tu número de documento",
+                value: documento,
+                onChange: (ev) => {
+                  setDocumento(ev.target.value.replace(/\D/g, ""));
+                  if (error) setError("");
+                },
+                className: error ? "is-invalid" : ""
+              },
+              void 0,
+              false,
+              {
+                fileName: "C:/Users/Alex/sigevaFront/src/pages/RecuperarContrasena.tsx",
+                lineNumber: 95,
+                columnNumber: 17
+              },
+              this
+            )
+          ] }, void 0, true, {
+            fileName: "C:/Users/Alex/sigevaFront/src/pages/RecuperarContrasena.tsx",
+            lineNumber: 93,
+            columnNumber: 15
+          }, this),
+          error ? /* @__PURE__ */ jsxDEV("p", { className: "login-error", children: error }, void 0, false, {
+            fileName: "C:/Users/Alex/sigevaFront/src/pages/RecuperarContrasena.tsx",
+            lineNumber: 109,
+            columnNumber: 24
+          }, this) : null
+        ] }, void 0, true, {
+          fileName: "C:/Users/Alex/sigevaFront/src/pages/RecuperarContrasena.tsx",
+          lineNumber: 91,
+          columnNumber: 13
+        }, this),
+        /* @__PURE__ */ jsxDEV(Button, { type: "submit", className: "login-submit login-submit-icon", disabled: enviando, children: [
+          /* @__PURE__ */ jsxDEV(FaEnvelope, {}, void 0, false, {
+            fileName: "C:/Users/Alex/sigevaFront/src/pages/RecuperarContrasena.tsx",
+            lineNumber: 113,
+            columnNumber: 15
+          }, this),
+          /* @__PURE__ */ jsxDEV("span", { children: enviando ? "Enviando..." : "Enviar instrucciones" }, void 0, false, {
+            fileName: "C:/Users/Alex/sigevaFront/src/pages/RecuperarContrasena.tsx",
+            lineNumber: 114,
+            columnNumber: 15
+          }, this)
+        ] }, void 0, true, {
+          fileName: "C:/Users/Alex/sigevaFront/src/pages/RecuperarContrasena.tsx",
+          lineNumber: 112,
+          columnNumber: 13
+        }, this)
+      ] }, void 0, true, {
+        fileName: "C:/Users/Alex/sigevaFront/src/pages/RecuperarContrasena.tsx",
+        lineNumber: 90,
+        columnNumber: 11
+      }, this),
+      /* @__PURE__ */ jsxDEV("div", { className: "login-rule", "aria-hidden": true, children: /* @__PURE__ */ jsxDEV("i", {}, void 0, false, {
+        fileName: "C:/Users/Alex/sigevaFront/src/pages/RecuperarContrasena.tsx",
+        lineNumber: 119,
+        columnNumber: 13
+      }, this) }, void 0, false, {
+        fileName: "C:/Users/Alex/sigevaFront/src/pages/RecuperarContrasena.tsx",
+        lineNumber: 118,
+        columnNumber: 11
+      }, this),
+      /* @__PURE__ */ jsxDEV(Link, { to: volverA, className: "login-devolver login-submit-icon", children: [
+        /* @__PURE__ */ jsxDEV(FaArrowLeft, {}, void 0, false, {
+          fileName: "C:/Users/Alex/sigevaFront/src/pages/RecuperarContrasena.tsx",
+          lineNumber: 123,
+          columnNumber: 13
+        }, this),
+        /* @__PURE__ */ jsxDEV("span", { children: "Volver al inicio" }, void 0, false, {
+          fileName: "C:/Users/Alex/sigevaFront/src/pages/RecuperarContrasena.tsx",
+          lineNumber: 124,
+          columnNumber: 13
+        }, this)
+      ] }, void 0, true, {
+        fileName: "C:/Users/Alex/sigevaFront/src/pages/RecuperarContrasena.tsx",
+        lineNumber: 122,
+        columnNumber: 11
+      }, this)
+    ] }, void 0, true, {
+      fileName: "C:/Users/Alex/sigevaFront/src/pages/RecuperarContrasena.tsx",
+      lineNumber: 68,
+      columnNumber: 9
+    }, this)
+  ] }, void 0, true, {
+    fileName: "C:/Users/Alex/sigevaFront/src/pages/RecuperarContrasena.tsx",
+    lineNumber: 54,
+    columnNumber: 7
+  }, this) }, void 0, false, {
+    fileName: "C:/Users/Alex/sigevaFront/src/pages/RecuperarContrasena.tsx",
+    lineNumber: 53,
+    columnNumber: 5
+  }, this);
+}
+_s(RecuperarContrasena, "GQrDc5gx62lGn8Yxp/i68PX7BGc=", false, function() {
+  return [useSearchParams];
+});
+_c = RecuperarContrasena;
+var _c;
+$RefreshReg$(_c, "RecuperarContrasena");
+import * as RefreshRuntime from "/@react-refresh";
+const inWebWorker = typeof WorkerGlobalScope !== "undefined" && self instanceof WorkerGlobalScope;
+if (import.meta.hot && !inWebWorker) {
+  if (!window.$RefreshReg$) {
+    throw new Error(
+      "@vitejs/plugin-react can't detect preamble. Something is wrong."
+    );
+  }
+  RefreshRuntime.__hmr_import(import.meta.url).then((currentExports) => {
+    RefreshRuntime.registerExportsForReactRefresh("C:/Users/Alex/sigevaFront/src/pages/RecuperarContrasena.tsx", currentExports);
+    import.meta.hot.accept((nextExports) => {
+      if (!nextExports) return;
+      const invalidateMessage = RefreshRuntime.validateRefreshBoundaryAndEnqueueUpdate("C:/Users/Alex/sigevaFront/src/pages/RecuperarContrasena.tsx", currentExports, nextExports);
+      if (invalidateMessage) import.meta.hot.invalidate(invalidateMessage);
+    });
+  });
+}
+function $RefreshReg$(type, id) {
+  return RefreshRuntime.register(type, "C:/Users/Alex/sigevaFront/src/pages/RecuperarContrasena.tsx " + id);
+}
+function $RefreshSig$() {
+  return RefreshRuntime.createSignatureFunctionForTransform();
+}
+
+//# sourceMappingURL=data:application/json;base64,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IkZvcm0iLCJCdXR0b24iLCJMaW5rIiwidXNlU2VhcmNoUGFyYW1zIiwiRmFBcnJvd0xlZnQiLCJGYUVudmVsb3BlIiwiRmFVc2VyIiwiYXBpIiwiU2lnZXZhV29yZG1hcmsiLCJSZWN1cGVyYXJDb250cmFzZW5hIiwiX3MiLCJwYXJhbXMiLCJlc0Z1bmNpb25hcmlvIiwiZ2V0Iiwidm9sdmVyQSIsImRvY3VtZW50byIsInNldERvY3VtZW50byIsImVycm9yIiwic2V0RXJyb3IiLCJlbnZpYW5kbyIsInNldEVudmlhbmRvIiwidmFsaWRhciIsInZhbG9yIiwidHJpbSIsInRlc3QiLCJvblN1Ym1pdCIsImUiLCJwcmV2ZW50RGVmYXVsdCIsIm1lbnNhamUiLCJlbmRwb2ludCIsInBvc3QiLCJudW1lcm9fZG9jdW1lbnRvIiwic3VjY2VzcyIsImV2IiwidGFyZ2V0IiwidmFsdWUiLCJyZXBsYWNlIiwiX2MiXSwiaWdub3JlTGlzdCI6W10sInNvdXJjZXMiOlsiUmVjdXBlcmFyQ29udHJhc2VuYS50c3giXSwic291cmNlc0NvbnRlbnQiOlsiaW1wb3J0IHsgdXNlU3RhdGUgfSBmcm9tIFwicmVhY3RcIjtcclxuaW1wb3J0IHRvYXN0IGZyb20gXCJyZWFjdC1ob3QtdG9hc3RcIjtcclxuaW1wb3J0IEZvcm0gZnJvbSBcInJlYWN0LWJvb3RzdHJhcC9Gb3JtXCI7XHJcbmltcG9ydCBCdXR0b24gZnJvbSBcInJlYWN0LWJvb3RzdHJhcC9CdXR0b25cIjtcclxuaW1wb3J0IHsgTGluaywgdXNlU2VhcmNoUGFyYW1zIH0gZnJvbSBcInJlYWN0LXJvdXRlci1kb21cIjtcclxuaW1wb3J0IHsgRmFBcnJvd0xlZnQsIEZhRW52ZWxvcGUsIEZhVXNlciB9IGZyb20gXCJyZWFjdC1pY29ucy9mYVwiO1xyXG5pbXBvcnQgeyBhcGkgfSBmcm9tIFwiLi4vYXBpXCI7XHJcbmltcG9ydCB7IFNpZ2V2YVdvcmRtYXJrIH0gZnJvbSBcIi4uL2NvbXBvbmVudHMvbGFuZGluZy9TaWdldmFNYXJrXCI7XHJcbmltcG9ydCBcIi4vTG9naW4uY3NzXCI7XHJcblxyXG5leHBvcnQgZGVmYXVsdCBmdW5jdGlvbiBSZWN1cGVyYXJDb250cmFzZW5hKCkge1xyXG4gIGNvbnN0IFtwYXJhbXNdID0gdXNlU2VhcmNoUGFyYW1zKCk7XHJcbiAgY29uc3QgZXNGdW5jaW9uYXJpbyA9IHBhcmFtcy5nZXQoXCJkZXNkZVwiKSA9PT0gXCJmdW5jaW9uYXJpb1wiO1xyXG4gIGNvbnN0IHZvbHZlckEgPSBlc0Z1bmNpb25hcmlvID8gXCIvbG9naW5cIiA6IFwiL2xvZ2luLWFwcmVuZGl6XCI7XHJcbiAgY29uc3QgW2RvY3VtZW50bywgc2V0RG9jdW1lbnRvXSA9IHVzZVN0YXRlKFwiXCIpO1xyXG4gIGNvbnN0IFtlcnJvciwgc2V0RXJyb3JdID0gdXNlU3RhdGUoXCJcIik7XHJcbiAgY29uc3QgW2VudmlhbmRvLCBzZXRFbnZpYW5kb10gPSB1c2VTdGF0ZShmYWxzZSk7XHJcblxyXG4gIGNvbnN0IHZhbGlkYXIgPSAodmFsb3I6IHN0cmluZykgPT4ge1xyXG4gICAgaWYgKCF2YWxvci50cmltKCkpIHJldHVybiBcIkVsIG7Dum1lcm8gZGUgZG9jdW1lbnRvIGVzIG9ibGlnYXRvcmlvXCI7XHJcbiAgICBpZiAoIS9eWzAtOV17NiwxNX0kLy50ZXN0KHZhbG9yLnRyaW0oKSkpIHtcclxuICAgICAgcmV0dXJuIFwiSW5ncmVzYSB1biBuw7ptZXJvIGRlIGRvY3VtZW50byB2w6FsaWRvICg2IGEgMTUgZMOtZ2l0b3MpXCI7XHJcbiAgICB9XHJcbiAgICByZXR1cm4gXCJcIjtcclxuICB9O1xyXG5cclxuICBjb25zdCBvblN1Ym1pdCA9IGFzeW5jIChlOiBSZWFjdC5Gb3JtRXZlbnQpID0+IHtcclxuICAgIGUucHJldmVudERlZmF1bHQoKTtcclxuICAgIGNvbnN0IG1lbnNhamUgPSB2YWxpZGFyKGRvY3VtZW50byk7XHJcbiAgICBpZiAobWVuc2FqZSkge1xyXG4gICAgICBzZXRFcnJvcihtZW5zYWplKTtcclxuICAgICAgcmV0dXJuO1xyXG4gICAgfVxyXG5cclxuICAgIHNldEVycm9yKFwiXCIpO1xyXG4gICAgc2V0RW52aWFuZG8odHJ1ZSk7XHJcbiAgICB0cnkge1xyXG4gICAgICBjb25zdCBlbmRwb2ludCA9IGVzRnVuY2lvbmFyaW9cclxuICAgICAgICA/IFwiL2FwaS91c3Vhcmlvcy9yZWN1cGVyYXItY29udHJhc2VuYVwiXHJcbiAgICAgICAgOiBcIi9hcGkvYXByZW5kaXovcmVjdXBlcmFyLWNvbnRyYXNlbmFcIjtcclxuICAgICAgYXdhaXQgYXBpLnBvc3QoZW5kcG9pbnQsIHsgbnVtZXJvX2RvY3VtZW50bzogZG9jdW1lbnRvLnRyaW0oKSB9KTtcclxuICAgIH0gY2F0Y2gge1xyXG4gICAgICAvKiBTaSBlbCBiYWNrIGHDum4gbm8gdGllbmUgZWwgZW5kcG9pbnQsIG5vIHJldmVsYW1vcyBzaSBlbCBkb2N1bWVudG8gZXhpc3RlLiAqL1xyXG4gICAgfSBmaW5hbGx5IHtcclxuICAgICAgc2V0RW52aWFuZG8oZmFsc2UpO1xyXG4gICAgICB0b2FzdC5zdWNjZXNzKFxyXG4gICAgICAgIFwiU2kgZWwgZG9jdW1lbnRvIGVzdMOhIHJlZ2lzdHJhZG8sIHRlIGVudmlhcmVtb3MgbGFzIGluc3RydWNjaW9uZXMgcGFyYSByZXN0YWJsZWNlciB0dSBjb250cmFzZcOxYS5cIlxyXG4gICAgICApO1xyXG4gICAgfVxyXG4gIH07XHJcblxyXG4gIHJldHVybiAoXHJcbiAgICA8ZGl2IGNsYXNzTmFtZT1cImxvZ2luLXBhZ2VcIj5cclxuICAgICAgPHNlY3Rpb24gY2xhc3NOYW1lPVwibG9naW4tY2FyZFwiIGFyaWEtbGFiZWw9XCJSZWN1cGVyYXIgY29udHJhc2XDsWFcIj5cclxuICAgICAgICA8YXNpZGUgY2xhc3NOYW1lPVwibG9naW4tdmlzdWFsIGxvZ2luLXZpc3VhbC0tcmVjb3ZlclwiPlxyXG4gICAgICAgICAgPGltZ1xyXG4gICAgICAgICAgICBjbGFzc05hbWU9XCJsb2dpbi12aXN1YWwtcGhvdG9cIlxyXG4gICAgICAgICAgICBzcmM9XCIvbGFuZGluZy9jb252b2NhdG9yaWFzLmpwZ1wiXHJcbiAgICAgICAgICAgIGFsdD1cIkFwcmVuZGl6IHByZXNlbnRhbmRvIGFudGUgc3VzIGNvbXBhw7Flcm9zIGVuIGVsIFNFTkFcIlxyXG4gICAgICAgICAgLz5cclxuICAgICAgICAgIDxkaXYgY2xhc3NOYW1lPVwibG9naW4tdmlzdWFsLWNvcHlcIj5cclxuICAgICAgICAgICAgPHAgY2xhc3NOYW1lPVwibG9naW4tdmlzdWFsLWtpY2tlclwiPlJlY3VwZXJhIHR1IGFjY2Vzbyw8L3A+XHJcbiAgICAgICAgICAgIDxoMiBjbGFzc05hbWU9XCJsb2dpbi12aXN1YWwtaGVhZGxpbmVcIj5TaWd1ZSBwYXJ0aWNpcGFuZG88L2gyPlxyXG4gICAgICAgICAgICA8cD5SZXN0YWJsZWNlIHR1IGNvbnRyYXNlw7FhIHkgY29udGluw7phIGhhY2llbmRvIHBhcnRlIGRlIFNJR0VWQS48L3A+XHJcbiAgICAgICAgICA8L2Rpdj5cclxuICAgICAgICA8L2FzaWRlPlxyXG5cclxuICAgICAgICA8ZGl2IGNsYXNzTmFtZT1cImxvZ2luLXBhbmVsXCI+XHJcbiAgICAgICAgICA8ZGl2IGNsYXNzTmFtZT1cImxvZ2luLXBhbmVsLWJyYW5kc1wiPlxyXG4gICAgICAgICAgICA8ZGl2IGNsYXNzTmFtZT1cImxvZ2luLWJyYW5kLXNpZ2V2YVwiPlxyXG4gICAgICAgICAgICAgIDxTaWdldmFXb3JkbWFyayAvPlxyXG4gICAgICAgICAgICAgIDxzbWFsbD5TaXN0ZW1hIEVsZWN0b3JhbCBTRU5BPC9zbWFsbD5cclxuICAgICAgICAgICAgPC9kaXY+XHJcbiAgICAgICAgICAgIDxzcGFuIGNsYXNzTmFtZT1cImxvZ2luLWJyYW5kLXNlcFwiIGFyaWEtaGlkZGVuIC8+XHJcbiAgICAgICAgICAgIDxpbWdcclxuICAgICAgICAgICAgICBzcmM9XCIvbG9nb19mYWJyaWNhLnBuZ1wiXHJcbiAgICAgICAgICAgICAgYWx0PVwiRsOhYnJpY2EgZGUgU29mdHdhcmUgU0VOQVwiXHJcbiAgICAgICAgICAgICAgY2xhc3NOYW1lPVwibG9naW4tYnJhbmQtZmFiXCJcclxuICAgICAgICAgICAgLz5cclxuICAgICAgICAgIDwvZGl2PlxyXG5cclxuICAgICAgICAgIDxoMSBjbGFzc05hbWU9XCJsb2dpbi1wYW5lbC10aXRsZVwiPlxyXG4gICAgICAgICAgICBSZWN1cGVyYXIgPHNwYW4+Y29udHJhc2XDsWE8L3NwYW4+XHJcbiAgICAgICAgICA8L2gxPlxyXG4gICAgICAgICAgPHAgY2xhc3NOYW1lPVwibG9naW4tcGFuZWwtbGVhZFwiPlxyXG4gICAgICAgICAgICBJbmdyZXNhIHR1IG7Dum1lcm8gZGUgZG9jdW1lbnRvIHkgdGUgZW52aWFyZW1vcyBpbnN0cnVjY2lvbmVzIHBhcmEgcmVzdGFibGVjZXIgdHVcclxuICAgICAgICAgICAgY29udHJhc2XDsWEuXHJcbiAgICAgICAgICA8L3A+XHJcblxyXG4gICAgICAgICAgPEZvcm0gb25TdWJtaXQ9e29uU3VibWl0fT5cclxuICAgICAgICAgICAgPEZvcm0uR3JvdXAgY2xhc3NOYW1lPVwibWItNFwiPlxyXG4gICAgICAgICAgICAgIDxGb3JtLkxhYmVsPk7Dum1lcm8gZGUgZG9jdW1lbnRvPC9Gb3JtLkxhYmVsPlxyXG4gICAgICAgICAgICAgIDxkaXYgY2xhc3NOYW1lPVwibG9naW4taW5wdXQtaWNvblwiPlxyXG4gICAgICAgICAgICAgICAgPEZhVXNlciAvPlxyXG4gICAgICAgICAgICAgICAgPEZvcm0uQ29udHJvbFxyXG4gICAgICAgICAgICAgICAgICBpZD1cImRvY3VtZW50b1wiXHJcbiAgICAgICAgICAgICAgICAgIHR5cGU9XCJ0ZXh0XCJcclxuICAgICAgICAgICAgICAgICAgaW5wdXRNb2RlPVwibnVtZXJpY1wiXHJcbiAgICAgICAgICAgICAgICAgIGF1dG9Db21wbGV0ZT1cInVzZXJuYW1lXCJcclxuICAgICAgICAgICAgICAgICAgcGxhY2Vob2xkZXI9XCJJbmdyZXNhIHR1IG7Dum1lcm8gZGUgZG9jdW1lbnRvXCJcclxuICAgICAgICAgICAgICAgICAgdmFsdWU9e2RvY3VtZW50b31cclxuICAgICAgICAgICAgICAgICAgb25DaGFuZ2U9eyhldikgPT4ge1xyXG4gICAgICAgICAgICAgICAgICAgIHNldERvY3VtZW50byhldi50YXJnZXQudmFsdWUucmVwbGFjZSgvXFxEL2csIFwiXCIpKTtcclxuICAgICAgICAgICAgICAgICAgICBpZiAoZXJyb3IpIHNldEVycm9yKFwiXCIpO1xyXG4gICAgICAgICAgICAgICAgICB9fVxyXG4gICAgICAgICAgICAgICAgICBjbGFzc05hbWU9e2Vycm9yID8gXCJpcy1pbnZhbGlkXCIgOiBcIlwifVxyXG4gICAgICAgICAgICAgICAgLz5cclxuICAgICAgICAgICAgICA8L2Rpdj5cclxuICAgICAgICAgICAgICB7ZXJyb3IgPyA8cCBjbGFzc05hbWU9XCJsb2dpbi1lcnJvclwiPntlcnJvcn08L3A+IDogbnVsbH1cclxuICAgICAgICAgICAgPC9Gb3JtLkdyb3VwPlxyXG5cclxuICAgICAgICAgICAgPEJ1dHRvbiB0eXBlPVwic3VibWl0XCIgY2xhc3NOYW1lPVwibG9naW4tc3VibWl0IGxvZ2luLXN1Ym1pdC1pY29uXCIgZGlzYWJsZWQ9e2VudmlhbmRvfT5cclxuICAgICAgICAgICAgICA8RmFFbnZlbG9wZSAvPlxyXG4gICAgICAgICAgICAgIDxzcGFuPntlbnZpYW5kbyA/IFwiRW52aWFuZG8uLi5cIiA6IFwiRW52aWFyIGluc3RydWNjaW9uZXNcIn08L3NwYW4+XHJcbiAgICAgICAgICAgIDwvQnV0dG9uPlxyXG4gICAgICAgICAgPC9Gb3JtPlxyXG5cclxuICAgICAgICAgIDxkaXYgY2xhc3NOYW1lPVwibG9naW4tcnVsZVwiIGFyaWEtaGlkZGVuPlxyXG4gICAgICAgICAgICA8aSAvPlxyXG4gICAgICAgICAgPC9kaXY+XHJcblxyXG4gICAgICAgICAgPExpbmsgdG89e3ZvbHZlckF9IGNsYXNzTmFtZT1cImxvZ2luLWRldm9sdmVyIGxvZ2luLXN1Ym1pdC1pY29uXCI+XHJcbiAgICAgICAgICAgIDxGYUFycm93TGVmdCAvPlxyXG4gICAgICAgICAgICA8c3Bhbj5Wb2x2ZXIgYWwgaW5pY2lvPC9zcGFuPlxyXG4gICAgICAgICAgPC9MaW5rPlxyXG4gICAgICAgIDwvZGl2PlxyXG4gICAgICA8L3NlY3Rpb24+XHJcbiAgICA8L2Rpdj5cclxuICApO1xyXG59XHJcbiJdLCJmaWxlIjoiQzovVXNlcnMvQWxleC9zaWdldmFGcm9udC9zcmMvcGFnZXMvUmVjdXBlcmFyQ29udHJhc2VuYS50c3gifQ==

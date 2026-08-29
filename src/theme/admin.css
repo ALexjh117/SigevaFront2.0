@@ -99,6 +99,10 @@
   line-height: 1.15;
 }
 
+.theme-admin .admin-topbar-kicker .lp-name {
+  letter-spacing: 0.06em;
+}
+
 .theme-admin .admin-topbar-title {
   margin: 0.08rem 0 0;
   font-size: 0.82rem;
