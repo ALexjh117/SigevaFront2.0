@@ -28,6 +28,7 @@ interface Candidato {
   idcandidatos: string;
   numeroTarjeton: string;
   foto: string;
+  jornada?: string | null;
   aprendiz: Aprendiz;
 }
 
@@ -221,7 +222,7 @@ export default function EleccionesActivasPage() {
     setLoadingCandidatos(true);
     try {
       const res = await api.get(`/api/candidatos/listar/${eleccion.ideleccion}`);
-      setCandidatos(res.data.data);
+      setCandidatos(comoLista<Candidato>(res.data.data ?? res.data));
     } catch (error) {
       console.error("Error al cargar los candidatos:", error);
       setCandidatos([]);

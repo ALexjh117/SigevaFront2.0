@@ -3,6 +3,8 @@ import { FaCalendarAlt } from "react-icons/fa";
 import { useState } from "react";
 import GeneracionReporte from "../pages/funcionario/GeneracionReporte_NEW";
 import { api } from "../api";
+import { esJornada, JORNADAS } from "../constants/jornada";
+import { mapaJornadaCandidatos } from "../utils/resultadosJornada";
 
 interface Aprendiz {
   nombres: string;
@@ -13,6 +15,7 @@ interface Candidato {
   idcandidatos: string;
   numeroTarjeton: string;
   foto: string;
+  jornada?: string | null;
   aprendiz: Aprendiz;
 }
 
@@ -23,6 +26,49 @@ interface Eleccion {
   jornada: string | null;
   fechaInicio: string;
   fechaFin: string;
+}
+
+function FotoCandidato({ candidato }: { candidato: Candidato }) {
+  const base = import.meta.env.VITE_BASE_URL as string | undefined;
+  const raw = candidato.foto?.trim();
+  const src = raw
+    ? raw.startsWith("http")
+      ? raw
+      : base
+        ? `${base}/${raw.replace(/^\/+/, "")}`
+        : raw
+    : undefined;
+  const iniciales =
+    `${candidato.aprendiz.nombres?.[0] || ""}${candidato.aprendiz.apellidos?.[0] || ""}`.toUpperCase();
+
+  return (
+    <Card className="shadow-sm text-center p-2" style={{ width: "140px" }}>
+      {src ? (
+        <Card.Img
+          src={src}
+          alt={`${candidato.aprendiz.nombres} ${candidato.aprendiz.apellidos}`}
+          className="rounded-circle mx-auto d-block"
+          style={{ width: "80px", height: "80px", objectFit: "cover" }}
+        />
+      ) : (
+        <div
+          className="rounded-circle mx-auto d-flex align-items-center justify-content-center bg-light text-secondary"
+          style={{ width: "80px", height: "80px", fontWeight: 600 }}
+          aria-label="Sin foto"
+        >
+          {iniciales}
+        </div>
+      )}
+      <Card.Body className="p-2">
+        <Card.Title className="fw-bold" style={{ fontSize: "0.9rem" }}>
+          {candidato.aprendiz.nombres} {candidato.aprendiz.apellidos}
+        </Card.Title>
+        <Card.Text style={{ fontSize: "0.8rem" }}>
+          Tarjetón: {candidato.numeroTarjeton}
+        </Card.Text>
+      </Card.Body>
+    </Card>
+  );
 }
 
 interface EleccionDetalleModalProps {
@@ -67,6 +113,14 @@ export default function EleccionDetalleModal({
       const candidatosResp: any[] = Array.isArray(rep.candidatos) ? rep.candidatos : [];
       const totalVotos = candidatosResp.reduce((sum, c) => sum + Number(c.votos || 0), 0);
 
+      const mapaJornada = await mapaJornadaCandidatos(eleccion.ideleccion);
+      for (const c of candidatos) {
+        const id = Number(c.idcandidatos);
+        if (id && esJornada(c.jornada) && !mapaJornada.has(id)) {
+          mapaJornada.set(id, c.jornada);
+        }
+      }
+
       const candidatosTransformados = candidatosResp.map((c) => {
         const votos = Number(c.votos || 0);
         const porcentaje = totalVotos > 0 ? (votos / totalVotos) * 100 : 0;
@@ -74,14 +128,18 @@ export default function EleccionDetalleModal({
         const partes = String(c.nombres || "").split(" ");
         const nombre = partes[0] || String(c.nombres || "");
         const apellido = partes.slice(1).join(" ") || "";
+        const id = Number(c.idcandidatos);
+        const jornada =
+          (esJornada(c.jornada) ? c.jornada : mapaJornada.get(id)) || undefined;
         return {
-          id: Number(c.idcandidatos),
+          id,
           nombre,
           apellido,
           votos,
           porcentaje,
           numeroTarjeton: c.numero_tarjeton || undefined,
           propuesta: c.propuesta || undefined,
+          jornada,
         };
       });
 
@@ -141,44 +199,47 @@ export default function EleccionDetalleModal({
             </p>
       
             <Row className="g-3 mt-3">
-              {candidatos.map((candidato) => (
-                <Col key={candidato.idcandidatos} xs={6} md={4} lg={3}>
-                  <Card className="shadow-sm text-center p-2" style={{ width: "140px" }}>
-                    {(() => {
-                      const base = import.meta.env.VITE_BASE_URL as string | undefined;
-                      const raw = candidato.foto?.trim();
-                      const src = raw
-                        ? (raw.startsWith('http') ? raw : (base ? `${base}/${raw.replace(/^\/+/, '')}` : raw))
-                        : undefined;
-                      return src ? (
-                        <Card.Img
-                          src={src}
-                          alt={`${candidato.aprendiz.nombres} ${candidato.aprendiz.apellidos}`}
-                          className="rounded-circle mx-auto d-block"
-                          style={{ width: "80px", height: "80px", objectFit: "cover" }}
-                        />
-                      ) : (
-                        <div
-                          className="rounded-circle mx-auto d-flex align-items-center justify-content-center bg-light text-secondary"
-                          style={{ width: "80px", height: "80px", fontWeight: 600 }}
-                          aria-label="Sin foto"
-                        >
-                          {`${candidato.aprendiz.nombres?.[0] || ''}${candidato.aprendiz.apellidos?.[0] || ''}`.toUpperCase()}
-                        </div>
-                      );
-                    })()}
-                    <Card.Body className="p-2">
-                      <Card.Title className="fw-bold" style={{ fontSize: "0.9rem" }}>
-                        {candidato.aprendiz.nombres} {candidato.aprendiz.apellidos}
-                      </Card.Title>
-                      <Card.Text style={{ fontSize: "0.8rem" }}>
-                        Tarjetón: {candidato.numeroTarjeton}
-                      </Card.Text>
-                      
-                    </Card.Body>
-                  </Card>
-                </Col>
-              ))}
+              {candidatos.length === 0 ? (
+                <p className="text-muted">No hay candidatos cargados.</p>
+              ) : (
+                <>
+                  {JORNADAS.map((jornada) => {
+                    const lista = candidatos.filter((c) => c.jornada === jornada);
+                    return (
+                      <Col xs={12} key={jornada}>
+                        <p className="fw-semibold mb-2">Jornada {jornada}</p>
+                        <Row className="g-3">
+                          {lista.length === 0 ? (
+                            <Col>
+                              <p className="text-muted small">Sin candidatos en esta jornada.</p>
+                            </Col>
+                          ) : (
+                            lista.map((candidato) => (
+                              <Col key={candidato.idcandidatos} xs={6} md={4} lg={3}>
+                                <FotoCandidato candidato={candidato} />
+                              </Col>
+                            ))
+                          )}
+                        </Row>
+                      </Col>
+                    );
+                  })}
+                  {candidatos.some((c) => !esJornada(c.jornada)) && (
+                    <Col xs={12}>
+                      <p className="fw-semibold mb-2">Sin jornada asignada</p>
+                      <Row className="g-3">
+                        {candidatos
+                          .filter((c) => !esJornada(c.jornada))
+                          .map((candidato) => (
+                            <Col key={candidato.idcandidatos} xs={6} md={4} lg={3}>
+                              <FotoCandidato candidato={candidato} />
+                            </Col>
+                          ))}
+                      </Row>
+                    </Col>
+                  )}
+                </>
+              )}
             </Row>
 
             <div className="d-flex gap-3 mt-4">
@@ -186,7 +247,7 @@ export default function EleccionDetalleModal({
                 Volver
               </Button>
               <Button className="btn-gradient" onClick={handleGenerarReporte} disabled={loadingVotos}>
-                {loadingVotos ? 'Cargando votos...' : 'Generar PDF'}
+                {loadingVotos ? "Cargando votos..." : "Ver resultados y PDF"}
               </Button>
             </div>
           </>

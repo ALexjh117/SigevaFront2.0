@@ -194,9 +194,9 @@ html {
   height: 100%;
   display: block;
   object-fit: cover;
-  object-position: 42% 40%;
-  transform: scale(1.04);
-  transform-origin: 36% 42%;
+  object-position: 58% 38%;
+  transform: scale(1.02);
+  transform-origin: 55% 40%;
   pointer-events: none;
   user-select: none;
 }
@@ -1023,9 +1023,9 @@ html {
   }
 
   .lp-hero-photo {
-    object-position: 40% 38%;
+    object-position: 52% 36%;
     transform: scale(1.03);
-    transform-origin: 34% 40%;
+    transform-origin: 50% 38%;
   }
 
   .lp-phone {
@@ -1057,9 +1057,9 @@ html {
   }
 
   .lp-hero-photo {
-    object-position: 36% 34%;
-    transform: scale(1.06);
-    transform-origin: 32% 36%;
+    object-position: 48% 32%;
+    transform: scale(1.08);
+    transform-origin: 50% 30%;
   }
 
   .lp-hero-veil {
