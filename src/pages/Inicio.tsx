@@ -2,8 +2,6 @@ import { useEffect, useRef, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import {
   FaArrowRight,
-  FaChevronLeft,
-  FaChevronRight,
   FaSearch,
   FaHome,
   FaUser,
@@ -114,8 +112,8 @@ const acciones = [
 
 const Inicio: React.FC = () => {
   const scroller = useRef<HTMLDivElement>(null);
-  const [punto, setPunto] = useState(0);
   const { hash } = useLocation();
+  const [tarjetaActiva, setTarjetaActiva] = useState<string | null>(null);
 
   useEffect(() => {
     const id = hash.replace("#", "");
@@ -126,22 +124,6 @@ const Inicio: React.FC = () => {
     return () => window.clearTimeout(t);
   }, [hash]);
 
-  const mover = (dir: number) => {
-    const el = scroller.current;
-    if (!el) return;
-    const w = el.querySelector("article")?.clientWidth ?? 220;
-    el.scrollBy({ left: dir * (w + 16), behavior: "smooth" });
-    setPunto((p) => Math.min(infoCards.length - 1, Math.max(0, p + dir)));
-  };
-
-  const irA = (i: number) => {
-    const el = scroller.current;
-    if (!el) return;
-    const card = el.querySelectorAll("article")[i] as HTMLElement | undefined;
-    card?.scrollIntoView({ behavior: "smooth", inline: "start", block: "nearest" });
-    setPunto(i);
-  };
-
   return (
     <div className="landing">
       <LandingHeader />
@@ -150,7 +132,7 @@ const Inicio: React.FC = () => {
         <picture>
           <img
             className="lp-hero-photo"
-            src="/landing/hero-campus.jpg"
+            src="/landing/imagenlanding.jpg"
             alt="Aprendices consultando información en un celular y una tableta"
             fetchPriority="high"
           />
@@ -232,49 +214,47 @@ const Inicio: React.FC = () => {
       </section>
 
       <section className="lp-section lp-info" id="informacion">
-        <h2>
-          ¿Qué es <Marca />?
-        </h2>
-        <p className="lp-lead">
-          <Marca /> es la plataforma del SENA para la gestión y participación en los procesos
-          electorales de aprendices. Aquí encuentras lo esencial para entender cómo funciona.
-        </p>
+        
         <div className="lp-carousel">
-          <button type="button" className="lp-caro-btn" aria-label="Anterior" onClick={() => mover(-1)}>
-            <FaChevronLeft />
-          </button>
           <div
             className="lp-info-track"
             ref={scroller}
             onScroll={() => {
               const el = scroller.current;
               if (!el) return;
-              const w = el.querySelector("article")?.clientWidth ?? 1;
-              setPunto(Math.round(el.scrollLeft / (w + 16)));
+
+              // sin puntos ni flechas: solo mantenemos el seguimiento visual del scroll
+              void el.querySelector("article")?.clientWidth;
             }}
           >
-            {infoCards.map((c) => (
-              <article key={c.id} className="lp-info-card">
-                <span className="lp-info-icon">{c.icon}</span>
-                <h3>{c.titulo}</h3>
-                <p>{c.texto}</p>
-              </article>
-            ))}
+            {infoCards.map((c) => {
+              const activa = tarjetaActiva === c.id;
+
+              return (
+                <article
+                  key={c.id}
+                  className={`lp-info-card ${activa ? "is-flipped" : ""}`}
+                  onClick={() =>
+                    setTarjetaActiva((actual) => (actual === c.id ? null : c.id))
+                  }
+                  tabIndex={0}
+                  role="button"
+                  aria-label={c.aria}
+                >
+                  <div className="lp-info-card-inner">
+                    <div className="lp-info-card-face lp-info-card-front">
+                      <span className="lp-info-icon">{c.icon}</span>
+                      <h3>{c.titulo}</h3>
+                    </div>
+
+                    <div className="lp-info-card-face lp-info-card-back">
+                      <p>{c.texto}</p>
+                    </div>
+                  </div>
+                </article>
+              );
+            })}
           </div>
-          <button type="button" className="lp-caro-btn" aria-label="Siguiente" onClick={() => mover(1)}>
-            <FaChevronRight />
-          </button>
-        </div>
-        <div className="lp-dots" role="tablist" aria-label="Tarjetas de información">
-          {infoCards.map((c, i) => (
-            <button
-              key={c.id}
-              type="button"
-              className={i === punto ? "on" : undefined}
-              aria-label={c.aria}
-              onClick={() => irA(i)}
-            />
-          ))}
         </div>
       </section>
 
@@ -310,24 +290,48 @@ const Inicio: React.FC = () => {
         </p>
         <div className="lp-duos">
           <article className="lp-duo">
+            <img
+              src="/landing/login-voto.png"
+              alt="Aprendiz depositando su voto"
+            />
+
             <div className="lp-duo-copy">
+              <span className="lp-duo-icon lp-duo-icon-vote" aria-hidden="true">
+                <FaVoteYea />
+              </span>
+
               <h3>Elecciones</h3>
-              <p>Consulta las elecciones disponibles y participa activamente.</p>
+
+              <p>
+                Consulta las elecciones disponibles y participa activamente.
+              </p>
+
               <Link to="/login-aprendiz" className="lp-btn lp-btn-dark">
                 Ver elecciones <FaArrowRight />
               </Link>
             </div>
-            <img src="/landing/login-voto.png" alt="Aprendiz depositando su voto" />
           </article>
           <article className="lp-duo">
+            <img
+              src="/landing/convocatorias.jpg"
+              alt="Aprendices revisando una convocatoria"
+            />
+
             <div className="lp-duo-copy">
+              <span className="lp-duo-icon lp-duo-icon-call" aria-hidden="true">
+                <FaBullhorn />
+              </span>
+
               <h3>Convocatorias</h3>
-              <p>Conoce las convocatorias y oportunidades para participar.</p>
+
+              <p>
+                Conoce las convocatorias y oportunidades para participar.
+              </p>
+
               <Link to="/login-aprendiz" className="lp-btn lp-btn-dark">
                 Ver convocatorias <FaArrowRight />
               </Link>
             </div>
-            <img src="/landing/convocatorias.jpg" alt="Aprendices revisando una convocatoria" />
           </article>
         </div>
       </section>
