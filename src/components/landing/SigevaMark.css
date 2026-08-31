@@ -1,0 +1,31 @@
+/* Mismo escalonado del wordmark: SI oscuro, GE medio, VA lima */
+.lp-logo-sigeva {
+  height: 34px;
+  width: auto;
+  display: block;
+}
+
+.navbar .lp-logo-sigeva {
+  height: 30px;
+}
+
+.lp-name {
+  display: inline;
+  font-style: normal;
+  font-weight: inherit;
+  letter-spacing: 0.01em;
+  white-space: nowrap;
+  --sg-s: #0b3d2e;
+  --sg-i: #0e4a38;
+  --sg-g: #1b6b42;
+  --sg-e: #2e7d32;
+  --sg-v: #39a900;
+  --sg-a: #4cbb17;
+}
+
+.lp-name span:nth-child(1) { color: var(--sg-s) !important; }
+.lp-name span:nth-child(2) { color: var(--sg-i) !important; }
+.lp-name span:nth-child(3) { color: var(--sg-g) !important; }
+.lp-name span:nth-child(4) { color: var(--sg-e) !important; }
+.lp-name span:nth-child(5) { color: var(--sg-v) !important; }
+.lp-name span:nth-child(6) { color: var(--sg-a) !important; }

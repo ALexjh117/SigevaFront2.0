@@ -17,6 +17,7 @@ import {
   LupaDetalle,
   textoCorto,
 } from "../../components/tabla/detalleTabla";
+import { MiniGraficas, contarPor, topN } from "../../components/graficas/MiniGraficas";
 
 interface Aprendiz {
   nombres: string;
@@ -27,6 +28,7 @@ interface Candidato {
   idcandidatos: string;
   numeroTarjeton: string;
   foto: string;
+  jornada?: string | null;
   aprendiz: Aprendiz;
 }
 
@@ -189,7 +191,7 @@ export default function EleccionesActivasPage() {
     setLoadingCandidatos(true);
     try {
       const res = await api.get(`/api/candidatos/listar/${eleccion.ideleccion}`);
-      setCandidatos(res.data.data);
+      setCandidatos(comoLista<Candidato>(res.data.data ?? res.data));
     } catch (error) {
       console.error("Error al cargar los candidatos:", error);
       setCandidatos([]);
@@ -293,7 +295,7 @@ export default function EleccionesActivasPage() {
   );
 
   return (
-    <Container className={`my-4 px-3 ${esRed ? "admin-page" : ""}`}>
+    <Container className="my-4 px-3 admin-page">
       {esRed ? (
         <>
           <h3 className="fw-bold">
@@ -305,18 +307,50 @@ export default function EleccionesActivasPage() {
         </>
       ) : (
         <>
-          <h3 className="fw-bold">Bienvenido</h3>
-          <p className="text-muted">
-            Aquí tiene un resumen de la actividad reciente en SIGEVA.
-          </p>
-          <h5 className="fw-semibold mt-4">Resumen de Elecciones Activas</h5>
-          <h3 className="fw-bold ">
-            {eleccionActiva.length > 0
-              ? `Centro de formación ${eleccionActiva[0].centro}`
-              : "No hay centro asignado"}
+          <h3 className="fw-bold">
+            Elecciones de tu <span className="app-accent">centro</span>
           </h3>
+          <p className="text-muted">
+            Procesos de votación de tu centro de formación.
+          </p>
+          <h5 className="fw-semibold mt-3">
+            {eleccionActiva.length > 0
+              ? etiquetaLugar(eleccionActiva[0].centro)
+              : "No hay centro asignado"}
+          </h5>
         </>
       )}
+
+      <MiniGraficas
+        barras={{
+          titulo: esRed ? "Elecciones por centro" : "Elecciones por jornada",
+          datos: topN(
+            contarPor(
+              eleccionActiva,
+              (e) =>
+                esRed
+                  ? etiquetaLugar(e.centro)
+                  : e.jornada || "Sin jornada"
+            ),
+            8
+          ),
+          horizontal: true,
+          unidad: "elecciones",
+        }}
+        dona={{
+          titulo: "Activas y cerradas",
+          datos: [
+            {
+              etiqueta: "Activas",
+              valor: eleccionActiva.filter(esEleccionVigente).length,
+            },
+            {
+              etiqueta: "Cerradas",
+              valor: eleccionActiva.filter((e) => !esEleccionVigente(e)).length,
+            },
+          ],
+        }}
+      />
 
       <Row className="align-items-center mt-3 mb-4">
         <Col md={8} lg={6} className="mb-2 mb-md-0">
@@ -348,7 +382,7 @@ export default function EleccionesActivasPage() {
           pagination
           highlightOnHover
           striped
-          customStyles={esRed ? adminTableStyles : undefined}
+          customStyles={adminTableStyles}
           noDataComponent={
             esRed
               ? "No hay elecciones registradas en la red."

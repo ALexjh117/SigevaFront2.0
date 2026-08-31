@@ -3,6 +3,7 @@ import { TbLogout } from "react-icons/tb";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/auth/auth.context";
 import { jornadaDelAprendiz } from "../../utils/jornadaAprendiz";
+import { SigevaWordmark } from "../landing/SigevaMark";
 
 const Navbar = () => {
   const { logout, user } = useAuth();
@@ -14,11 +15,7 @@ const Navbar = () => {
       <div className="container-fluid d-flex justify-content-between align-items-center">
         {/* Logo */}
         <Link className="navbar-brand fw-bold text-primary m-0 logo-text" to="/votaciones">
-          <img
-            src={"../public/Sigeva.svg"}
-            alt="Logo"
-            style={{ height: "30px" }}
-          />
+          <SigevaWordmark />
         </Link>
 
         {/* Navegación central */}

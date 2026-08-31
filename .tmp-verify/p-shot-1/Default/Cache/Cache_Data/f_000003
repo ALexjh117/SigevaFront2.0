@@ -1,0 +1,406 @@
+import { createHotContext as __vite__createHotContext } from "/@vite/client";import.meta.hot = __vite__createHotContext("/src/App.tsx");import __vite__cjsImport0_react_jsxDevRuntime from "/node_modules/.vite/deps/react_jsx-dev-runtime.js?v=de8689fd"; const jsxDEV = __vite__cjsImport0_react_jsxDevRuntime["jsxDEV"];
+var _s = $RefreshSig$(), _s2 = $RefreshSig$(), _s3 = $RefreshSig$();
+import {
+  BrowserRouter,
+  Route,
+  Routes,
+  Navigate,
+  Outlet
+} from "/node_modules/.vite/deps/react-router-dom.js?v=de8689fd";
+import "/src/App.css";
+import VotacionesActivasPage from "/src/pages/aprendiz/VotacionesActivasPage.tsx?t=1788026549950";
+import Login from "/src/pages/Login.tsx?t=1788028595303";
+import RecuperarContrasena from "/src/pages/RecuperarContrasena.tsx?t=1788028595303";
+import ElegirJornadaPage from "/src/pages/aprendiz/ElegirJornadaPage.tsx?t=1788026549950";
+import CandidateSelectionPage from "/src/pages/aprendiz/SeleccionarCandidatoPage.tsx?t=1788026549950";
+import ConfirmarVoto from "/src/pages/aprendiz/ConfirmarVoto.tsx?t=1788026549950";
+import GestionCandidatos from "/src/pages/funcionario/GestionCandidatos.tsx";
+import CargarAprendices from "/src/pages/funcionario/CargarAprendices.tsx";
+import PanelMetricas from "/src/pages/funcionario/PanelMetricas.tsx";
+import EleccionesActivasPage from "/src/pages/funcionario/EleccionesActivasPage.tsx?t=1788026549950";
+import AgregarCandidato from "/src/pages/funcionario/AgregarCandidato.tsx";
+import FormEleccion from "/src/pages/funcionario/FormEleccion.tsx";
+import MainLayout from "/src/layouts/MainLayout.tsx?t=1788026549950";
+import { useAuth } from "/src/context/auth/auth.context.ts";
+import Inicio from "/src/pages/Inicio.tsx?t=1788028241322";
+import Aprendices from "/src/pages/administrador/Aprendices.tsx";
+import AprendizForm from "/src/pages/administrador/AprendizForm.tsx";
+import Funcionarios from "/src/pages/administrador/Funcionarios.tsx";
+import { DashboardAdmin } from "/src/pages/administrador/DashboardAdmin.tsx";
+import { Toaster } from "/node_modules/.vite/deps/react-hot-toast.js?v=de8689fd";
+import CargarAprendicesAdmin from "/src/pages/administrador/CargarAprendicesAdmin.tsx";
+import Equipo from "/src/pages/Equipo.tsx?t=1788028241322";
+import { esRolDeCentro } from "/src/utils/roles.ts";
+function PublicLayout() {
+  return /* @__PURE__ */ jsxDEV(Outlet, {}, void 0, false, {
+    fileName: "C:/Users/Alex/sigevaFront/src/App.tsx",
+    lineNumber: 35,
+    columnNumber: 10
+  }, this);
+}
+_c = PublicLayout;
+function PrivateLayout() {
+  _s();
+  const { isAuthenticated } = useAuth();
+  if (!isAuthenticated) {
+    return /* @__PURE__ */ jsxDEV(Navigate, { to: "/", replace: true }, void 0, false, {
+      fileName: "C:/Users/Alex/sigevaFront/src/App.tsx",
+      lineNumber: 42,
+      columnNumber: 12
+    }, this);
+  }
+  return /* @__PURE__ */ jsxDEV(Outlet, {}, void 0, false, {
+    fileName: "C:/Users/Alex/sigevaFront/src/App.tsx",
+    lineNumber: 45,
+    columnNumber: 10
+  }, this);
+}
+_s(PrivateLayout, "1LGxUrjNz4q7iKM/2JDC9lJQ3xY=", false, function() {
+  return [useAuth];
+});
+_c2 = PrivateLayout;
+function GestionLayout() {
+  _s2();
+  const { user } = useAuth();
+  if (user?.perfil === "Aprendiz") {
+    return /* @__PURE__ */ jsxDEV(Navigate, { to: "/votaciones", replace: true }, void 0, false, {
+      fileName: "C:/Users/Alex/sigevaFront/src/App.tsx",
+      lineNumber: 51,
+      columnNumber: 12
+    }, this);
+  }
+  return /* @__PURE__ */ jsxDEV(MainLayout, { showSidebar: true, children: /* @__PURE__ */ jsxDEV(Outlet, {}, void 0, false, {
+    fileName: "C:/Users/Alex/sigevaFront/src/App.tsx",
+    lineNumber: 55,
+    columnNumber: 7
+  }, this) }, void 0, false, {
+    fileName: "C:/Users/Alex/sigevaFront/src/App.tsx",
+    lineNumber: 54,
+    columnNumber: 5
+  }, this);
+}
+_s2(GestionLayout, "9ep4vdl3mBfipxjmc+tQCDhw6Ik=", false, function() {
+  return [useAuth];
+});
+_c3 = GestionLayout;
+function RedSenaLayout() {
+  _s3();
+  const { user } = useAuth();
+  if (user?.perfil === "Aprendiz") {
+    return /* @__PURE__ */ jsxDEV(Navigate, { to: "/votaciones", replace: true }, void 0, false, {
+      fileName: "C:/Users/Alex/sigevaFront/src/App.tsx",
+      lineNumber: 63,
+      columnNumber: 12
+    }, this);
+  }
+  if (esRolDeCentro(user?.perfil)) {
+    return /* @__PURE__ */ jsxDEV(Navigate, { to: "/dashboard", replace: true }, void 0, false, {
+      fileName: "C:/Users/Alex/sigevaFront/src/App.tsx",
+      lineNumber: 66,
+      columnNumber: 12
+    }, this);
+  }
+  return /* @__PURE__ */ jsxDEV(MainLayout, { showSidebar: true, children: /* @__PURE__ */ jsxDEV(Outlet, {}, void 0, false, {
+    fileName: "C:/Users/Alex/sigevaFront/src/App.tsx",
+    lineNumber: 70,
+    columnNumber: 7
+  }, this) }, void 0, false, {
+    fileName: "C:/Users/Alex/sigevaFront/src/App.tsx",
+    lineNumber: 69,
+    columnNumber: 5
+  }, this);
+}
+_s3(RedSenaLayout, "9ep4vdl3mBfipxjmc+tQCDhw6Ik=", false, function() {
+  return [useAuth];
+});
+_c4 = RedSenaLayout;
+function App() {
+  return /* @__PURE__ */ jsxDEV(BrowserRouter, { children: [
+    /* @__PURE__ */ jsxDEV(Routes, { children: [
+      /* @__PURE__ */ jsxDEV(Route, { element: /* @__PURE__ */ jsxDEV(PublicLayout, {}, void 0, false, {
+        fileName: "C:/Users/Alex/sigevaFront/src/App.tsx",
+        lineNumber: 80,
+        columnNumber: 25
+      }, this), children: [
+        /* @__PURE__ */ jsxDEV(Route, { path: "/", element: /* @__PURE__ */ jsxDEV(Inicio, {}, void 0, false, {
+          fileName: "C:/Users/Alex/sigevaFront/src/App.tsx",
+          lineNumber: 81,
+          columnNumber: 36
+        }, this) }, void 0, false, {
+          fileName: "C:/Users/Alex/sigevaFront/src/App.tsx",
+          lineNumber: 81,
+          columnNumber: 11
+        }, this),
+        /* @__PURE__ */ jsxDEV(Route, { path: "/login", element: /* @__PURE__ */ jsxDEV(Login, { perfil: "gestor" }, void 0, false, {
+          fileName: "C:/Users/Alex/sigevaFront/src/App.tsx",
+          lineNumber: 82,
+          columnNumber: 41
+        }, this) }, void 0, false, {
+          fileName: "C:/Users/Alex/sigevaFront/src/App.tsx",
+          lineNumber: 82,
+          columnNumber: 11
+        }, this),
+        /* @__PURE__ */ jsxDEV(Route, { path: "/login-aprendiz", element: /* @__PURE__ */ jsxDEV(Login, { perfil: "aprendiz" }, void 0, false, {
+          fileName: "C:/Users/Alex/sigevaFront/src/App.tsx",
+          lineNumber: 83,
+          columnNumber: 50
+        }, this) }, void 0, false, {
+          fileName: "C:/Users/Alex/sigevaFront/src/App.tsx",
+          lineNumber: 83,
+          columnNumber: 11
+        }, this),
+        /* @__PURE__ */ jsxDEV(Route, { path: "/recuperar-contrasena", element: /* @__PURE__ */ jsxDEV(RecuperarContrasena, {}, void 0, false, {
+          fileName: "C:/Users/Alex/sigevaFront/src/App.tsx",
+          lineNumber: 84,
+          columnNumber: 56
+        }, this) }, void 0, false, {
+          fileName: "C:/Users/Alex/sigevaFront/src/App.tsx",
+          lineNumber: 84,
+          columnNumber: 11
+        }, this),
+        /* @__PURE__ */ jsxDEV(Route, { path: "/equipo", element: /* @__PURE__ */ jsxDEV(Equipo, {}, void 0, false, {
+          fileName: "C:/Users/Alex/sigevaFront/src/App.tsx",
+          lineNumber: 85,
+          columnNumber: 42
+        }, this) }, void 0, false, {
+          fileName: "C:/Users/Alex/sigevaFront/src/App.tsx",
+          lineNumber: 85,
+          columnNumber: 11
+        }, this)
+      ] }, void 0, true, {
+        fileName: "C:/Users/Alex/sigevaFront/src/App.tsx",
+        lineNumber: 80,
+        columnNumber: 9
+      }, this),
+      /* @__PURE__ */ jsxDEV(Route, { element: /* @__PURE__ */ jsxDEV(PrivateLayout, {}, void 0, false, {
+        fileName: "C:/Users/Alex/sigevaFront/src/App.tsx",
+        lineNumber: 89,
+        columnNumber: 25
+      }, this), children: [
+        /* @__PURE__ */ jsxDEV(Route, { path: "/elegir-jornada", element: /* @__PURE__ */ jsxDEV(ElegirJornadaPage, {}, void 0, false, {
+          fileName: "C:/Users/Alex/sigevaFront/src/App.tsx",
+          lineNumber: 90,
+          columnNumber: 50
+        }, this) }, void 0, false, {
+          fileName: "C:/Users/Alex/sigevaFront/src/App.tsx",
+          lineNumber: 90,
+          columnNumber: 11
+        }, this),
+        /* @__PURE__ */ jsxDEV(Route, { path: "/votaciones", element: /* @__PURE__ */ jsxDEV(VotacionesActivasPage, {}, void 0, false, {
+          fileName: "C:/Users/Alex/sigevaFront/src/App.tsx",
+          lineNumber: 91,
+          columnNumber: 46
+        }, this) }, void 0, false, {
+          fileName: "C:/Users/Alex/sigevaFront/src/App.tsx",
+          lineNumber: 91,
+          columnNumber: 11
+        }, this),
+        /* @__PURE__ */ jsxDEV(Route, { path: "/seleccion/:id", element: /* @__PURE__ */ jsxDEV(CandidateSelectionPage, {}, void 0, false, {
+          fileName: "C:/Users/Alex/sigevaFront/src/App.tsx",
+          lineNumber: 92,
+          columnNumber: 49
+        }, this) }, void 0, false, {
+          fileName: "C:/Users/Alex/sigevaFront/src/App.tsx",
+          lineNumber: 92,
+          columnNumber: 11
+        }, this),
+        /* @__PURE__ */ jsxDEV(Route, { path: "/confirmar-voto", element: /* @__PURE__ */ jsxDEV(ConfirmarVoto, {}, void 0, false, {
+          fileName: "C:/Users/Alex/sigevaFront/src/App.tsx",
+          lineNumber: 93,
+          columnNumber: 50
+        }, this) }, void 0, false, {
+          fileName: "C:/Users/Alex/sigevaFront/src/App.tsx",
+          lineNumber: 93,
+          columnNumber: 11
+        }, this),
+        /* @__PURE__ */ jsxDEV(Route, { element: /* @__PURE__ */ jsxDEV(GestionLayout, {}, void 0, false, {
+          fileName: "C:/Users/Alex/sigevaFront/src/App.tsx",
+          lineNumber: 96,
+          columnNumber: 27
+        }, this), children: [
+          /* @__PURE__ */ jsxDEV(Route, { path: "/dashboard", element: /* @__PURE__ */ jsxDEV(DashboardAdmin, {}, void 0, false, {
+            fileName: "C:/Users/Alex/sigevaFront/src/App.tsx",
+            lineNumber: 97,
+            columnNumber: 47
+          }, this) }, void 0, false, {
+            fileName: "C:/Users/Alex/sigevaFront/src/App.tsx",
+            lineNumber: 97,
+            columnNumber: 13
+          }, this),
+          /* @__PURE__ */ jsxDEV(Route, { path: "/gestion-candidatos/:idEleccion", element: /* @__PURE__ */ jsxDEV(GestionCandidatos, {}, void 0, false, {
+            fileName: "C:/Users/Alex/sigevaFront/src/App.tsx",
+            lineNumber: 98,
+            columnNumber: 68
+          }, this) }, void 0, false, {
+            fileName: "C:/Users/Alex/sigevaFront/src/App.tsx",
+            lineNumber: 98,
+            columnNumber: 13
+          }, this),
+          /* @__PURE__ */ jsxDEV(Route, { path: "/cargar-aprendices", element: /* @__PURE__ */ jsxDEV(CargarAprendices, {}, void 0, false, {
+            fileName: "C:/Users/Alex/sigevaFront/src/App.tsx",
+            lineNumber: 99,
+            columnNumber: 55
+          }, this) }, void 0, false, {
+            fileName: "C:/Users/Alex/sigevaFront/src/App.tsx",
+            lineNumber: 99,
+            columnNumber: 13
+          }, this),
+          /* @__PURE__ */ jsxDEV(Route, { path: "/panel-metricas", element: /* @__PURE__ */ jsxDEV(PanelMetricas, {}, void 0, false, {
+            fileName: "C:/Users/Alex/sigevaFront/src/App.tsx",
+            lineNumber: 100,
+            columnNumber: 52
+          }, this) }, void 0, false, {
+            fileName: "C:/Users/Alex/sigevaFront/src/App.tsx",
+            lineNumber: 100,
+            columnNumber: 13
+          }, this),
+          /* @__PURE__ */ jsxDEV(Route, { path: "/elecciones", element: /* @__PURE__ */ jsxDEV(EleccionesActivasPage, {}, void 0, false, {
+            fileName: "C:/Users/Alex/sigevaFront/src/App.tsx",
+            lineNumber: 101,
+            columnNumber: 48
+          }, this) }, void 0, false, {
+            fileName: "C:/Users/Alex/sigevaFront/src/App.tsx",
+            lineNumber: 101,
+            columnNumber: 13
+          }, this),
+          /* @__PURE__ */ jsxDEV(Route, { path: "/agregar-candidato", element: /* @__PURE__ */ jsxDEV(AgregarCandidato, {}, void 0, false, {
+            fileName: "C:/Users/Alex/sigevaFront/src/App.tsx",
+            lineNumber: 102,
+            columnNumber: 55
+          }, this) }, void 0, false, {
+            fileName: "C:/Users/Alex/sigevaFront/src/App.tsx",
+            lineNumber: 102,
+            columnNumber: 13
+          }, this),
+          /* @__PURE__ */ jsxDEV(Route, { path: "/nueva-eleccion", element: /* @__PURE__ */ jsxDEV(FormEleccion, {}, void 0, false, {
+            fileName: "C:/Users/Alex/sigevaFront/src/App.tsx",
+            lineNumber: 103,
+            columnNumber: 52
+          }, this) }, void 0, false, {
+            fileName: "C:/Users/Alex/sigevaFront/src/App.tsx",
+            lineNumber: 103,
+            columnNumber: 13
+          }, this),
+          /* @__PURE__ */ jsxDEV(Route, { path: "/aprendices", element: /* @__PURE__ */ jsxDEV(Aprendices, {}, void 0, false, {
+            fileName: "C:/Users/Alex/sigevaFront/src/App.tsx",
+            lineNumber: 104,
+            columnNumber: 48
+          }, this) }, void 0, false, {
+            fileName: "C:/Users/Alex/sigevaFront/src/App.tsx",
+            lineNumber: 104,
+            columnNumber: 13
+          }, this),
+          /* @__PURE__ */ jsxDEV(Route, { path: "/aprendiz-form", element: /* @__PURE__ */ jsxDEV(AprendizForm, {}, void 0, false, {
+            fileName: "C:/Users/Alex/sigevaFront/src/App.tsx",
+            lineNumber: 105,
+            columnNumber: 51
+          }, this) }, void 0, false, {
+            fileName: "C:/Users/Alex/sigevaFront/src/App.tsx",
+            lineNumber: 105,
+            columnNumber: 13
+          }, this)
+        ] }, void 0, true, {
+          fileName: "C:/Users/Alex/sigevaFront/src/App.tsx",
+          lineNumber: 96,
+          columnNumber: 11
+        }, this),
+        /* @__PURE__ */ jsxDEV(Route, { element: /* @__PURE__ */ jsxDEV(RedSenaLayout, {}, void 0, false, {
+          fileName: "C:/Users/Alex/sigevaFront/src/App.tsx",
+          lineNumber: 109,
+          columnNumber: 27
+        }, this), children: [
+          /* @__PURE__ */ jsxDEV(Route, { path: "/dashboard-admin", element: /* @__PURE__ */ jsxDEV(DashboardAdmin, {}, void 0, false, {
+            fileName: "C:/Users/Alex/sigevaFront/src/App.tsx",
+            lineNumber: 110,
+            columnNumber: 53
+          }, this) }, void 0, false, {
+            fileName: "C:/Users/Alex/sigevaFront/src/App.tsx",
+            lineNumber: 110,
+            columnNumber: 13
+          }, this),
+          /* @__PURE__ */ jsxDEV(Route, { path: "/funcionarios", element: /* @__PURE__ */ jsxDEV(Funcionarios, {}, void 0, false, {
+            fileName: "C:/Users/Alex/sigevaFront/src/App.tsx",
+            lineNumber: 111,
+            columnNumber: 50
+          }, this) }, void 0, false, {
+            fileName: "C:/Users/Alex/sigevaFront/src/App.tsx",
+            lineNumber: 111,
+            columnNumber: 13
+          }, this),
+          /* @__PURE__ */ jsxDEV(Route, { path: "/cargar-aprendices-admin", element: /* @__PURE__ */ jsxDEV(CargarAprendicesAdmin, {}, void 0, false, {
+            fileName: "C:/Users/Alex/sigevaFront/src/App.tsx",
+            lineNumber: 112,
+            columnNumber: 61
+          }, this) }, void 0, false, {
+            fileName: "C:/Users/Alex/sigevaFront/src/App.tsx",
+            lineNumber: 112,
+            columnNumber: 13
+          }, this)
+        ] }, void 0, true, {
+          fileName: "C:/Users/Alex/sigevaFront/src/App.tsx",
+          lineNumber: 109,
+          columnNumber: 11
+        }, this)
+      ] }, void 0, true, {
+        fileName: "C:/Users/Alex/sigevaFront/src/App.tsx",
+        lineNumber: 89,
+        columnNumber: 9
+      }, this),
+      /* @__PURE__ */ jsxDEV(Route, { path: "*", element: /* @__PURE__ */ jsxDEV(Navigate, { to: "/", replace: true }, void 0, false, {
+        fileName: "C:/Users/Alex/sigevaFront/src/App.tsx",
+        lineNumber: 116,
+        columnNumber: 34
+      }, this) }, void 0, false, {
+        fileName: "C:/Users/Alex/sigevaFront/src/App.tsx",
+        lineNumber: 116,
+        columnNumber: 9
+      }, this)
+    ] }, void 0, true, {
+      fileName: "C:/Users/Alex/sigevaFront/src/App.tsx",
+      lineNumber: 78,
+      columnNumber: 7
+    }, this),
+    /* @__PURE__ */ jsxDEV(Toaster, { position: "top-right", reverseOrder: false }, void 0, false, {
+      fileName: "C:/Users/Alex/sigevaFront/src/App.tsx",
+      lineNumber: 118,
+      columnNumber: 7
+    }, this)
+  ] }, void 0, true, {
+    fileName: "C:/Users/Alex/sigevaFront/src/App.tsx",
+    lineNumber: 77,
+    columnNumber: 5
+  }, this);
+}
+_c5 = App;
+export default App;
+var _c, _c2, _c3, _c4, _c5;
+$RefreshReg$(_c, "PublicLayout");
+$RefreshReg$(_c2, "PrivateLayout");
+$RefreshReg$(_c3, "GestionLayout");
+$RefreshReg$(_c4, "RedSenaLayout");
+$RefreshReg$(_c5, "App");
+import * as RefreshRuntime from "/@react-refresh";
+const inWebWorker = typeof WorkerGlobalScope !== "undefined" && self instanceof WorkerGlobalScope;
+if (import.meta.hot && !inWebWorker) {
+  if (!window.$RefreshReg$) {
+    throw new Error(
+      "@vitejs/plugin-react can't detect preamble. Something is wrong."
+    );
+  }
+  RefreshRuntime.__hmr_import(import.meta.url).then((currentExports) => {
+    RefreshRuntime.registerExportsForReactRefresh("C:/Users/Alex/sigevaFront/src/App.tsx", currentExports);
+    import.meta.hot.accept((nextExports) => {
+      if (!nextExports) return;
+      const invalidateMessage = RefreshRuntime.validateRefreshBoundaryAndEnqueueUpdate("C:/Users/Alex/sigevaFront/src/App.tsx", currentExports, nextExports);
+      if (invalidateMessage) import.meta.hot.invalidate(invalidateMessage);
+    });
+  });
+}
+function $RefreshReg$(type, id) {
+  return RefreshRuntime.register(type, "C:/Users/Alex/sigevaFront/src/App.tsx " + id);
+}
+function $RefreshSig$() {
+  return RefreshRuntime.createSignatureFunctionForTransform();
+}
+
+//# sourceMappingURL=data:application/json;base64,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LGFBQXdCLEtBQWpEO0FBQUE7QUFBQTtBQUFBO0FBQUEsYUFBcUQ7QUFBQSxTQXRDdkQ7QUFBQTtBQUFBO0FBQUE7QUFBQSxXQXVDQTtBQUFBLElBQ0EsdUJBQUMsV0FBUSxVQUFTLGFBQVksY0FBYyxTQUE1QztBQUFBO0FBQUE7QUFBQTtBQUFBLFdBQWtEO0FBQUEsT0F6Q3BEO0FBQUE7QUFBQTtBQUFBO0FBQUEsU0EwQ0E7QUFFSjtBQUFDQyxNQTlDUUQ7QUFnRFQsZUFBZUE7QUFBSSxJQUFBVixJQUFBWSxLQUFBQyxLQUFBQyxLQUFBSDtBQUFBLGFBQUFYLElBQUE7QUFBQSxhQUFBWSxLQUFBO0FBQUEsYUFBQUMsS0FBQTtBQUFBLGFBQUFDLEtBQUE7QUFBQSxhQUFBSCxLQUFBIiwibmFtZXMiOlsiQnJvd3NlclJvdXRlciIsIlJvdXRlIiwiUm91dGVzIiwiTmF2aWdhdGUiLCJPdXRsZXQiLCJWb3RhY2lvbmVzQWN0aXZhc1BhZ2UiLCJMb2dpbiIsIlJlY3VwZXJhckNvbnRyYXNlbmEiLCJFbGVnaXJKb3JuYWRhUGFnZSIsIkNhbmRpZGF0ZVNlbGVjdGlvblBhZ2UiLCJDb25maXJtYXJWb3RvIiwiR2VzdGlvbkNhbmRpZGF0b3MiLCJDYXJnYXJBcHJlbmRpY2VzIiwiUGFuZWxNZXRyaWNhcyIsIkVsZWNjaW9uZXNBY3RpdmFzUGFnZSIsIkFncmVnYXJDYW5kaWRhdG8iLCJGb3JtRWxlY2Npb24iLCJNYWluTGF5b3V0IiwidXNlQXV0aCIsIkluaWNpbyIsIkFwcmVuZGljZXMiLCJBcHJlbmRpekZvcm0iLCJGdW5jaW9uYXJpb3MiLCJEYXNoYm9hcmRBZG1pbiIsIlRvYXN0ZXIiLCJDYXJnYXJBcHJlbmRpY2VzQWRtaW4iLCJFcXVpcG8iLCJlc1JvbERlQ2VudHJvIiwiUHVibGljTGF5b3V0IiwiX2MiLCJQcml2YXRlTGF5b3V0IiwiX3MiLCJpc0F1dGhlbnRpY2F0ZWQiLCJHZXN0aW9uTGF5b3V0IiwiX3MyIiwidXNlciIsInBlcmZpbCIsIlJlZFNlbmFMYXlvdXQiLCJfczMiLCJBcHAiLCJfYzUiLCJfYzIiLCJfYzMiLCJfYzQiXSwiaWdub3JlTGlzdCI6W10sInNvdXJjZXMiOlsiQXBwLnRzeCJdLCJzb3VyY2VzQ29udGVudCI6WyJpbXBvcnQge1xuICBCcm93c2VyUm91dGVyLFxuICBSb3V0ZSxcbiAgUm91dGVzLFxuICBOYXZpZ2F0ZSxcbiAgT3V0bGV0LFxufSBmcm9tIFwicmVhY3Qtcm91dGVyLWRvbVwiO1xuaW1wb3J0IFwiLi9BcHAuY3NzXCI7XG5pbXBvcnQgVm90YWNpb25lc0FjdGl2YXNQYWdlIGZyb20gXCIuL3BhZ2VzL2FwcmVuZGl6L1ZvdGFjaW9uZXNBY3RpdmFzUGFnZVwiO1xuaW1wb3J0IExvZ2luIGZyb20gXCIuL3BhZ2VzL0xvZ2luXCI7XG5pbXBvcnQgUmVjdXBlcmFyQ29udHJhc2VuYSBmcm9tIFwiLi9wYWdlcy9SZWN1cGVyYXJDb250cmFzZW5hXCI7XG5pbXBvcnQgRWxlZ2lySm9ybmFkYVBhZ2UgZnJvbSBcIi4vcGFnZXMvYXByZW5kaXovRWxlZ2lySm9ybmFkYVBhZ2VcIjtcbmltcG9ydCBDYW5kaWRhdGVTZWxlY3Rpb25QYWdlIGZyb20gXCIuL3BhZ2VzL2FwcmVuZGl6L1NlbGVjY2lvbmFyQ2FuZGlkYXRvUGFnZVwiO1xuaW1wb3J0IENvbmZpcm1hclZvdG8gZnJvbSBcIi4vcGFnZXMvYXByZW5kaXovQ29uZmlybWFyVm90b1wiO1xuaW1wb3J0IEdlc3Rpb25DYW5kaWRhdG9zIGZyb20gXCIuL3BhZ2VzL2Z1bmNpb25hcmlvL0dlc3Rpb25DYW5kaWRhdG9zXCI7XG5pbXBvcnQgQ2FyZ2FyQXByZW5kaWNlcyBmcm9tIFwiLi9wYWdlcy9mdW5jaW9uYXJpby9DYXJnYXJBcHJlbmRpY2VzXCI7XG5pbXBvcnQgUGFuZWxNZXRyaWNhcyBmcm9tIFwiLi9wYWdlcy9mdW5jaW9uYXJpby9QYW5lbE1ldHJpY2FzXCI7XG5pbXBvcnQgRWxlY2Npb25lc0FjdGl2YXNQYWdlIGZyb20gXCIuL3BhZ2VzL2Z1bmNpb25hcmlvL0VsZWNjaW9uZXNBY3RpdmFzUGFnZVwiO1xuaW1wb3J0IEFncmVnYXJDYW5kaWRhdG8gZnJvbSBcIi4vcGFnZXMvZnVuY2lvbmFyaW8vQWdyZWdhckNhbmRpZGF0b1wiO1xuaW1wb3J0IEZvcm1FbGVjY2lvbiBmcm9tIFwiLi9wYWdlcy9mdW5jaW9uYXJpby9Gb3JtRWxlY2Npb25cIjtcbmltcG9ydCBNYWluTGF5b3V0IGZyb20gXCIuL2xheW91dHMvTWFpbkxheW91dFwiO1xuaW1wb3J0IHsgdXNlQXV0aCB9IGZyb20gXCIuL2NvbnRleHQvYXV0aC9hdXRoLmNvbnRleHRcIjtcbmltcG9ydCBJbmljaW8gZnJvbSBcIi4vcGFnZXMvSW5pY2lvXCI7XG5pbXBvcnQgQXByZW5kaWNlcyBmcm9tIFwiLi9wYWdlcy9hZG1pbmlzdHJhZG9yL0FwcmVuZGljZXNcIjtcbmltcG9ydCBBcHJlbmRpekZvcm0gZnJvbSBcIi4vcGFnZXMvYWRtaW5pc3RyYWRvci9BcHJlbmRpekZvcm1cIjtcbmltcG9ydCBGdW5jaW9uYXJpb3MgZnJvbSBcIi4vcGFnZXMvYWRtaW5pc3RyYWRvci9GdW5jaW9uYXJpb3NcIjtcbmltcG9ydCB7IERhc2hib2FyZEFkbWluIH0gZnJvbSBcIi4vcGFnZXMvYWRtaW5pc3RyYWRvci9EYXNoYm9hcmRBZG1pblwiO1xuaW1wb3J0IHsgVG9hc3RlciB9IGZyb20gXCJyZWFjdC1ob3QtdG9hc3RcIjtcbmltcG9ydCBDYXJnYXJBcHJlbmRpY2VzQWRtaW4gZnJvbSBcIi4vcGFnZXMvYWRtaW5pc3RyYWRvci9DYXJnYXJBcHJlbmRpY2VzQWRtaW5cIjtcbmltcG9ydCBFcXVpcG8gZnJvbSBcIi4vcGFnZXMvRXF1aXBvXCI7XG5pbXBvcnQgeyBlc1JvbERlQ2VudHJvIH0gZnJvbSBcIi4vdXRpbHMvcm9sZXNcIjtcblxuXG5mdW5jdGlvbiBQdWJsaWNMYXlvdXQoKSB7XG4gIHJldHVybiA8T3V0bGV0IC8+O1xufVxuXG5mdW5jdGlvbiBQcml2YXRlTGF5b3V0KCkge1xuICBjb25zdCB7IGlzQXV0aGVudGljYXRlZCB9ID0gdXNlQXV0aCgpO1xuXG4gIGlmICghaXNBdXRoZW50aWNhdGVkKSB7XG4gICAgcmV0dXJuIDxOYXZpZ2F0ZSB0bz1cIi9cIiByZXBsYWNlIC8+O1xuICB9XG5cbiAgcmV0dXJuIDxPdXRsZXQgLz47XG59XG5cbmZ1bmN0aW9uIEdlc3Rpb25MYXlvdXQoKSB7XG4gIGNvbnN0IHsgdXNlciB9ID0gdXNlQXV0aCgpO1xuICBpZiAodXNlcj8ucGVyZmlsID09PSBcIkFwcmVuZGl6XCIpIHtcbiAgICByZXR1cm4gPE5hdmlnYXRlIHRvPVwiL3ZvdGFjaW9uZXNcIiByZXBsYWNlIC8+O1xuICB9XG4gIHJldHVybiAoXG4gICAgPE1haW5MYXlvdXQgc2hvd1NpZGViYXI9e3RydWV9PlxuICAgICAgPE91dGxldCAvPlxuICAgIDwvTWFpbkxheW91dD5cbiAgKTtcbn1cblxuZnVuY3Rpb24gUmVkU2VuYUxheW91dCgpIHtcbiAgY29uc3QgeyB1c2VyIH0gPSB1c2VBdXRoKCk7XG4gIGlmICh1c2VyPy5wZXJmaWwgPT09IFwiQXByZW5kaXpcIikge1xuICAgIHJldHVybiA8TmF2aWdhdGUgdG89XCIvdm90YWNpb25lc1wiIHJlcGxhY2UgLz47XG4gIH1cbiAgaWYgKGVzUm9sRGVDZW50cm8odXNlcj8ucGVyZmlsKSkge1xuICAgIHJldHVybiA8TmF2aWdhdGUgdG89XCIvZGFzaGJvYXJkXCIgcmVwbGFjZSAvPjtcbiAgfVxuICByZXR1cm4gKFxuICAgIDxNYWluTGF5b3V0IHNob3dTaWRlYmFyPXt0cnVlfT5cbiAgICAgIDxPdXRsZXQgLz5cbiAgICA8L01haW5MYXlvdXQ+XG4gICk7XG59XG5cbmZ1bmN0aW9uIEFwcCgpIHtcbiAgcmV0dXJuIChcbiAgICA8QnJvd3NlclJvdXRlcj5cbiAgICAgIDxSb3V0ZXM+XG4gICAgICAgIHsvKiBSdXRhcyBww7pibGljYXMgKi99XG4gICAgICAgIDxSb3V0ZSBlbGVtZW50PXs8UHVibGljTGF5b3V0IC8+fT5cbiAgICAgICAgICA8Um91dGUgcGF0aD1cIi9cIiBlbGVtZW50PXs8SW5pY2lvIC8+fSAvPlxuICAgICAgICAgIDxSb3V0ZSBwYXRoPVwiL2xvZ2luXCIgZWxlbWVudD17PExvZ2luIHBlcmZpbD1cImdlc3RvclwiIC8+fSAvPlxuICAgICAgICAgIDxSb3V0ZSBwYXRoPVwiL2xvZ2luLWFwcmVuZGl6XCIgZWxlbWVudD17PExvZ2luIHBlcmZpbD1cImFwcmVuZGl6XCIgLz59IC8+XG4gICAgICAgICAgPFJvdXRlIHBhdGg9XCIvcmVjdXBlcmFyLWNvbnRyYXNlbmFcIiBlbGVtZW50PXs8UmVjdXBlcmFyQ29udHJhc2VuYSAvPn0gLz5cbiAgICAgICAgICA8Um91dGUgcGF0aD1cIi9lcXVpcG9cIiBlbGVtZW50PXs8RXF1aXBvIC8+fSAvPlxuICAgICAgICA8L1JvdXRlPlxuXG4gICAgICAgIHsvKiBSdXRhcyBkZSBBcHJlbmRpeiAqL31cbiAgICAgICAgPFJvdXRlIGVsZW1lbnQ9ezxQcml2YXRlTGF5b3V0IC8+fT5cbiAgICAgICAgICA8Um91dGUgcGF0aD1cIi9lbGVnaXItam9ybmFkYVwiIGVsZW1lbnQ9ezxFbGVnaXJKb3JuYWRhUGFnZSAvPn0gLz5cbiAgICAgICAgICA8Um91dGUgcGF0aD1cIi92b3RhY2lvbmVzXCIgZWxlbWVudD17PFZvdGFjaW9uZXNBY3RpdmFzUGFnZSAvPn0gLz5cbiAgICAgICAgICA8Um91dGUgcGF0aD1cIi9zZWxlY2Npb24vOmlkXCIgZWxlbWVudD17PENhbmRpZGF0ZVNlbGVjdGlvblBhZ2UgLz59IC8+XG4gICAgICAgICAgPFJvdXRlIHBhdGg9XCIvY29uZmlybWFyLXZvdG9cIiBlbGVtZW50PXs8Q29uZmlybWFyVm90byAvPn0gLz5cblxuICAgICAgICAgIHsvKiBHZXN0acOzbiBkZSBjZW50cm86IGZ1bmNpb25hcmlvIHkgYWRtaW5fc2lzdGVtYSAqL31cbiAgICAgICAgICA8Um91dGUgZWxlbWVudD17PEdlc3Rpb25MYXlvdXQgLz59PlxuICAgICAgICAgICAgPFJvdXRlIHBhdGg9XCIvZGFzaGJvYXJkXCIgZWxlbWVudD17PERhc2hib2FyZEFkbWluIC8+fSAvPlxuICAgICAgICAgICAgPFJvdXRlIHBhdGg9XCIvZ2VzdGlvbi1jYW5kaWRhdG9zLzppZEVsZWNjaW9uXCIgZWxlbWVudD17PEdlc3Rpb25DYW5kaWRhdG9zIC8+fSAvPlxuICAgICAgICAgICAgPFJvdXRlIHBhdGg9XCIvY2FyZ2FyLWFwcmVuZGljZXNcIiBlbGVtZW50PXs8Q2FyZ2FyQXByZW5kaWNlcyAvPn0gLz5cbiAgICAgICAgICAgIDxSb3V0ZSBwYXRoPVwiL3BhbmVsLW1ldHJpY2FzXCIgZWxlbWVudD17PFBhbmVsTWV0cmljYXMgLz59IC8+XG4gICAgICAgICAgICA8Um91dGUgcGF0aD1cIi9lbGVjY2lvbmVzXCIgZWxlbWVudD17PEVsZWNjaW9uZXNBY3RpdmFzUGFnZSAvPn0gLz5cbiAgICAgICAgICAgIDxSb3V0ZSBwYXRoPVwiL2FncmVnYXItY2FuZGlkYXRvXCIgZWxlbWVudD17PEFncmVnYXJDYW5kaWRhdG8gLz59IC8+XG4gICAgICAgICAgICA8Um91dGUgcGF0aD1cIi9udWV2YS1lbGVjY2lvblwiIGVsZW1lbnQ9ezxGb3JtRWxlY2Npb24gLz59IC8+XG4gICAgICAgICAgICA8Um91dGUgcGF0aD1cIi9hcHJlbmRpY2VzXCIgZWxlbWVudD17PEFwcmVuZGljZXMgLz59IC8+XG4gICAgICAgICAgICA8Um91dGUgcGF0aD1cIi9hcHJlbmRpei1mb3JtXCIgZWxlbWVudD17PEFwcmVuZGl6Rm9ybSAvPn0gLz5cbiAgICAgICAgICA8L1JvdXRlPlxuXG4gICAgICAgICAgey8qIFRvcnJlIGRlIHJlZDogc29sbyBBZG1pbmlzdHJhZG9yICovfVxuICAgICAgICAgIDxSb3V0ZSBlbGVtZW50PXs8UmVkU2VuYUxheW91dCAvPn0+XG4gICAgICAgICAgICA8Um91dGUgcGF0aD1cIi9kYXNoYm9hcmQtYWRtaW5cIiBlbGVtZW50PXs8RGFzaGJvYXJkQWRtaW4gLz59IC8+XG4gICAgICAgICAgICA8Um91dGUgcGF0aD1cIi9mdW5jaW9uYXJpb3NcIiBlbGVtZW50PXs8RnVuY2lvbmFyaW9zIC8+fSAvPlxuICAgICAgICAgICAgPFJvdXRlIHBhdGg9XCIvY2FyZ2FyLWFwcmVuZGljZXMtYWRtaW5cIiBlbGVtZW50PXs8Q2FyZ2FyQXByZW5kaWNlc0FkbWluLz59IC8+XG4gICAgICAgICAgPC9Sb3V0ZT5cbiAgICAgICAgPC9Sb3V0ZT5cblxuICAgICAgICA8Um91dGUgcGF0aD1cIipcIiBlbGVtZW50PXs8TmF2aWdhdGUgdG89XCIvXCIgcmVwbGFjZSAvPn0gLz5cbiAgICAgIDwvUm91dGVzPlxuICAgICAgPFRvYXN0ZXIgcG9zaXRpb249XCJ0b3AtcmlnaHRcIiByZXZlcnNlT3JkZXI9e2ZhbHNlfSAvPlxuICAgIDwvQnJvd3NlclJvdXRlcj5cbiAgKTtcbn1cblxuZXhwb3J0IGRlZmF1bHQgQXBwO1xuIl0sImZpbGUiOiJDOi9Vc2Vycy9BbGV4L3NpZ2V2YUZyb250L3NyYy9BcHAudHN4In0=

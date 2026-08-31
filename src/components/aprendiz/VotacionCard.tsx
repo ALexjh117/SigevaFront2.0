@@ -1,4 +1,3 @@
-import { Card, Button } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 
 interface Props {
@@ -6,28 +5,57 @@ interface Props {
   centro: string;
   ideleccion: string | number;
   hayCandidatos: boolean;
+  fechaInicio?: string;
+  fechaFin?: string;
+  yaVoto?: boolean;
 }
 
-export const VotacionCard = ({ titulo, centro, ideleccion, hayCandidatos }: Props) => {
+function rango(inicio?: string, fin?: string) {
+  const fmt = (s?: string) => {
+    if (!s) return "";
+    const d = new Date(s);
+    if (Number.isNaN(d.getTime())) return s;
+    return d.toLocaleDateString("es-CO", { day: "2-digit", month: "short" });
+  };
+  const a = fmt(inicio);
+  const b = fmt(fin);
+  if (!a && !b) return null;
+  return [a, b].filter(Boolean).join(" — ");
+}
+
+export const VotacionCard = ({
+  titulo,
+  centro,
+  ideleccion,
+  hayCandidatos,
+  fechaInicio,
+  fechaFin,
+  yaVoto,
+}: Props) => {
   const navigate = useNavigate();
+  const fechas = rango(fechaInicio, fechaFin);
+  const puedeVotar = hayCandidatos && !yaVoto;
+
   return (
-    <Card className="h-100 border-success border-1 ">
-      <Card.Body>
-        <Card.Title className="fw-bold">{titulo}</Card.Title>
-        <Card.Text>{centro}</Card.Text>
-        {hayCandidatos ? (
-          <Button
-            className="btn-gradient"
-            onClick={() => {
-              navigate(`/seleccion/${ideleccion}`);
-            }}
-          >
-            Participar
-          </Button>
-        ) : (
-          <p className="fw-semibold text-muted mb-0">No hay candidatos para tu jornada!</p>
-        )}
-      </Card.Body>
-    </Card>
+    <article
+      className={`grafica-card admin-vote-card${puedeVotar ? " is-clickable" : ""}`}
+      onClick={puedeVotar ? () => navigate(`/seleccion/${ideleccion}`) : undefined}
+    >
+      <header>
+        <h3>{titulo}</h3>
+        <small className={yaVoto ? "admin-pill-done" : hayCandidatos ? "admin-pill-on" : "admin-pill-off"}>
+          {yaVoto ? "Ya votaste" : hayCandidatos ? "Abierta" : "Sin lista"}
+        </small>
+      </header>
+      <p className="admin-vote-meta">{centro}</p>
+      {fechas ? <p className="admin-vote-meta">{fechas}</p> : null}
+      {yaVoto ? (
+        <p className="admin-vote-cta">Tu voto ya quedó registrado.</p>
+      ) : hayCandidatos ? (
+        <p className="admin-vote-cta admin-vote-cta--go">Participar</p>
+      ) : (
+        <p className="admin-vote-cta">Todavía no hay candidatos para tu jornada.</p>
+      )}
+    </article>
   );
 };
