@@ -1,5 +1,5 @@
-import { Form, Row, Col, Button, Card } from "react-bootstrap";
-import { FaBookOpen, FaRegSave, FaRegUser } from "react-icons/fa";
+import { Form, Row, Col, Button, Card, InputGroup } from "react-bootstrap";
+import { FaBookOpen, FaRegSave, FaRegUser, FaEye, FaEyeSlash } from "react-icons/fa";
 import { useLocation, useNavigate } from "react-router-dom";
 import { api } from "../../api";
 import { useForm } from "react-hook-form";
@@ -36,35 +36,36 @@ const AprendizForm = () => {
   const navigate = useNavigate();
   const [centros, setCentros] = useState<CentroFormacion[]>([]);
   const [programas, setProgramas] = useState<ProgramaFormacion[]>([]);
-  const {user} = useAuth();
+  const [showPassword, setShowPassword] = useState(false); // Estado para visibilidad de la contraseña
+  const { user } = useAuth();
 
-const getCentros = async () => {
-  try {
-    const res = await api.get("api/centrosFormacion/obtiene");
-    setCentros(res.data.data || []);
-  } catch (err) {
-    toast.error("Error cargando centros");
-    setCentros([]);
-  }
-};
+  const getCentros = async () => {
+    try {
+      const res = await api.get("api/centrosFormacion/obtiene");
+      setCentros(res.data.data || []);
+    } catch (err) {
+      toast.error("Error cargando centros");
+      setCentros([]);
+    }
+  };
 
-const getProgramas = async () => {
-  try {
-    const res = await api.get("api/programasFormacion/listar");
-    setProgramas(res.data || []);
-  } catch (err) {
-    toast.error("Error cargando programas");
-    setProgramas([]);
-  }
-};
+  const getProgramas = async () => {
+    try {
+      const res = await api.get("api/programasFormacion/listar");
+      setProgramas(res.data || []);
+    } catch (err) {
+      toast.error("Error cargando programas");
+      setProgramas([]);
+    }
+  };
 
   useEffect(() => {
     if (!esAdministradorRed(user?.perfil) && !user?.centroFormacion) {
-      return
+      return;
     }
-    getCentros()
-    getProgramas()
-  }, [user?.perfil, user?.centroFormacion])
+    getCentros();
+    getProgramas();
+  }, [user?.perfil, user?.centroFormacion]);
 
   const { register, handleSubmit } = useForm({
     defaultValues: aprendiz
@@ -90,12 +91,12 @@ const getProgramas = async () => {
           grupo: "",
           jornada: "",
           programa: "",
-          codigo_programa: "", //
-          version: "", //
-          duracion: "", //
-          idnivel_formacion: 0, //
-          nivel_formacion: "", //
-          idarea_tematica: 0, //
+          codigo_programa: "",
+          version: "",
+          duracion: "",
+          idnivel_formacion: 0,
+          nivel_formacion: "",
+          idarea_tematica: 0,
           perfil_idperfil: 3,
           nombres: "",
           apellidos: "",
@@ -140,34 +141,37 @@ const getProgramas = async () => {
       );
     }
   };
+
   const onSubmit = (data: any) => {
     if (data.programa) {
-    const programaObj = JSON.parse(data.programa);
+      const programaObj = JSON.parse(data.programa);
 
-    data.idprograma_formacion = programaObj.idprogramaFormacion;
-    data.codigo_programa = programaObj.codigoPrograma;
-    data.version = programaObj.version;
-    data.duracion = programaObj.duracion;
-    data.idnivel_formacion = programaObj.idnivelFormacion;
-    data.idarea_tematica = programaObj.idareaTematica;
-    data.programa =  programaObj.programa; 
-  }
+      data.idprograma_formacion = programaObj.idprogramaFormacion;
+      data.codigo_programa = programaObj.codigoPrograma;
+      data.version = programaObj.version;
+      data.duracion = programaObj.duracion;
+      data.idnivel_formacion = programaObj.idnivelFormacion;
+      data.idarea_tematica = programaObj.idareaTematica;
+      data.programa = programaObj.programa;
+    }
     if (aprendiz) {
       actualizarAprendiz(data);
     } else {
       agregarAprendiz(data);
     }
-   
   };
-
 
   return (
     <div className="admin-page">
-      <Card.Header
-        className="px-4"
-      >
-        <h2 className="fw-bold">{aprendiz ? "Actualizar " : "Crear nuevo "}<span className="app-accent">Aprendiz</span></h2>
-        <p>{!aprendiz? 'Registra un nuevo ' : 'Actualiza un'} aprendiz en el sistema para habilitar su participación en los procesos en votación.</p>
+      <Card.Header className="px-4">
+        <h2 className="fw-bold">
+          {aprendiz ? "Actualizar " : "Crear nuevo "}
+          <span className="app-accent">Aprendiz</span>
+        </h2>
+        <p>
+          {!aprendiz ? "Registra un nuevo " : "Actualiza un"} aprendiz en el
+          sistema para habilitar su participación en los procesos en votación.
+        </p>
       </Card.Header>
       <Card.Body className="p-4">
         <Form onSubmit={handleSubmit(onSubmit)}>
@@ -194,7 +198,7 @@ const getProgramas = async () => {
                     <Form.Select {...register("jornada")} required>
                       <option value="">Seleccione...</option>
                       <option value="Mañana">Mañana</option>
-                           <option value="Tarde">Tarde</option>
+                      <option value="Tarde">Tarde</option>
                       <option value="Noche">Noche</option>
                     </Form.Select>
                   </Form.Group>
@@ -218,23 +222,29 @@ const getProgramas = async () => {
                     </Form.Select>
                   </Form.Group>
                 </Col>
-                {esAdministradorRed(user?.perfil)?
-                <Col md={6}>
-                  <Form.Group>
-                    <Form.Label>Centro Formación</Form.Label>
-                    <Form.Select
-                      {...register("centro_formacion_idcentro_formacion")} required
+                {esAdministradorRed(user?.perfil) ? (
+                  <Col md={6}>
+                    <Form.Group>
+                      <Form.Label>Centro Formación</Form.Label>
+                      <Form.Select
+                        {...register("centro_formacion_idcentro_formacion")}
+                        required
                       >
-                      <option value={0}>Seleccione...</option>
-                      {centros.map((c) => (
-                        <option key={c.idcentroFormacion} value={c.idcentroFormacion}>
-                          {c.centroFormacioncol}
-                        </option>
-                      ))}
-                    </Form.Select>
-                  </Form.Group>
-                </Col>:<></>
-                }
+                        <option value={0}>Seleccione...</option>
+                        {centros.map((c) => (
+                          <option
+                            key={c.idcentroFormacion}
+                            value={c.idcentroFormacion}
+                          >
+                            {c.centroFormacioncol}
+                          </option>
+                        ))}
+                      </Form.Select>
+                    </Form.Group>
+                  </Col>
+                ) : (
+                  <></>
+                )}
               </Row>
             </>
           ) : (
@@ -248,7 +258,11 @@ const getProgramas = async () => {
             <Col md={6}>
               <Form.Group>
                 <Form.Label>Nombres</Form.Label>
-                <Form.Control {...register("nombres")} required placeholder="Nombres" />
+                <Form.Control
+                  {...register("nombres")}
+                  required
+                  placeholder="Nombres"
+                />
               </Form.Group>
             </Col>
             <Col md={6}>
@@ -288,7 +302,7 @@ const getProgramas = async () => {
             <Col md={4}>
               <Form.Group>
                 <Form.Label>Celular</Form.Label>
-                <Form.Control {...register("celular")} placeholder="Celular"/>
+                <Form.Control {...register("celular")} placeholder="Celular" />
               </Form.Group>
             </Col>
           </Row>
@@ -308,12 +322,21 @@ const getProgramas = async () => {
             <Col md={6}>
               <Form.Group>
                 <Form.Label>Contraseña</Form.Label>
-                <Form.Control
-                  type="password"
-                  {...register("password", {required: !aprendiz})}
-                  placeholder="Contraseña"
-                  required={!aprendiz}
-                />
+                <InputGroup>
+                  <Form.Control
+                    type={showPassword ? "text" : "password"}
+                    {...register("password", { required: !aprendiz })}
+                    placeholder="Contraseña"
+                    required={!aprendiz}
+                  />
+                  <Button
+                    variant="outline-secondary"
+                    onClick={() => setShowPassword(!showPassword)}
+                    type="button"
+                  >
+                    {showPassword ? <FaEyeSlash /> : <FaEye />}
+                  </Button>
+                </InputGroup>
               </Form.Group>
             </Col>
           </Row>
