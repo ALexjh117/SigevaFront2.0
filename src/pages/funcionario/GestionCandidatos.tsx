@@ -7,6 +7,11 @@ import { api } from "../../api";
 import { useParams } from "react-router-dom";
 import { Toaster } from "react-hot-toast";
 import { JORNADAS, type Jornada } from "../../constants/jornada";
+import {
+  DetalleFilaModal,
+  LupaDetalle,
+  textoCorto,
+} from "../../components/tabla/detalleTabla";
 
 interface Eleccion {
   ideleccion: number;
@@ -46,6 +51,7 @@ const GestionCandidatos = () => {
   const [showModal, setShowModal] = useState(false);
   const [showModalModificar, setShowModalModificar] = useState(false);
   const [candidatoSeleccionado, setCandidatoSeleccionado] = useState<any | null>(null);
+  const [ficha, setFicha] = useState<Candidato | null>(null);
   const { user, isAuthenticated } = useAuth();
   const [loading, setLoading] = useState(false);
   const { idEleccion } = useParams<{ idEleccion: string }>();
@@ -151,11 +157,12 @@ const GestionCandidatos = () => {
           }}
         />
       </td>
-      <td className="fw-semibold">{c.nombres}</td>
+      <td className="fw-semibold">{textoCorto(c.nombres, 22)}</td>
       <td className="text-muted">{c.numeroTarjeton || "Sin tarjetón"}</td>
-      <td className="text-muted">{c.propuesta}</td>
+      <td className="text-muted">{textoCorto(c.propuesta, 28)}</td>
       <td>
-        <div className="d-flex justify-content-center gap-3">
+        <div className="d-flex justify-content-center gap-2">
+          <LupaDetalle onClick={() => setFicha(c)} />
           <button
             className="btn btn-sm p-0 border-0 text-primary"
             title="Editar"
@@ -260,6 +267,22 @@ const GestionCandidatos = () => {
         }}
         aprendices={aprendices || []}
         idEleccion={idEleccion ? parseInt(idEleccion) : undefined}
+      />
+
+      <DetalleFilaModal
+        show={!!ficha}
+        onHide={() => setFicha(null)}
+        titulo="Información del candidato"
+        campos={
+          ficha
+            ? [
+                { etiqueta: "Nombre", valor: ficha.nombres },
+                { etiqueta: "Tarjetón", valor: ficha.numeroTarjeton || "Sin tarjetón" },
+                { etiqueta: "Jornada", valor: ficha.jornada },
+                { etiqueta: "Propuesta", valor: ficha.propuesta },
+              ]
+            : []
+        }
       />
 
       <style>{`

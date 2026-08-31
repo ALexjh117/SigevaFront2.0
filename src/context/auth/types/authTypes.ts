@@ -4,6 +4,9 @@ export interface Gestor {
   estado: string;
   perfil: "Funcionario" | "Administrador" | "admin_sistema";
   centroFormacion: number;
+  nombres?: string;
+  apellidos?: string;
+  nombre?: string;
 }
 
 export interface Aprendiz {

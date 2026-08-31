@@ -1,10 +1,8 @@
-import Container from "react-bootstrap/Container";
 import toast from "react-hot-toast";
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { api } from "../api";
-import Logo from "../assets/Sigeva white.svg";
 import { useAuth } from "../context/auth/auth.context";
 import type { ResponseType, User } from "../context/auth/types/authTypes";
 import { Controller, useForm, type SubmitHandler } from "react-hook-form";
@@ -14,14 +12,17 @@ import {
   type FormValues,
 } from "../components/LoginForm/models/login.schema";
 import { getJornadaGuardada } from "../utils/jornadaAprendiz";
+import "./Login.css";
 
 interface Props {
-  perfil: "gestor" | "aprendiz";
+  perfil?: "gestor" | "aprendiz";
 }
 
-export default function Login({ perfil }: Props) {
+export default function Login(_props: Props) {
   const { login } = useAuth();
   const navigate = useNavigate();
+  const { pathname } = useLocation();
+  const esAprendiz = pathname.includes("login-aprendiz");
 
   const {
     control,
@@ -38,8 +39,9 @@ export default function Login({ perfil }: Props) {
 
   const onSubmit: SubmitHandler<FormValues> = async (data) => {
     try {
-      const endpoint =
-        perfil === "aprendiz" ? "/api/aprendiz/login" : "/api/usuarios/login";
+      const endpoint = esAprendiz
+        ? "/api/aprendiz/login"
+        : "/api/usuarios/login";
       const res = await api.post<ResponseType<User>>(endpoint, data);
 
       login(res.data);
@@ -63,84 +65,67 @@ export default function Login({ perfil }: Props) {
         }
       }
     } catch (error) {
-      toast.error("Credenciales inválidas. Verifica tu correo y contraseña.")
+      toast.error("Credenciales inválidas. Verifica tu correo y contraseña.");
     }
   };
-  
-  return (
-    <div
-      className="d-flex justify-content-center align-items-center vh-100 bg-primary "
-      style={{
-        background:
-          "linear-gradient(95deg, #6136BF 2.31%, #542EA6 20.84%, #4B68BF 48.18%, #049DBF 72.74%, #04BFBF 98.69%)",
-      }}
-    >
-      <Container style={{ maxWidth: "600px", maxHeight: "480px" }}>
-        <div className="text-center mb-4">
-          <img src={`${Logo}`} alt="Logo" height="50px" />
-        </div>
 
-        <p className="text-center text-white">
-          Sistema de Gestión de Votos para Aprendices
-        </p>
-        <Container
-          style={{
-            maxWidth: "450px",
-            minHeight: "40px",
-            borderRadius: "1.5rem",
-          }}
-          className="bg-white p-5 shadow"
-        >
-          {/* Cambio de login */}
-          <div className="d-flex justify-content-center mb-4">
-            <div
-              className="rounded-pill d-flex"
-              style={{
-                backgroundColor: "#fff",
-                border: "2px solid #5031C9",
-                padding: "3px",
-                gap: "2px",
-              }}
-            >
-              <Link
-                to="/login-aprendiz"
-                className={`text-decoration-none text-center px-4 py-2 rounded-pill ${
-                  perfil === "aprendiz"
-                    ? "text-white fw-bold"
-                    : "text-dark fw-semibold"
-                }`}
-                style={{
-                  backgroundColor: perfil === "aprendiz" ? "#5031C9" : "#fff",
-                  transition: "background 0.3s",
-                  fontSize: "0.9rem",
-                  minWidth: "130px",
-                }}
-              >
-                Aprendiz
-              </Link>
-              <Link
-                to="/login"
-                className={`text-decoration-none text-center px-4 py-2 rounded-pill ${
-                  perfil === "gestor"
-                    ? "text-white fw-bold"
-                    : "text-dark fw-semibold"
-                }`}
-                style={{
-                  backgroundColor: perfil === "gestor" ? "#5031C9" : "#fff",
-                  transition: "background 0.3s",
-                  fontSize: "0.9rem",
-                  minWidth: "130px",
-                }}
-              >
-                Funcionario
-              </Link>
+  return (
+    <div className="login-page">
+      <Link to="/" className="login-back">
+        ← Volver al inicio
+      </Link>
+
+      <section className="login-card" aria-label="Inicio de sesión">
+        <aside className="login-visual">
+          <img
+            src="/landing/login-voto.png"
+            alt="Aprendices depositando su voto en urna"
+          />
+          <div className="login-visual-copy">
+            <div className="login-brands">
+              <div className="login-brands-chip">
+                <img src="/logo_fabrica.png" alt="Fábrica de Software SENA" />
+                <span className="login-brands-sep" aria-hidden />
+                <img src="/sena.png" alt="SENA" />
+              </div>
             </div>
+            <p className="login-visual-kicker">Una voz, un voto</p>
+            <h2>SIGEVA</h2>
+            <p>Sistema de Gestión de Votos para Aprendices. Entre y elija con claridad.</p>
+          </div>
+        </aside>
+
+        <div className="login-panel">
+          <h1>Iniciar sesión</h1>
+          <p className="login-panel-lead">
+            {esAprendiz
+              ? "Acceso para aprendices. Use su correo institucional para votar."
+              : "Acceso para funcionarios y administradores de la red."}
+          </p>
+
+          <div className="login-switch" role="tablist" aria-label="Tipo de usuario">
+            <Link
+              to="/login-aprendiz"
+              className={esAprendiz ? "is-on" : undefined}
+              role="tab"
+              aria-selected={esAprendiz}
+            >
+              Aprendiz
+            </Link>
+            <Link
+              to="/login"
+              className={!esAprendiz ? "is-on" : undefined}
+              role="tab"
+              aria-selected={!esAprendiz}
+            >
+              Funcionario
+            </Link>
           </div>
 
           <Form onSubmit={handleSubmit(onSubmit)}>
             <Form.Group className="mb-3">
               <Form.Label>
-                <strong>Correo electrónico</strong>{" "}
+                <strong>Correo electrónico</strong>
               </Form.Label>
               <Controller
                 name="email"
@@ -151,18 +136,18 @@ export default function Login({ perfil }: Props) {
                     type="email"
                     placeholder="Ingrese su correo electrónico"
                     {...field}
-                    className={`form-control ${
-                      errors.email ? "is-invalid" : ""
-                    }`}
+                    className={errors.email ? "is-invalid" : ""}
                   />
                 )}
               />
-              {errors.email && <p className="error">{errors.email.message}</p>}
+              {errors.email && (
+                <p className="login-error">{errors.email.message}</p>
+              )}
             </Form.Group>
 
             <Form.Group className="mb-4">
               <Form.Label>
-                <strong>Contraseña</strong>{" "}
+                <strong>Contraseña</strong>
               </Form.Label>
               <Controller
                 name="password"
@@ -173,31 +158,29 @@ export default function Login({ perfil }: Props) {
                     type="password"
                     placeholder="Ingrese su contraseña"
                     {...field}
-                    className={`form-control ${
-                      errors.password ? "is-invalid" : ""
-                    }`}
+                    className={errors.password ? "is-invalid" : ""}
                   />
                 )}
               />
               {errors.password && (
-                <p className="error">{errors.password.message}</p>
+                <p className="login-error">{errors.password.message}</p>
               )}
             </Form.Group>
 
             <Form.Group>
               <Button
-                variant="primary"
                 type="submit"
-                className="w-100 rounded"
-                style={{ backgroundColor: "#5031C9", border: "none" }}
+                className="login-submit"
                 disabled={isSubmitting}
               >
                 {isSubmitting ? "Ingresando..." : "Ingresar"}
               </Button>
             </Form.Group>
           </Form>
-        </Container>
-      </Container>
+
+          <p className="login-footnote">Fábrica de Software · Centro de formación</p>
+        </div>
+      </section>
     </div>
   );
 }
