@@ -154,41 +154,10 @@ export default function EleccionesActivasPage() {
   const loadData = async () => {
     if (!esRed && !user?.centroFormacion) return;
     try {
-      if (esRed) {
-        const [resEle, resCentros, resRegionales] = await Promise.all([
-          api.get("/api/eleccion").catch(() => api.get("api/eleccion/activas")),
-          api.get("api/centrosFormacion/obtiene"),
-          api.get("api/regionales"),
-        ]);
-        const centrosPorId = new Map<number, CentroRed>();
-        comoLista<CentroRed>(resCentros.data).forEach((c) => {
-          const id = Number(c.idcentroFormacion);
-          if (id) centrosPorId.set(id, c);
-        });
-        const regionalesPorId = new Map<number, string>();
-        comoLista<RegionalRed>(resRegionales.data).forEach((r) => {
-          const id = Number(r.idregional);
-          if (id) regionalesPorId.set(id, r.regional);
-        });
-        setEleccionActiva(
-          ordenarElecciones(
-            comoLista<Record<string, unknown>>(resEle.data).map((row) =>
-              mapearEleccion(row, centrosPorId, regionalesPorId)
-            )
-          )
-        );
-      } else {
-        const idCentro = user?.centroFormacion;
-        if (!idCentro) return;
-        const res = await api.get(`/api/eleccion/traerTodas/${idCentro}`);
-        setEleccionActiva(
-          ordenarElecciones(
-            comoLista<Record<string, unknown>>(res.data).map((row) =>
-              mapearEleccion(row, new Map(), new Map())
-            )
-          )
-        );
-      }
+      const res = await api.get(`/api/eleccion/traerTodas/${user.centroFormacion}`);
+  
+      setEleccionActiva(res.data.eleccionesActivas);
+      setLoading(false);
     } catch (error) {
       console.error("Error al cargar las votaciones:", error);
       setEleccionActiva([]);
@@ -462,7 +431,15 @@ export default function EleccionesActivasPage() {
         onHide={() => setShowEditarModal(false)}
         eleccion={selectedEleccion as any}
         onUpdated={() => {
-          void loadData();
+          if (user?.centroFormacion) {
+            api.get(`/api/eleccionPorCentro/${user?.centroFormacion}`)
+              .then(res => {
+                setEleccionActiva(res.data.eleccionesActivas)
+                setLoading(false);
+                loadData();
+              })
+              .catch(err => console.error("Error al recargar elecciones:", err));
+          }
         }}
 
       />
