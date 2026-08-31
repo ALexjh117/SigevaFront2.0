@@ -1,8 +1,9 @@
+import { useState } from "react";
 import toast from "react-hot-toast";
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import { FaArrowLeft, FaArrowRight, FaLock, FaUserGraduate, FaUserTie } from "react-icons/fa";
+import { FaArrowLeft, FaArrowRight, FaLock, FaUserGraduate, FaUserTie, FaEye, FaEyeSlash } from "react-icons/fa";
 import { api } from "../api";
 import { useAuth } from "../context/auth/auth.context";
 import type { ResponseType, User } from "../context/auth/types/authTypes";
@@ -22,6 +23,7 @@ interface Props {
 }
 
 export default function Login(_props: Props) {
+  const [showPassword, setShowPassword] = useState(false);
   const { login } = useAuth();
   const navigate = useNavigate();
   const { pathname } = useLocation();
@@ -158,13 +160,36 @@ export default function Login(_props: Props) {
                 name="password"
                 control={control}
                 render={({ field }) => (
-                  <Form.Control
-                    id="password"
-                    type="password"
-                    placeholder="Ingrese su contraseña"
-                    {...field}
-                    className={errors.password ? "is-invalid" : ""}
-                  />
+                  <div className="password-input-wrapper" style={{ position: "relative" }}>
+                    <Form.Control
+                      id="password"
+                      type={showPassword ? "text" : "password"}
+                      placeholder="Ingrese su contraseña"
+                      {...field}
+                      className={errors.password ? "is-invalid" : ""}
+                    />
+                    <button
+                      type="button"
+                      onClick={() => setShowPassword(!showPassword)}
+                      style={{
+                        position: "absolute",
+                        right: "12px",
+                        top: "50%",
+                        transform: "translateY(-50%)",
+                        background: "none",
+                        border: "none",
+                        cursor: "pointer",
+                        color: "#6c757d",
+                        display: "flex",
+                        alignItems: "center",
+                        padding: 0,
+                        zIndex: 5
+                      }}
+                      aria-label={showPassword ? "Ocultar contraseña" : "Mostrar contraseña"}
+                    >
+                      {showPassword ? <FaEyeSlash /> : <FaEye />}
+                    </button>
+                  </div>
                 )}
               />
               {errors.password && (
