@@ -192,10 +192,15 @@ const Sidebar: React.FC<SidebarProps> = ({ onNavigate }) => {
         {esAprendiz(user?.perfil) ? <CarruselCandidatosSidebar /> : null}
         {isAdmin && !esAprendiz(user?.perfil) && (
           <blockquote className="sidebar-motto">
-            <p>
-              La inteligencia es un privilegio: cobra valor cuando se comparte
-              y se usa para el bien de los demás.
+            <p className="sidebar-motto2">
+              El conocimiento vale el doble cuando sirve para ayudar
             </p>
+
+              <blockquote className="sidebar-motto2">
+            <p>
+              
+            </p>
+          </blockquote>
           </blockquote>
         )}
         <div className="sidebar-footer">
