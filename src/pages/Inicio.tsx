@@ -361,26 +361,31 @@ const Inicio: React.FC = () => {
 
       <section className="lp-section lp-backers" id="sobre">
         <h2>Una plataforma respaldada por nuestra comunidad</h2>
+
         <div className="lp-logos">
           <div className="lp-logo-item">
             <img src="/sena.png" alt="SENA" className="lp-logo-sena" />
             <span>SENA</span>
           </div>
+
           <span className="lp-logo-sep" />
+
           <div className="lp-logo-item">
-            <img src="/logo_fabrica.png" alt="Fábrica de Software" className="lp-logo-fab" />
-            <span>Fábrica de Software</span>
+            <img
+              src="/logo_fabrica.png"
+              alt="Fábrica de Software"
+              className="lp-logo-fab"
+            />
+            <span>FÁBRICA DE SOFTWARE</span>
           </div>
+
           <span className="lp-logo-sep" />
+
           <div className="lp-logo-item">
             <SigevaWordmark />
           </div>
         </div>
-        <p className="lp-backers-link">
-          <Link to="/equipo">
-            Conoce al equipo que construye <Marca />
-          </Link>
-        </p>
+
       </section>
 
       <LandingFooter />

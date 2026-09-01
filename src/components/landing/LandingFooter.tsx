@@ -26,13 +26,6 @@ export default function LandingFooter() {
               <img src="/logo_fabrica.png" alt="Fábrica de Software SENA" />
             </div>
           </div>
-          <div className="lp-social">
-            {redes.map((r) => (
-              <a key={r.label} href={r.href} target="_blank" rel="noopener noreferrer" aria-label={r.label}>
-                {r.icon}
-              </a>
-            ))}
-          </div>
         </div>
 
         <div>
@@ -68,13 +61,34 @@ export default function LandingFooter() {
         </div>
 
         <div className="lp-foot-follow">
-          <h4>Síguenos</h4>
+          <h4>Contáctanos</h4>
+
           <div className="lp-social">
             {redes.map((r) => (
-              <a key={r.label} href={r.href} target="_blank" rel="noopener noreferrer" aria-label={r.label}>
+              <a
+                key={r.label}
+                href={r.href}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label={r.label}
+              >
                 {r.icon}
               </a>
             ))}
+          </div>
+
+          <div className="lp-foot-contact">
+            <a href="mailto:fabricaswctpicauca@gmail.com">
+              fabricaswctpicauca@gmail.com
+            </a>
+
+            <a
+              href="https://fabricasw.cloudsenactpi.net/"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              https://fabricasw.cloudsenactpi.net/
+            </a>
           </div>
         </div>
       </div>

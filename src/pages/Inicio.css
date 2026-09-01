@@ -329,7 +329,7 @@ html {
   display: flex;
   justify-content: flex-end;
   align-items: center;
-  gap: 0;
+  gap: 12px;
   padding-right: clamp(0.4rem, 1.5vw, 1.4rem);
   z-index: 3;
 }
@@ -347,6 +347,7 @@ html {
   position: relative;
   z-index: 2;
   flex-shrink: 0;
+  transform: translateX(-12px);
 }
 
 .lp-phone-notch {
@@ -484,7 +485,7 @@ html {
 .lp-qr {
   position: relative;
   width: 172px;
-  margin-left: -18px;
+  margin-left: 0;
   background: #fff;
   border-radius: 18px;
   padding: 1.15rem 1rem 1.05rem;
@@ -1248,20 +1249,6 @@ html {
   background: #d5dcd7;
 }
 
-.lp-backers-link {
-  text-align: center;
-  margin: 1.4rem 0 0;
-}
-
-.lp-backers-link a {
-  color: var(--lp-green-mid);
-  font-weight: 700;
-  font-size: 0.92rem;
-}
-
-.lp-backers-link a:hover {
-  color: var(--lp-green);
-}
 
 /* ——— Footer ——— */
 .lp-foot {
@@ -1358,6 +1345,30 @@ html {
   background: rgba(255, 255, 255, 0.12);
 }
 
+.lp-foot-contact {
+  margin-top: 0.9rem;
+}
+
+.lp-foot-contact a {
+  display: block;
+
+  margin-bottom: 0.5rem;
+
+  color: rgba(255, 255, 255, 0.78);
+
+  font-size: 0.82rem;
+
+  line-height: 1.4;
+
+  text-decoration: none;
+
+  word-break: break-word;
+}
+
+.lp-foot-contact a:hover {
+  color: #fff;
+}
+
 .lp-foot-bar {
   max-width: 1180px;
   margin: 2rem auto 0;
@@ -1399,11 +1410,12 @@ html {
   .lp-phone {
     width: 204px;
     height: 430px;
+    transform: translateX(-10px);
   }
 
   .lp-qr {
     width: 158px;
-    margin-left: -14px;
+    margin-left: 0;
   }
 }
 
