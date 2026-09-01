@@ -3,13 +3,14 @@ import { Link, useLocation } from "react-router-dom";
 import { FaArrowRight, FaBars } from "react-icons/fa";
 import { SigevaWordmark, SigevaName } from "./SigevaMark";
 
-type NavKey = "inicio" | "elecciones" | "informacion" | "sobre";
+type NavKey = "inicio" | "elecciones" | "informacion" | "sobre" | "equipo";
 
 const links: { id: NavKey; label: ReactNode; to: string }[] = [
   { id: "inicio", label: "Inicio", to: "/" },
   { id: "elecciones", label: "Elecciones", to: "/#elecciones" },
   { id: "informacion", label: "Información", to: "/#informacion" },
   { id: "sobre", label: <>Sobre <SigevaName /></>, to: "/#sobre" },
+  { id: "equipo", label: <>Equipo <SigevaName /></>, to: "/equipo" },
 ];
 
 export default function LandingHeader() {
@@ -17,13 +18,15 @@ export default function LandingHeader() {
   const { pathname, hash } = useLocation();
 
   const activo: NavKey =
-    pathname === "/equipo" || hash === "#sobre"
-      ? "sobre"
-      : hash === "#elecciones" || hash === "#acciones"
-        ? "elecciones"
-        : hash === "#informacion"
-          ? "informacion"
-          : "inicio";
+    pathname === "/equipo"
+      ? "equipo"
+      : hash === "#sobre"
+        ? "sobre"
+        : hash === "#elecciones" || hash === "#acciones"
+          ? "elecciones"
+          : hash === "#informacion"
+            ? "informacion"
+            : "inicio";
 
   return (
     <header className="lp-nav">
