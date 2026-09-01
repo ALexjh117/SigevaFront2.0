@@ -1,0 +1,176 @@
+.chatbot-container {
+  position: fixed;
+  right: 25px;
+  bottom: 25px;
+  z-index: 9999;
+}
+
+/* Botón flotante */
+
+.chatbot-button {
+  width: 60px;
+  height: 60px;
+  border: none;
+  border-radius: 50%;
+  cursor: pointer;
+
+  font-size: 28px;
+
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.25);
+
+  transition: transform 0.2s ease;
+}
+
+.chatbot-button:hover {
+  transform: scale(1.08);
+}
+
+/* Ventana */
+
+.chatbot-window {
+  width: 350px;
+  height: 500px;
+
+  background: white;
+
+  border-radius: 15px;
+
+  box-shadow: 0 5px 25px rgba(0, 0, 0, 0.25);
+
+  display: flex;
+  flex-direction: column;
+
+  overflow: hidden;
+}
+
+/* Encabezado */
+
+.chatbot-header {
+  padding: 15px;
+
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.chatbot-header strong {
+  display: block;
+  font-size: 16px;
+}
+
+.chatbot-header span {
+  display: block;
+  margin-top: 3px;
+  font-size: 12px;
+}
+
+.chatbot-close {
+  border: none;
+  background: transparent;
+
+  font-size: 25px;
+
+  cursor: pointer;
+}
+
+/* Mensajes */
+
+.chatbot-messages {
+  flex: 1;
+
+  padding: 15px;
+
+  overflow-y: auto;
+
+  display: flex;
+  flex-direction: column;
+
+  gap: 10px;
+}
+
+.mensaje {
+  max-width: 80%;
+
+  padding: 10px 13px;
+
+  border-radius: 12px;
+
+  font-size: 14px;
+
+  line-height: 1.4;
+}
+
+.mensaje.bot {
+  align-self: flex-start;
+
+  background: #f1f1f1;
+}
+
+.mensaje.usuario {
+  align-self: flex-end;
+
+  background: #e5e5e5;
+}
+
+/* Input */
+
+.chatbot-input-container {
+  display: flex;
+
+  padding: 10px;
+
+  border-top: 1px solid #ddd;
+}
+
+.chatbot-input-container input {
+  flex: 1;
+
+  border: none;
+
+  outline: none;
+
+  padding: 10px;
+
+  font-size: 14px;
+}
+
+.chatbot-input-container button {
+  width: 40px;
+
+  border: none;
+
+  border-radius: 8px;
+
+  cursor: pointer;
+
+  font-size: 18px;
+}
+.preguntas-rapidas {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.preguntas-rapidas p {
+  margin: 0 0 4px;
+  font-size: 13px;
+  font-weight: 600;
+  color: #555;
+}
+
+.preguntas-rapidas button {
+  border: 1px solid #ddd;
+  background: white;
+  border-radius: 12px;
+  padding: 10px 12px;
+  text-align: left;
+  cursor: pointer;
+  font-size: 13px;
+  transition: all 0.2s ease;
+}
+
+.preguntas-rapidas button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+}
