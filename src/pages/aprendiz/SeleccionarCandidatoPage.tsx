@@ -6,6 +6,11 @@ import { api } from "../../api";
 import { useAuth } from "../../context/auth/auth.context";
 import { jornadaDelAprendiz } from "../../utils/jornadaAprendiz";
 import { comoLista } from "../../utils/comoLista";
+import { esJornada } from "../../constants/jornada";
+import {
+  candidatosYaVotados,
+  eleccionYaVotada,
+} from "../../utils/votoAprendiz";
 
 type CandidatoLista = {
   idcandidatos: string;
@@ -13,6 +18,7 @@ type CandidatoLista = {
   propuesta: string;
   foto: string;
   numeroTarjeton: string;
+  jornada?: string;
   aprendiz: { nombres: string; apellidos: string };
 };
 
@@ -20,6 +26,7 @@ export default function CandidateSelectionPage() {
   const { id } = useParams();
   const [candidatos, setCandidatos] = useState<CandidatoLista[]>([]);
   const [loading, setLoading] = useState(true);
+  const [yaVoto, setYaVoto] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const [candidatoSeleccionado, setCandidatoSeleccionado] = useState<{
     nombre: string;
@@ -38,10 +45,17 @@ export default function CandidateSelectionPage() {
       if (!id || !jornada) return;
       try {
         setLoading(true);
-        const response = await api.get(`/api/candidatos/listar/${id}`, {
-          params: { jornada },
-        });
-        setCandidatos(comoLista<CandidatoLista>(response.data));
+        const [response, votados] = await Promise.all([
+          api.get(`/api/candidatos/listar/${id}`),
+          candidatosYaVotados(Number(user?.id)),
+        ]);
+        const todos = comoLista<CandidatoLista>(response.data);
+        const hayJornada = todos.some((c) => esJornada(c.jornada));
+        const deJornada = todos.filter((c) =>
+          esJornada(c.jornada) ? c.jornada === jornada : true
+        );
+        setCandidatos(hayJornada ? deJornada : todos);
+        setYaVoto(eleccionYaVotada(todos, votados));
       } catch (error) {
         console.error("Error al cargar candidatos:", error);
         setCandidatos([]);
@@ -50,7 +64,7 @@ export default function CandidateSelectionPage() {
       }
     };
     loadData();
-  }, [id, jornada]);
+  }, [id, jornada, user?.id]);
 
   return (
     <div className="admin-dash">
@@ -60,8 +74,9 @@ export default function CandidateSelectionPage() {
           Elige un <span>candidato</span>
         </h1>
         <p className="admin-dash-lead">
-          Toca un candidato para leer su propuesta y votar. Si votas, te
-          pediremos el código de 6 caracteres que llega a tu correo.
+          {yaVoto
+            ? "Ya votaste en esta elección. Puedes ver los candidatos de otra jornada, pero no puedes votar otra vez."
+            : "Toca un candidato para leer su propuesta y votar. Si votas, te pediremos el código de 6 caracteres que llega a tu correo."}
         </p>
       </header>
 
@@ -103,6 +118,7 @@ export default function CandidateSelectionPage() {
         show={showModal}
         onHide={() => setShowModal(false)}
         candidato={candidatoSeleccionado}
+        yaVoto={yaVoto}
       />
     </div>
   );

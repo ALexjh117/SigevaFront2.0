@@ -273,7 +273,7 @@ export default function EleccionesActivasPage() {
           <Button
             size="sm"
             variant="outline-secondary"
-            title="Ver candidatos / PDF"
+            title="Ver candidatos / escrutinio"
             onClick={() => handleDetalles(row)}
           >
             <FiEye />

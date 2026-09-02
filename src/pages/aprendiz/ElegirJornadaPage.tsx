@@ -1,6 +1,7 @@
 import { JORNADAS, type Jornada } from "../../constants/jornada";
 import { useAuth } from "../../context/auth/auth.context";
 import { useNavigate } from "react-router-dom";
+import { jornadaDelAprendiz } from "../../utils/jornadaAprendiz";
 import { DiosBulb, DiosChip, DiosLeaf } from "../../theme/DiosIcons";
 
 const DETALLE: Record<Jornada, string> = {
@@ -22,8 +23,9 @@ const CLASE: Record<Jornada, string> = {
 };
 
 export default function ElegirJornadaPage() {
-  const { setJornada } = useAuth();
+  const { setJornada, user } = useAuth();
   const navigate = useNavigate();
+  const actual = jornadaDelAprendiz(user);
 
   const elegir = (jornada: Jornada) => {
     setJornada(jornada);
@@ -38,8 +40,9 @@ export default function ElegirJornadaPage() {
           Elige tu <span>jornada</span>
         </h1>
         <p className="admin-dash-lead">
-          Así te mostramos solo la elección y los candidatos de tu turno. La
-          próxima vez que entres en este equipo no te la volveremos a pedir.
+          {actual
+            ? `Ahora estás en ${actual}. Si ya votaste, cambiar de jornada solo cambia a quién ves: no puedes votar otra vez en la misma elección.`
+            : "Así te mostramos solo la elección y los candidatos de tu turno. Un voto por elección, aunque cambies de jornada."}
         </p>
       </header>
 
@@ -50,7 +53,7 @@ export default function ElegirJornadaPage() {
             <button
               key={jornada}
               type="button"
-              className={`admin-shortcut ${CLASE[jornada]}`}
+              className={`admin-shortcut ${CLASE[jornada]}${actual === jornada ? " is-on" : ""}`}
               onClick={() => elegir(jornada)}
             >
               <span className="admin-shortcut-icon">
@@ -58,7 +61,10 @@ export default function ElegirJornadaPage() {
               </span>
               <span>
                 <strong>{jornada}</strong>
-                <small>{DETALLE[jornada]}</small>
+                <small>
+                  {actual === jornada ? "Jornada actual · " : ""}
+                  {DETALLE[jornada]}
+                </small>
               </span>
             </button>
           );

@@ -115,23 +115,11 @@ const Sidebar: React.FC<SidebarProps> = ({ onNavigate }) => {
     if (esRolDeCentro(user.perfil)) {
 
       return [
-        {
-          to: '/dashboard',
-          icon: <FaHome />,
-          text: 'Inicio',
-          type: 'link'
-        },
-
-        {
-          to: '/panel-metricas',
-          icon: <FaChartBar />,
-          text: 'Estadísticas',
-          type: 'link'
-        },
-
-        {
-          type: 'dropdown',
-          text: 'Gestión de Usuarios',
+        { to: '/dashboard', icon: <FaHome />, text: 'Inicio', type: 'link' },
+        { to: '/panel-metricas', icon: <FaChartBar />, text: 'Resultados en vivo', type: 'link' },
+        { 
+          type: 'dropdown', 
+          text: 'Gestión de Usuarios', 
           icon: <FaUsers />,
           items: [
             {
@@ -163,37 +151,13 @@ const Sidebar: React.FC<SidebarProps> = ({ onNavigate }) => {
     if (esAdministradorRed(user.perfil)) {
 
       return [
-        {
-          to: '/dashboard-admin',
-          icon: <FaHome />,
-          text: 'Dashboard',
-          type: 'link'
-        },
-
-        {
-          to: '/panel-metricas',
-          icon: <FaChartBar />,
-          text: 'Estadísticas',
-          type: 'link'
-        },
-
-        {
-          to: '/elecciones',
-          icon: <FaClipboardList />,
-          text: 'Elecciones de la red',
-          type: 'link'
-        },
-
-        {
-          to: '/aprendices',
-          icon: <FaUserGraduate />,
-          text: 'Aprendices',
-          type: 'link'
-        },
-
-        {
-          type: 'dropdown',
-          text: 'Gestión de Usuarios',
+        { to: '/dashboard-admin', icon: <FaHome />, text: 'Dashboard', type: 'link' },
+        { to: '/panel-metricas', icon: <FaChartBar />, text: 'Resultados en vivo', type: 'link' },
+        { to: '/elecciones', icon: <FaClipboardList />, text: 'Elecciones de la red', type: 'link' },
+        { to: '/aprendices', icon: <FaUserGraduate />, text: 'Aprendices', type: 'link' },
+        { 
+          type: 'dropdown', 
+          text: 'Gestión de Usuarios', 
           icon: <FaUsers />,
           items: [
             {
@@ -472,21 +436,23 @@ const Sidebar: React.FC<SidebarProps> = ({ onNavigate }) => {
           </blockquote>
         )}
         <div className="sidebar-footer">
-
-          {esAprendiz(user?.perfil) &&
-            jornadaAprendiz ? (
-
-            <span className="sidebar-user">
-              Jornada {jornadaAprendiz}
-            </span>
-
-          ) : isAdmin &&
-            user?.email ? (
-
-            <span className="sidebar-user">
-              {user.email}
-            </span>
-
+          {esAprendiz(user?.perfil) && jornadaAprendiz ? (
+            <button
+              type="button"
+              className="sidebar-link"
+              onClick={(e) => {
+                e.preventDefault();
+                navigate("/elegir-jornada");
+                if (isMobile) {
+                  setShowSidebar(false);
+                  onNavigate?.();
+                }
+              }}
+            >
+              <span className="sidebar-text">Jornada {jornadaAprendiz} · cambiar</span>
+            </button>
+          ) : isAdmin && user?.email ? (
+            <span className="sidebar-user">{user.email}</span>
           ) : null}
 
 

@@ -2,9 +2,19 @@ import { useState, type PropsWithChildren } from "react";
 import { AuthContext } from "./auth.context";
 import type { Gestor, ResponseType, User, UserNormalizado } from "./types/authTypes";
 import toast from "react-hot-toast";
-import { esJornada, type Jornada } from "../../constants/jornada";
+import { type Jornada } from "../../constants/jornada";
 import { getJornadaGuardada, guardarJornada, idDelAprendiz } from "../../utils/jornadaAprendiz";
 import { setActorHeader } from "../../api";
+import { esAprendiz } from "../../utils/roles";
+
+function estadoHabilitado(estado?: string) {
+  const n = (estado || "")
+    .toLowerCase()
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .trim();
+  return n === "activo" || n === "en formacion" || n === "condicionado";
+}
 
 function centroDe(rawUser: User): number | undefined {
   if ("CentroFormacion" in rawUser && rawUser.CentroFormacion != null) {
@@ -31,28 +41,21 @@ export function AuthProvider({ children }: PropsWithChildren) {
       setIsAuthenticated(false);
       setUser(null);
       toast.error(response.message);
-      return;
+      return false;
     }
 
-    if (
-      response.data?.estado.toLowerCase() != "activo" &&
-      response.data?.estado.toLowerCase() != "en formacion" &&
-      response.data?.estado.toLowerCase() != "condicionado"
-    ) {
+    if (!estadoHabilitado(response.data?.estado)) {
       toast.error("Usuario no habilitado. Contacta con Bienestar al Aprendiz.");
-      return;
+      return false;
     }
 
     const rawUser = response.data!;
     const centro = centroDe(rawUser);
     const idAprendiz = idDelAprendiz(rawUser) ?? Number(rawUser.id);
-    const jornadaApi =
-      "jornada" in rawUser && esJornada(rawUser.jornada) ? rawUser.jornada : null;
-    const jornadaLocal =
-      rawUser.perfil === "Aprendiz" && idAprendiz ? getJornadaGuardada(idAprendiz) : null;
-    const jornada = jornadaApi || jornadaLocal;
+    const esApre = esAprendiz(rawUser.perfil);
+    const jornada = esApre && idAprendiz ? getJornadaGuardada(idAprendiz) : null;
 
-    if (rawUser.perfil === "Aprendiz" && jornada && idAprendiz) {
+    if (esApre && jornada && idAprendiz) {
       guardarJornada(idAprendiz, jornada);
     }
 
@@ -66,12 +69,13 @@ export function AuthProvider({ children }: PropsWithChildren) {
 
     setIsAuthenticated(true);
     setUser(normalizado);
-    if (rawUser.perfil === "Aprendiz") {
+    if (esApre) {
       setActorHeader(null);
     } else {
       setActorHeader(rawUser.id);
     }
     toast.success("¡Inicio de sesión exitoso!");
+    return true;
   };
 
   const logout = () => {

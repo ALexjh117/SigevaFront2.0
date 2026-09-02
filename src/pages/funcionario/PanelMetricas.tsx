@@ -1,25 +1,19 @@
 import { useEffect, useMemo, useState } from "react";
-import { Button, Col, Container, Form, Row, Table } from "react-bootstrap";
+import { Button, Col, Container, Form, Row } from "react-bootstrap";
 import { FaArrowLeft } from "react-icons/fa";
-import { FaFilePdf } from "react-icons/fa6";
 import DataTable from "react-data-table-component";
 import type { TableColumn } from "react-data-table-component";
 import { api } from "../../api";
 import { useAuth } from "../../context/auth/auth.context";
 import { esAdministradorRed } from "../../utils/roles";
 import { comoLista, etiquetaAnidada } from "../../utils/comoLista";
-import { GraficaBarras } from "../../components/graficas/GraficaBarras";
-import { GraficaDona } from "../../components/graficas/GraficaDona";
-import type { DatoGrafica } from "../../components/graficas/tipos";
 import { generarReporte } from "../../utils/generarReporte";
-import { JORNADAS, type Jornada } from "../../constants/jornada";
-import {
-  jornadasPresentes,
-  mapaJornadaCandidatos,
-  bloquesPorJornada,
-} from "../../utils/resultadosJornada";
+import { type Jornada } from "../../constants/jornada";
+import { bloquesPorJornada } from "../../utils/resultadosJornada";
 import { adminTableStyles } from "../../theme/adminTableStyles";
 import { LupaDetalle, textoCorto } from "../../components/tabla/detalleTabla";
+import { useResultadosEnVivo } from "../../hooks/useResultadosEnVivo";
+import { PanelResultadosJornada } from "../../components/resultados/PanelResultadosJornada";
 import "../../components/graficas/graficas.css";
 
 type CentroOpcion = {
@@ -42,15 +36,6 @@ type EleccionOpcion = {
   horaFin?: string;
 };
 
-type CandidatoResultado = {
-  id: number;
-  nombre: string;
-  apellido: string;
-  votos: number;
-  porcentaje: number;
-  jornada?: string;
-};
-
 type CentroRaw = {
   idcentroFormacion?: number;
   idcentro_formacion?: number;
@@ -65,30 +50,6 @@ type RegionalRaw = {
   idregional?: number;
   regional?: string;
 };
-
-async function traerReporte(id: number) {
-  try {
-    const { data } = await api.get(`/reporte/eleccion/${id}`);
-    return data;
-  } catch (err: unknown) {
-    const status = (err as { response?: { status?: number } })?.response?.status;
-    if (status === 404) {
-      const { data } = await api.get(`/api/reporte/eleccion/${id}`);
-      return data;
-    }
-    throw err;
-  }
-}
-
-function nombreCandidato(c: Record<string, unknown>) {
-  const aprendiz = c.aprendiz as Record<string, unknown> | undefined;
-  const nombres =
-    etiquetaAnidada(c.nombres) ||
-    etiquetaAnidada(aprendiz) ||
-    [aprendiz?.nombres, aprendiz?.apellidos].filter(Boolean).join(" ") ||
-    "Candidato";
-  return nombres;
-}
 
 function idCentroDe(row: Record<string, unknown>): number | undefined {
   const anidado = row.centro as Record<string, unknown> | undefined;
@@ -157,15 +118,15 @@ export default function PanelMetricas() {
   );
   const [idEleccion, setIdEleccion] = useState<string>("");
   const [cargandoLista, setCargandoLista] = useState(true);
-  const [cargando, setCargando] = useState(false);
   const [exportando, setExportando] = useState<Jornada | "todas" | "">("");
   const [habilitados, setHabilitados] = useState(0);
-  const [candidatos, setCandidatos] = useState<CandidatoResultado[]>([]);
-  const [jornada, setJornada] = useState("—");
   const [centroNombre, setCentroNombre] = useState("—");
   const [inicio, setInicio] = useState("—");
   const [cierre, setCierre] = useState("—");
-  const [titulo, setTitulo] = useState("Estadísticas de la elección");
+  const [titulo, setTitulo] = useState("Resultados de la elección");
+  const { candidatos, meta, cargando, actualizado } = useResultadosEnVivo(
+    idEleccion && idCentro ? Number(idEleccion) : null
+  );
 
   useEffect(() => {
     const cargarLista = async () => {
@@ -352,120 +313,50 @@ export default function PanelMetricas() {
   }, [idCentro, elecciones, idEleccion]);
 
   useEffect(() => {
-    const cargarDetalle = async () => {
-      if (!idEleccion || !idCentro) {
-        setCandidatos([]);
-        setCargando(false);
+    const actual = elecciones.find((e) => String(e.ideleccion) === idEleccion);
+    if (actual) {
+      setTitulo(actual.titulo);
+      setCentroNombre(actual.centro);
+      setInicio(actual.fechaInicio || "—");
+      setCierre(actual.fechaFin || "—");
+    }
+  }, [idEleccion, elecciones]);
+
+  useEffect(() => {
+    if (meta.titulo) setTitulo(meta.titulo);
+    if (meta.fechaInicio) setInicio(meta.fechaInicio);
+    if (meta.fechaFin) setCierre(meta.fechaFin);
+    if (typeof meta.totalParticipantes === "number") {
+      setHabilitados((prev) => (prev > 0 ? prev : meta.totalParticipantes || 0));
+    }
+  }, [meta]);
+
+  useEffect(() => {
+    const cargarHabilitados = async () => {
+      if (!idCentro) {
+        setHabilitados(0);
         return;
       }
-      setCargando(true);
-      const actual = elecciones.find((e) => String(e.ideleccion) === idEleccion);
-      if (actual) {
-        setTitulo(actual.titulo);
-        setCentroNombre(actual.centro);
-        setJornada(actual.jornada || "—");
-        setInicio(actual.fechaInicio || "—");
-        setCierre(actual.fechaFin || "—");
-      }
-
       try {
-        try {
-          const habilitadosRes = await api.get(
-            `api/aprendiz/disponibles/centros/${idCentro}`
-          );
-          setHabilitados(comoLista(habilitadosRes.data).length);
-        } catch {
-          setHabilitados(0);
-        }
-
-        let resultados: CandidatoResultado[] = [];
-        try {
-          const rep = await traerReporte(Number(idEleccion));
-          const lista = comoLista<Record<string, unknown>>(rep?.candidatos ?? rep);
-          resultados = lista.map((c) => {
-            const votos = Number(c.votos || 0);
-            const partes = nombreCandidato(c).split(" ");
-            return {
-              id: Number(c.idcandidatos ?? c.id ?? 0),
-              nombre: partes[0] || nombreCandidato(c),
-              apellido: partes.slice(1).join(" "),
-              votos,
-              porcentaje: 0,
-            };
-          });
-          if (rep?.eleccion) {
-            setTitulo(
-              String(rep.eleccion.nombre ?? actual?.titulo ?? "Estadísticas de la elección")
-            );
-            if (rep.eleccion.fecha_inicio) setInicio(String(rep.eleccion.fecha_inicio));
-            if (rep.eleccion.fecha_fin) setCierre(String(rep.eleccion.fecha_fin));
-          }
-          if (typeof rep?.totalParticipantes === "number") {
-            setHabilitados((prev) => (prev > 0 ? prev : Number(rep.totalParticipantes)));
-          }
-        } catch {
-          try {
-            const candRes = await api.get(`/api/candidatos/listar/${idEleccion}`);
-            const lista = comoLista<Record<string, unknown>>(candRes.data);
-            resultados = lista.map((c) => {
-              const partes = nombreCandidato(c).split(" ");
-              return {
-                id: Number(c.idcandidatos ?? 0),
-                nombre: partes[0] || "Candidato",
-                apellido: partes.slice(1).join(" "),
-                votos: Number(c.votos || 0),
-                porcentaje: 0,
-              };
-            });
-          } catch {
-            resultados = [];
-          }
-        }
-
-        const totalVotos = resultados.reduce((s, c) => s + c.votos, 0);
-        let conJornada = resultados.map((c) => ({
-          ...c,
-          porcentaje: totalVotos > 0 ? (c.votos / totalVotos) * 100 : 0,
-        }));
-        try {
-          const mapa = await mapaJornadaCandidatos(Number(idEleccion));
-          conJornada = conJornada.map((c) => ({
-            ...c,
-            jornada: mapa.get(c.id) || c.jornada,
-          }));
-        } catch {
-          /* sin mapa de jornada */
-        }
-        setCandidatos(conJornada.sort((a, b) => b.votos - a.votos));
-      } catch (error) {
-        console.error("Error al cargar métricas:", error);
-        setCandidatos([]);
-      } finally {
-        setCargando(false);
+        const habilitadosRes = await api.get(
+          `api/aprendiz/disponibles/centros/${idCentro}`
+        );
+        setHabilitados(comoLista(habilitadosRes.data).length);
+      } catch {
+        setHabilitados(0);
       }
     };
-
-    void cargarDetalle();
-  }, [idEleccion, idCentro, elecciones]);
+    void cargarHabilitados();
+  }, [idCentro]);
 
   const bloques = useMemo(
     () => bloquesPorJornada(candidatos, true),
     [candidatos]
   );
-  const jornadasEleccion = useMemo(
-    () => jornadasPresentes(candidatos),
-    [candidatos]
-  );
-  const hayJornadas = jornadasEleccion.length > 0;
 
   const totalVotos = candidatos.reduce((s, c) => s + c.votos, 0);
   const participacion =
     habilitados > 0 ? Math.min(100, (totalVotos / habilitados) * 100) : 0;
-
-  const barrasTodas: DatoGrafica[] = candidatos.map((c) => ({
-    etiqueta: `${c.nombre} ${c.apellido}`.trim(),
-    valor: c.votos,
-  }));
 
   const abrirCentro = (id: number) => {
     setIdCentro(id);
@@ -475,7 +366,6 @@ export default function PanelMetricas() {
   const volverACentros = () => {
     setIdCentro(null);
     setIdEleccion("");
-    setCandidatos([]);
     irArriba();
   };
 
@@ -514,7 +404,7 @@ export default function PanelMetricas() {
     try {
       await generarReporte({
         ...baseReporte,
-        jornada: hayJornadas ? "Mañana, Tarde y Noche" : jornada,
+        jornada: "Mañana, Tarde y Noche",
         totalVotos,
         candidatos,
       });
@@ -526,14 +416,14 @@ export default function PanelMetricas() {
   };
 
   return (
-    <div className="admin-page">
+    <div className="admin-page admin-page--resultados">
       <Container className="px-0">
         {esRed && !idCentro ? (
           <>
-            <h3 className="fw-bold">Estadísticas por centro</h3>
+            <h3 className="fw-bold">Resultados por centro</h3>
             <p className="text-muted">
-              Busca el centro y ábrelo con la lupa. Las gráficas salen enseguida,
-              sin bajar por la tabla.
+              Elige el centro para ver el escrutinio en vivo de sus elecciones.
+              Luego podrás escoger la elección y la jornada.
             </p>
 
             <Row className="mb-3">
@@ -590,10 +480,8 @@ export default function PanelMetricas() {
             <h3 className="fw-bold">{centroActual?.nombre || centroNombre}</h3>
             <p className="text-muted">
               {centroActual?.regional ? `${centroActual.regional} · ` : ""}
-              {eleccionesDelCentro.length}{" "}
-              {eleccionesDelCentro.length === 1
-                ? "elección en este centro"
-                : "elecciones en este centro"}
+              Elige la elección y luego la jornada (Mañana, Tarde o Noche) para
+              ver fotos, votos y porcentajes en tiempo real.
             </p>
 
             {eleccionesDelCentro.length === 0 ? (
@@ -650,211 +538,17 @@ export default function PanelMetricas() {
                   {cargando ? " · Cargando…" : ""}
                 </p>
 
-                {hayJornadas ? (
-                  <>
-                    <div className="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-3">
-                      <p className="mb-0 fw-semibold">
-                        Quién va ganando en cada jornada
-                      </p>
-                      <Button
-                        variant="outline-success"
-                        disabled={!!exportando || candidatos.length === 0}
-                        onClick={() => void exportarTodas()}
-                      >
-                        <FaFilePdf className="me-2" />
-                        {exportando === "todas"
-                          ? "Generando…"
-                          : "PDF de las 3 jornadas"}
-                      </Button>
-                    </div>
-
-                    {JORNADAS.map((j) => {
-                      const bloque = bloques.find((b) => b.jornada === j);
-                      const ganador = bloque?.ganador;
-                      const segundo = bloque?.segundo;
-                      return (
-                        <section
-                          key={j}
-                          className="mb-4 p-3 p-md-4"
-                          style={{
-                            border: "1px solid #e4e9e5",
-                            borderRadius: 12,
-                            background: "#fff",
-                          }}
-                        >
-                          <div className="d-flex flex-wrap justify-content-between align-items-start gap-3 mb-3">
-                            <div>
-                              <p className="admin-dash-eyebrow mb-1">
-                                Sección PDF
-                              </p>
-                              <h3 className="h5 fw-bold mb-1">Jornada {j}</h3>
-                              {ganador ? (
-                                <>
-                                  <p className="mb-1">
-                                    Va ganando{" "}
-                                    <strong>
-                                      {ganador.nombre} {ganador.apellido}
-                                    </strong>{" "}
-                                    con {ganador.votos} votos (
-                                    {ganador.porcentaje.toFixed(1)}%).
-                                  </p>
-                                  {segundo && bloque?.ventaja != null ? (
-                                    <p className="text-muted mb-0 small">
-                                      Le saca {bloque.ventaja} voto
-                                      {bloque.ventaja === 1 ? "" : "s"} a{" "}
-                                      {segundo.nombre} {segundo.apellido} (
-                                      {segundo.votos} votos).
-                                    </p>
-                                  ) : (
-                                    <p className="text-muted mb-0 small">
-                                      Único candidato de esta jornada.
-                                    </p>
-                                  )}
-                                </>
-                              ) : (
-                                <p className="text-muted mb-0">
-                                  Todavía no hay candidatos en esta jornada.
-                                </p>
-                              )}
-                            </div>
-                            <Button
-                              variant="success"
-                              disabled={!!exportando || !ganador}
-                              onClick={() => void exportarJornada(j)}
-                            >
-                              <FaFilePdf className="me-2" />
-                              {exportando === j
-                                ? "Generando…"
-                                : `Generar PDF · ${j}`}
-                            </Button>
-                          </div>
-
-                          {bloque && bloque.lista.length > 0 && (
-                            <>
-                              <div className="grafica-grid grafica-grid--2 mb-3">
-                                <GraficaBarras
-                                  titulo={`Votos · ${j}`}
-                                  datos={bloque.lista.map((c) => ({
-                                    etiqueta: `${c.nombre} ${c.apellido}`.trim(),
-                                    valor: c.votos,
-                                  }))}
-                                  horizontal
-                                  unidad="votos"
-                                  alto="sm"
-                                />
-                                <GraficaDona
-                                  titulo={`Distribución · ${j}`}
-                                  datos={bloque.lista.map((c) => ({
-                                    etiqueta: `${c.nombre} ${c.apellido}`.trim(),
-                                    valor: c.votos,
-                                  }))}
-                                  alto="sm"
-                                />
-                              </div>
-                              <Table responsive className="mb-0">
-                                <thead>
-                                  <tr>
-                                    <th>Candidato</th>
-                                    <th>Votos</th>
-                                    <th>%</th>
-                                    <th>Estado</th>
-                                  </tr>
-                                </thead>
-                                <tbody>
-                                  {bloque.lista.map((c, i) => (
-                                    <tr key={`${j}-${c.id}`}>
-                                      <td>
-                                        {c.nombre} {c.apellido}
-                                      </td>
-                                      <td className="fw-bold app-accent">
-                                        {c.votos}
-                                      </td>
-                                      <td>{c.porcentaje.toFixed(1)}%</td>
-                                      <td>
-                                        {i === 0 ? (
-                                          <span className="badge text-bg-success">
-                                            Va ganando
-                                          </span>
-                                        ) : i === 1 ? (
-                                          <span className="text-muted">
-                                            Segundo
-                                          </span>
-                                        ) : (
-                                          <span className="text-muted">
-                                            Candidato
-                                          </span>
-                                        )}
-                                      </td>
-                                    </tr>
-                                  ))}
-                                </tbody>
-                              </Table>
-                            </>
-                          )}
-                        </section>
-                      );
-                    })}
-                  </>
-                ) : (
-                  <>
-                    <div className="grafica-grid grafica-grid--2 mb-4">
-                      <GraficaBarras
-                        titulo="Votos por candidato"
-                        datos={barrasTodas}
-                        horizontal
-                        unidad="votos"
-                      />
-                      <GraficaDona
-                        titulo="Distribución de votos"
-                        datos={barrasTodas}
-                      />
-                    </div>
-
-                    <div className="admin-table-shell mb-4">
-                      <Table responsive className="mb-0">
-                        <thead>
-                          <tr>
-                            <th>Candidato</th>
-                            <th>Votos</th>
-                            <th>Porcentaje</th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                          {candidatos.length === 0 ? (
-                            <tr>
-                              <td colSpan={3} className="text-muted">
-                                No hay resultados todavía.
-                              </td>
-                            </tr>
-                          ) : (
-                            candidatos.map((c) => (
-                              <tr key={c.id || `${c.nombre}-${c.apellido}`}>
-                                <td>
-                                  {c.nombre} {c.apellido}
-                                </td>
-                                <td className="fw-bold app-accent">{c.votos}</td>
-                                <td>{c.porcentaje.toFixed(1)}%</td>
-                              </tr>
-                            ))
-                          )}
-                        </tbody>
-                      </Table>
-                    </div>
-
-                    <div className="d-flex justify-content-end">
-                      <Button
-                        variant="primary"
-                        onClick={() => void exportarTodas()}
-                        disabled={!!exportando || candidatos.length === 0}
-                      >
-                        <FaFilePdf className="me-2" />
-                        {exportando === "todas"
-                          ? "Generando PDF…"
-                          : "Exportar PDF"}
-                      </Button>
-                    </div>
-                  </>
-                )}
+                <PanelResultadosJornada
+                  key={idEleccion}
+                  candidatos={candidatos}
+                  nombreEleccion={titulo}
+                  centro={centroNombre}
+                  cargando={cargando}
+                  actualizado={actualizado}
+                  exportando={exportando}
+                  onPdfJornada={exportarJornada}
+                  onPdfTodas={exportarTodas}
+                />
               </>
             )}
           </>

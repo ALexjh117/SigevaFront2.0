@@ -71,8 +71,8 @@ export const DashboardAdmin = () => {
         {
           clase: "admin-shortcut--oferta",
           to: "/panel-metricas",
-          titulo: "Estadísticas",
-          pie: "Gráficas de tus elecciones",
+          titulo: "Resultados en vivo",
+          pie: "Escrutinio por jornada",
           icono: <DiosTarget />,
         },
         {

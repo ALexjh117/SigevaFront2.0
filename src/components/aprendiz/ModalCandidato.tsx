@@ -7,10 +7,13 @@ import { useAuth } from "../../context/auth/auth.context";
 import Swal from "sweetalert2";
 import { FaTimes, FaEnvelope } from "react-icons/fa";
 import { ADMIN_PALETTE } from "../../theme/tokens";
+import { comoLista } from "../../utils/comoLista";
+import { candidatosYaVotados, eleccionYaVotada } from "../../utils/votoAprendiz";
 
 interface Props {
   show: boolean;
   onHide: () => void;
+  yaVoto?: boolean;
   candidato: {
     nombre: string;
     programa: string;
@@ -25,6 +28,7 @@ export default function SelecionarCandidato({
   show,
   onHide,
   candidato,
+  yaVoto = false,
 }: Props) {
   const { id } = useParams();
   const navigate = useNavigate();
@@ -92,6 +96,16 @@ export default function SelecionarCandidato({
   };
 
   const handleVoteClick = async () => {
+    if (yaVoto) {
+      Swal.fire({
+        title: "Ya votaste",
+        text: "En esta elección solo puedes votar una vez. Cambiar de jornada no abre otro voto.",
+        icon: "info",
+        confirmButtonText: "Entendido",
+        confirmButtonColor: ADMIN_PALETTE.confirm,
+      });
+      return;
+    }
     if (enviando) return;
     setEnviando(true);
     const ok = await enviarOTP();
@@ -104,6 +118,7 @@ export default function SelecionarCandidato({
 
   const submit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (yaVoto) return;
    
     if (!/^[A-Za-z0-9_-]{6}$/.test(otp)) {
       return Swal.fire({
@@ -121,6 +136,20 @@ export default function SelecionarCandidato({
       
       if (data.success === true) {
         try {
+          const [votados, candRes] = await Promise.all([
+            candidatosYaVotados(Number(user?.id)),
+            api.get(`/api/candidatos/listar/${id}`),
+          ]);
+          if (eleccionYaVotada(comoLista(candRes.data), votados)) {
+            Swal.fire({
+              title: "Ya votaste",
+              text: "En esta elección solo puedes votar una vez. Cambiar de jornada no abre otro voto.",
+              icon: "info",
+              confirmButtonText: "Entendido",
+              confirmButtonColor: ADMIN_PALETTE.confirm,
+            }).then(() => navigate("/votaciones"));
+            return;
+          }
           console.log(
             "[submit] registrando voto. candidatoId:",
             candidato.idCandidato,
@@ -234,21 +263,34 @@ export default function SelecionarCandidato({
               Este candidato aún no publicó propuesta.
             </p>
           )}
+          {yaVoto ? (
+            <p className="apz-ficha-propuesta" style={{ marginTop: "1rem" }}>
+              Ya votaste en esta elección. Cambiar de jornada no te deja votar otra vez.
+            </p>
+          ) : null}
         </Modal.Body>
         <Modal.Footer className="apz-modal-actions apz-modal-actions--footer">
-          <button type="button" className="apz-btn apz-btn--ghost" onClick={onHide} disabled={enviando}>
-            Cancelar
-          </button>
-          <button type="button" className="apz-btn" onClick={handleVoteClick} disabled={enviando}>
-            {enviando ? (
-              <>
-                <span className="spinner-border spinner-border-sm" aria-hidden />
-                Enviando código…
-              </>
-            ) : (
-              "Votar por este candidato"
-            )}
-          </button>
+          {yaVoto ? (
+            <button type="button" className="apz-btn apz-btn--ghost" onClick={onHide}>
+              Cerrar
+            </button>
+          ) : (
+            <>
+              <button type="button" className="apz-btn apz-btn--ghost" onClick={onHide} disabled={enviando}>
+                Cancelar
+              </button>
+              <button type="button" className="apz-btn" onClick={handleVoteClick} disabled={enviando}>
+                {enviando ? (
+                  <>
+                    <span className="spinner-border spinner-border-sm" aria-hidden />
+                    Enviando código…
+                  </>
+                ) : (
+                  "Votar por este candidato"
+                )}
+              </button>
+            </>
+          )}
         </Modal.Footer>
       </Modal>
 
