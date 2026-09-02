@@ -457,33 +457,20 @@ const Sidebar: React.FC<SidebarProps> = ({ onNavigate }) => {
           )}
 
         </nav>
+        {esAprendiz(user?.perfil) ? <CarruselCandidatosSidebar /> : null}
+        {isAdmin && !esAprendiz(user?.perfil) && (
+          <blockquote className="sidebar-motto">
+            <p className="sidebar-motto2">
+              El conocimiento vale el doble cuando sirve para ayudar
+            </p>
 
-
-        {/* CARRUSEL PARA APRENDICES */}
-        {esAprendiz(user?.perfil)
-          ? <CarruselCandidatosSidebar />
-          : null}
-
-
-        {/* MENSAJE ADMIN */}
-        {isAdmin &&
-          !esAprendiz(user?.perfil) && (
-            <blockquote className="sidebar-motto">
-
-              <p>
-                La inteligencia es un privilegio:
-                cobra valor cuando se comparte
-                y se usa para el bien de los demás.
-              </p>
-
-            </blockquote>
-          )}
-
-
-        {/* =====================================
-            FOOTER
-            ===================================== */}
-
+              <blockquote className="sidebar-motto2">
+            <p>
+              
+            </p>
+          </blockquote>
+          </blockquote>
+        )}
         <div className="sidebar-footer">
 
           {esAprendiz(user?.perfil) &&
