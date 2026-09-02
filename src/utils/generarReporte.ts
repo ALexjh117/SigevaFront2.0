@@ -12,6 +12,7 @@ export interface Candidato {
   numeroTarjeton?: string;
   jornada?: string;
   propuesta?: string;
+  foto?: string;
 }
 
 export interface Participante {

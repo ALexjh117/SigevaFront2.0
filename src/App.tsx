@@ -29,6 +29,7 @@ import { DashboardAdmin } from "./pages/administrador/DashboardAdmin";
 import { Toaster } from "react-hot-toast";
 import CargarAprendicesAdmin from "./pages/administrador/CargarAprendicesAdmin";
 import Equipo from "./pages/Equipo";
+import ResultadosDemoPage from "./pages/funcionario/ResultadosDemoPage";
 import { esAprendiz, esRolDeCentro } from "./utils/roles";
 
 
@@ -84,6 +85,9 @@ function App() {
           <Route path="/login-aprendiz" element={<Login perfil="aprendiz" />} />
           <Route path="/recuperar-contrasena" element={<RecuperarContrasena />} />
           <Route path="/equipo" element={<Equipo />} />
+          {import.meta.env.DEV ? (
+            <Route path="/resultados-demo" element={<ResultadosDemoPage />} />
+          ) : null}
         </Route>
 
         {/* Rutas de Aprendiz */}

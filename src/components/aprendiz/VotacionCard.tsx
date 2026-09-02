@@ -34,12 +34,13 @@ export const VotacionCard = ({
 }: Props) => {
   const navigate = useNavigate();
   const fechas = rango(fechaInicio, fechaFin);
+  const puedeEntrar = hayCandidatos;
   const puedeVotar = hayCandidatos && !yaVoto;
 
   return (
     <article
-      className={`grafica-card admin-vote-card${puedeVotar ? " is-clickable" : ""}`}
-      onClick={puedeVotar ? () => navigate(`/seleccion/${ideleccion}`) : undefined}
+      className={`grafica-card admin-vote-card${puedeEntrar ? " is-clickable" : ""}`}
+      onClick={puedeEntrar ? () => navigate(`/seleccion/${ideleccion}`) : undefined}
     >
       <header>
         <h3>{titulo}</h3>
@@ -50,8 +51,12 @@ export const VotacionCard = ({
       <p className="admin-vote-meta">{centro}</p>
       {fechas ? <p className="admin-vote-meta">{fechas}</p> : null}
       {yaVoto ? (
-        <p className="admin-vote-cta">Tu voto ya quedó registrado.</p>
-      ) : hayCandidatos ? (
+        <p className="admin-vote-cta">
+          {hayCandidatos
+            ? "Tu voto ya quedó registrado. Puedes ver candidatos, no votar otra vez."
+            : "Tu voto ya quedó registrado."}
+        </p>
+      ) : puedeVotar ? (
         <p className="admin-vote-cta admin-vote-cta--go">Participar</p>
       ) : (
         <p className="admin-vote-cta">Todavía no hay candidatos para tu jornada.</p>

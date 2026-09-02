@@ -24,10 +24,6 @@ export default function AprendizLayout() {
     return <Navigate to="/elegir-jornada" replace />;
   }
 
-  if (jornada && pathname === "/elegir-jornada") {
-    return <Navigate to="/votaciones" replace />;
-  }
-
   return (
     <MainLayout showSidebar>
       <Outlet />

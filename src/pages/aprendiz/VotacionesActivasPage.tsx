@@ -5,6 +5,12 @@ import { jornadaDelAprendiz } from "../../utils/jornadaAprendiz";
 import { nombreDeUsuario } from "../../utils/usuario";
 import { comoLista, etiquetaAnidada } from "../../utils/comoLista";
 import { VotacionCard } from "../../components/aprendiz/VotacionCard";
+import {
+  candidatosYaVotados,
+  eleccionYaVotada,
+  idDeEleccion,
+} from "../../utils/votoAprendiz";
+import { esJornada } from "../../constants/jornada";
 
 type Votacion = {
   ideleccion: number;
@@ -15,19 +21,6 @@ type Votacion = {
   fechaFin?: string;
   yaVoto: boolean;
 };
-
-function idDeEleccion(v: Record<string, unknown>) {
-  const n = Number(v.ideleccion ?? v.idEleccion ?? v.eleccionId);
-  return n || 0;
-}
-
-function idDeAprendiz(v: Record<string, unknown>) {
-  const anidado =
-    v.aprendiz && typeof v.aprendiz === "object"
-      ? Number((v.aprendiz as Record<string, unknown>).idaprendiz)
-      : 0;
-  return Number(v.idaprendiz ?? v.aprendiz_idaprendiz ?? v.idAprendiz) || anidado || 0;
-}
 
 const VotacionesActivasPage = () => {
   const [votaciones, setVotaciones] = useState<Votacion[]>([]);
@@ -43,24 +36,15 @@ const VotacionesActivasPage = () => {
         return;
       }
       try {
-        const [eleccionesRes, votosRes] = await Promise.allSettled([
-          api.get(`/api/eleccionPorCentro/${user.CentroFormacion}`),
-          api.get("/api/votoXCandidato/traer"),
+        const [eleccionesRes, idsCandidatosVotados] = await Promise.all([
+          api.get(`/api/eleccionPorCentro/${user.CentroFormacion}`).then(
+            (res) => comoLista<Record<string, unknown>>(res.data),
+            () => [] as Record<string, unknown>[]
+          ),
+          candidatosYaVotados(Number(user.id)),
         ]);
 
-        const elecciones =
-          eleccionesRes.status === "fulfilled"
-            ? comoLista<Record<string, unknown>>(eleccionesRes.value.data)
-            : [];
-
-        const votosPropios =
-          votosRes.status === "fulfilled"
-            ? comoLista<Record<string, unknown>>(votosRes.value.data).filter(
-                (v) => idDeAprendiz(v) === Number(user.id)
-              )
-            : [];
-
-        const idsVotadas = new Set(votosPropios.map(idDeEleccion).filter(Boolean));
+        const elecciones = eleccionesRes;
 
         const conCandidatos: Votacion[] = await Promise.all(
           elecciones.map(async (vote) => {
@@ -68,18 +52,20 @@ const VotacionesActivasPage = () => {
             const titulo = String(vote.titulo || "Elección");
             const centro = etiquetaAnidada(vote.centro) || "Tu centro";
             try {
-              const cand = await api.get(`/api/candidatos/listar/${ideleccion}`, {
-                params: { jornada },
-              });
-              const lista = comoLista(cand.data);
+              const cand = await api.get(`/api/candidatos/listar/${ideleccion}`);
+              const todos = comoLista<Record<string, unknown>>(cand.data);
+              const deJornada = todos.filter((c) => esJornada(c.jornada) ? c.jornada === jornada : true);
+              const listaJornada = todos.some((c) => esJornada(c.jornada))
+                ? deJornada
+                : todos;
               return {
                 ideleccion,
                 titulo,
                 centro,
-                hayCandidatos: lista.length > 0,
+                hayCandidatos: listaJornada.length > 0,
                 fechaInicio: vote.fechaInicio ? String(vote.fechaInicio) : undefined,
                 fechaFin: vote.fechaFin ? String(vote.fechaFin) : undefined,
-                yaVoto: idsVotadas.has(ideleccion),
+                yaVoto: eleccionYaVotada(todos, idsCandidatosVotados),
               };
             } catch {
               return {
@@ -89,7 +75,7 @@ const VotacionesActivasPage = () => {
                 hayCandidatos: false,
                 fechaInicio: vote.fechaInicio ? String(vote.fechaInicio) : undefined,
                 fechaFin: vote.fechaFin ? String(vote.fechaFin) : undefined,
-                yaVoto: idsVotadas.has(ideleccion),
+                yaVoto: false,
               };
             }
           })

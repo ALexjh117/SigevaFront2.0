@@ -383,6 +383,10 @@
   max-width: 1180px;
 }
 
+.theme-admin .admin-page--resultados {
+  max-width: 1280px;
+}
+
 .theme-admin .admin-page h2,
 .theme-admin .admin-page h3 {
   color: var(--admin-ink);
@@ -700,6 +704,10 @@
 
 .admin-shortcut:hover {
   background: rgba(57, 169, 0, 0.04);
+}
+
+.admin-shortcut.is-on {
+  background: rgba(57, 169, 0, 0.08);
 }
 
 .admin-shortcut-icon {

@@ -20,7 +20,7 @@ interface MainLayoutProps {
 
 function tituloDeRuta(pathname: string) {
   if (pathname.startsWith('/dashboard')) return 'Inicio';
-  if (pathname.startsWith('/panel-metricas')) return 'Estadísticas';
+  if (pathname.startsWith('/panel-metricas')) return 'Resultados en vivo';
   if (pathname.startsWith('/elecciones')) return 'Elecciones';
   if (pathname.startsWith('/funcionarios')) return 'Funcionarios';
   if (pathname.startsWith('/aprendices')) return 'Aprendices';
