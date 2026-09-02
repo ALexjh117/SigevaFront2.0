@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
+import ChatBot from "../components/ChatBot/ChatBot";
 import {
   FaArrowRight,
   FaSearch,
@@ -389,6 +390,7 @@ const Inicio: React.FC = () => {
       </section>
 
       <LandingFooter />
+         <ChatBot />
     </div>
   );
 };
