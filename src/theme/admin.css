@@ -263,8 +263,23 @@
   flex-shrink: 0;
 }
 
-.theme-admin .sidebar-motto::before {
+
+.sidebar-motto2::before {
   content: "“";
+  display: block;
+  margin: 0 0 0.2rem;
+  color: var(--dios-d);
+  font-size: 1.65rem;
+  font-weight: 700;
+  line-height: 0.7;
+}
+
+
+
+
+
+.theme-admin .sidebar-motto::before {
+  
   display: block;
   margin: 0 0 0.2rem;
   color: var(--dios-d);
