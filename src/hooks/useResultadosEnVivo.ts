@@ -4,6 +4,7 @@ import { esJornada } from "../constants/jornada";
 import { comoLista, etiquetaAnidada } from "../utils/comoLista";
 import { urlFotoCandidato } from "../utils/fotoCandidato";
 import { mapaJornadaCandidatos } from "../utils/resultadosJornada";
+import { idDeCandidatoEnVoto } from "../utils/votoAprendiz";
 
 const INTERVALO_MS = 5000;
 
@@ -59,17 +60,36 @@ function jornadaDe(...valores: unknown[]) {
   return undefined;
 }
 
+const eleccionesSinReporte = new Set<number>();
+
 async function traerReporte(id: number) {
+  if (eleccionesSinReporte.has(id)) return null;
   try {
-    const { data } = await api.get(`/reporte/eleccion/${id}`);
+    const { data } = await api.get(`/api/reporte/eleccion/${id}`);
     return data;
   } catch (err: unknown) {
     const status = (err as { response?: { status?: number } })?.response?.status;
     if (status === 404) {
-      const { data } = await api.get(`/api/reporte/eleccion/${id}`);
-      return data;
+      eleccionesSinReporte.add(id);
+      return null;
     }
     throw err;
+  }
+}
+
+async function votosPorCandidato(ids: Set<number>) {
+  if (ids.size === 0) return new Map<number, number>();
+  try {
+    const { data } = await api.get("/api/votoXCandidato/traer");
+    const mapa = new Map<number, number>();
+    for (const voto of comoLista<Record<string, unknown>>(data)) {
+      const idCandidato = idDeCandidatoEnVoto(voto);
+      if (!ids.has(idCandidato)) continue;
+      mapa.set(idCandidato, (mapa.get(idCandidato) || 0) + 1);
+    }
+    return mapa;
+  } catch {
+    return new Map<number, number>();
   }
 }
 
@@ -99,15 +119,21 @@ export async function cargarResultadosEleccion(idEleccion: number): Promise<{
   const listaVotos = comoLista<Record<string, unknown>>(rep?.candidatos ?? rep);
   const fuente = listaVotos.length > 0 ? listaVotos : listaCandidatos;
 
+  let conteo: Map<number, number> | null = null;
+  if (listaVotos.length === 0 && porId.size > 0) {
+    conteo = await votosPorCandidato(new Set(porId.keys()));
+  }
+
   let resultados: CandidatoResultado[] = fuente.map((c) => {
     const id = Number(c.idcandidatos ?? c.id ?? 0);
     const extra = porId.get(id) || {};
     const { nombre, apellido } = partirNombre({ ...extra, ...c });
+    const votosReporte = Number(c.votos ?? extra.votos ?? 0);
     return {
       id,
       nombre,
       apellido,
-      votos: Number(c.votos ?? extra.votos ?? 0),
+      votos: conteo ? conteo.get(id) || 0 : votosReporte,
       porcentaje: 0,
       jornada: jornadaDe(c.jornada, extra.jornada),
       foto: fotoDe(extra) || fotoDe(c),

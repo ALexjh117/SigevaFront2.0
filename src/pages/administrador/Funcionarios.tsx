@@ -13,6 +13,9 @@ import { ADMIN_PALETTE } from "../../theme/tokens";
 import { adminTableStyles } from "../../theme/adminTableStyles";
 import { LupaDetalle, SemaforoEstado, etiquetaEstado, textoCorto } from "../../components/tabla/detalleTabla";
 import { MiniGraficas, contarPor, topN } from "../../components/graficas/MiniGraficas";
+import { useAuth } from "../../context/auth/auth.context";
+import { esAdministradorRed, esAdminSistema } from "../../utils/roles";
+import { estadoCanonico, mensajeApi } from "../../utils/centro";
 
 // ----------------- Interfaces -----------------
 interface Regional {
@@ -72,6 +75,9 @@ interface FuncionarioDetalle extends Funcionario {
 
 // ----------------- Componente -----------------
 const Funcionarios: React.FC = () => {
+  const { user } = useAuth();
+  const esRed = esAdministradorRed(user?.perfil);
+  const esSede = esAdminSistema(user?.perfil);
   const [funcionarios, setFuncionarios] = useState<Funcionario[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -113,7 +119,7 @@ const Funcionarios: React.FC = () => {
       const response = await api.get<Funcionario[]>("api/usuarios/funcionarios");
       setFuncionarios(response.data);
     } catch (err: unknown) {
-      const message = err instanceof Error ? err.message : "Error desconocido al cargar los funcionarios";
+      const message = mensajeApi(err);
       setError(message);
       Swal.fire({
         title: "Error",
@@ -133,17 +139,18 @@ const Funcionarios: React.FC = () => {
     setFormLoading(true);
     try {
       const isEditing = Boolean(editingId);
-      const url = isEditing ? `api/usuarios/${editingId}` : "api/usuarios/crear";
+      const url = isEditing ? `api/usuarios/funcionarios/${editingId}` : "api/usuarios/funcionarios";
       const requestData: Record<string, string | number> = {
         nombres: formData.nombres,
         apellidos: formData.apellidos,
         celular: formData.celular,
         numero_documento: formData.numero_documento,
         email: formData.email,
-        estado: formData.estado,
-        idcentro_formacion: formData.idcentro_formacion.toString(),
-        idperfil: formData.idperfil || 2,
+        estado: estadoCanonico(formData.estado),
       };
+      if (esRed) {
+        requestData.idcentro_formacion = formData.idcentro_formacion;
+      }
 
       // Solo incluir contraseña si se proporciona una nueva (crear) o si hay contenido (editar)
       if (!isEditing || (isEditing && formData.password.trim() !== "")) {
@@ -181,7 +188,7 @@ const Funcionarios: React.FC = () => {
   const handleToggleStatus = async (id: number, nuevoEstado: string) => {
     const result = await Swal.fire({
       title: "¿Estás seguro?",
-      text: `¿Deseas ${nuevoEstado === "activo" ? "activar" : "desactivar"} este funcionario?`,
+      text: `¿Deseas ${estadoCanonico(nuevoEstado) === "Activo" ? "activar" : "desactivar"} este funcionario?`,
       icon: "warning",
       showCancelButton: true,
       confirmButtonColor: ADMIN_PALETTE.confirm,
@@ -192,10 +199,11 @@ const Funcionarios: React.FC = () => {
     if (!result.isConfirmed) return;
     
     try {
-      await api.put<ApiResponse<Funcionario>>(`api/usuarios/${id}`, { estado: nuevoEstado });
+      const estado = estadoCanonico(nuevoEstado);
+      await api.put<ApiResponse<Funcionario>>(`api/usuarios/funcionarios/${id}`, { estado });
       setFuncionarios(
-        funcionarios.map((func: Funcionario) => 
-          func.id === id ? { ...func, estado: nuevoEstado } : func
+        funcionarios.map((func: Funcionario) =>
+          func.id === id ? { ...func, estado } : func
         )
       );
       await Swal.fire({
@@ -348,10 +356,10 @@ const Funcionarios: React.FC = () => {
           <Button
             variant={row.estado === "activo" ? "outline-danger" : "outline-success"}
             size="sm"
-            onClick={() => handleToggleStatus(row.id, row.estado === "activo" ? "inactivo" : "activo")}
-            title={row.estado === "activo" ? "Desactivar" : "Activar"}
+            onClick={() => handleToggleStatus(row.id, estadoCanonico(row.estado) === "Activo" ? "Inactivo" : "Activo")}
+            title={estadoCanonico(row.estado) === "Activo" ? "Desactivar" : "Activar"}
           >
-            {row.estado === "activo" ? <FaToggleOff /> : <FaToggleOn />}
+            {estadoCanonico(row.estado) === "Activo" ? <FaToggleOff /> : <FaToggleOn />}
           </Button>
         </div>
       ),
@@ -363,9 +371,13 @@ const Funcionarios: React.FC = () => {
   return (
     <div className="container mt-4 admin-page">
       <div className="mb-4">
-        <h2 className="fw-bold">Gestión de Funcionarios de Bienestar</h2>
+        <h2 className="fw-bold">
+          {esSede ? "Funcionarios de tu centro" : "Gestión de Funcionarios de Bienestar"}
+        </h2>
         <p className="text-muted">
-          Consulta, crea y actualiza los perfiles del equipo de Bienestar encargados de coordinar los procesos electorales en cada centro de formación.
+          {esSede
+            ? "Creas el funcionario de tu mesa. El centro ya es el tuyo; no eliges otra sede."
+            : "Crea un funcionario y elige a qué centro de formación queda asignado."}
         </p>
       </div>
       <MiniGraficas

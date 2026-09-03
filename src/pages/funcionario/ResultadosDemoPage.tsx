@@ -32,6 +32,7 @@ const SEMILLA: CandidatoResultado[] = [
 export default function ResultadosDemoPage() {
   const param = new URLSearchParams(window.location.search).get("j");
   const jornadaInicial = esJornada(param) ? param : undefined;
+  const iniciarCompleta = new URLSearchParams(window.location.search).has("full");
   const [candidatos, setCandidatos] = useState(SEMILLA);
   const [actualizado, setActualizado] = useState(() => new Date());
   const [exportando, setExportando] = useState<Jornada | "todas" | "">("");
@@ -108,8 +109,8 @@ export default function ResultadosDemoPage() {
       <h1 className="h3 fw-bold mb-2">Así se ve el escrutinio</h1>
       <p className="text-muted mb-4">
         Datos de ejemplo con fotos. Los votos suben solos para probar el tiempo real.
-        En la app real, el funcionario y el admin de centro ven las elecciones de su
-        sede; el admin global elige primero el centro.
+        Usa <strong>Pantalla completa</strong> para proyectarlo en un televisor:
+        el tablero llena la pantalla y las jornadas se van rotando.
       </p>
       <PanelResultadosJornada
         candidatos={candidatos}
@@ -118,6 +119,7 @@ export default function ResultadosDemoPage() {
         actualizado={actualizado}
         exportando={exportando}
         jornadaInicial={jornadaInicial}
+        iniciarCompleta={iniciarCompleta}
         onPdfJornada={pdfJornada}
         onPdfTodas={pdfTodas}
       />

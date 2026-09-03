@@ -1,12 +1,16 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { Button } from "react-bootstrap";
+import { FaCompress, FaExpand } from "react-icons/fa";
 import { FaFilePdf } from "react-icons/fa6";
 import { JORNADAS, type Jornada } from "../../constants/jornada";
+import { usePantallaCompleta } from "../../hooks/usePantallaCompleta";
 import type { CandidatoResultado } from "../../hooks/useResultadosEnVivo";
 import { bloquesPorJornada, jornadasPresentes } from "../../utils/resultadosJornada";
 import { formatoPorcentaje, formatoVotos } from "../../utils/fotoCandidato";
 import { TableroResultadosTv } from "./TableroResultadosTv";
 import "./tableroResultadosTv.css";
+
+const ROTAR_JORNADA_MS = 12000;
 
 type Props = {
   candidatos: CandidatoResultado[];
@@ -16,6 +20,7 @@ type Props = {
   actualizado?: Date | null;
   exportando?: Jornada | "todas" | "";
   jornadaInicial?: Jornada;
+  iniciarCompleta?: boolean;
   onPdfJornada: (jornada: Jornada) => void | Promise<void>;
   onPdfTodas: () => void | Promise<void>;
 };
@@ -36,6 +41,7 @@ export function PanelResultadosJornada({
   actualizado,
   exportando = "",
   jornadaInicial,
+  iniciarCompleta = false,
   onPdfJornada,
   onPdfTodas,
 }: Props) {
@@ -45,6 +51,13 @@ export function PanelResultadosJornada({
     jornadaInicial || presentes[0] || "Mañana"
   );
   const [, setTick] = useState(0);
+  const [idle, setIdle] = useState(false);
+  const panelRef = useRef<HTMLElement>(null);
+  const { activa: pantallaCompleta, alternar, entrar } = usePantallaCompleta(panelRef);
+
+  useEffect(() => {
+    if (iniciarCompleta) void entrar();
+  }, [iniciarCompleta, entrar]);
 
   useEffect(() => {
     if (presentes.length && !presentes.includes(jornada)) {
@@ -57,14 +70,58 @@ export function PanelResultadosJornada({
     return () => window.clearInterval(t);
   }, []);
 
+  const jornadasConDatos = useMemo(
+    () =>
+      JORNADAS.filter(
+        (j) => (bloques.find((b) => b.jornada === j)?.lista.length || 0) > 0
+      ),
+    [bloques]
+  );
+
+  useEffect(() => {
+    if (!pantallaCompleta || jornadasConDatos.length < 2) return;
+    const id = window.setInterval(() => {
+      setJornada((prev) => {
+        const i = jornadasConDatos.indexOf(prev);
+        return jornadasConDatos[(i < 0 ? 0 : i + 1) % jornadasConDatos.length];
+      });
+    }, ROTAR_JORNADA_MS);
+    return () => window.clearInterval(id);
+  }, [pantallaCompleta, jornadasConDatos, jornada]);
+
+  useEffect(() => {
+    if (!pantallaCompleta) {
+      setIdle(false);
+      return;
+    }
+    let timer = 0;
+    const despertar = () => {
+      setIdle(false);
+      window.clearTimeout(timer);
+      timer = window.setTimeout(() => setIdle(true), 2800);
+    };
+    despertar();
+    window.addEventListener("mousemove", despertar);
+    window.addEventListener("touchstart", despertar);
+    return () => {
+      window.clearTimeout(timer);
+      window.removeEventListener("mousemove", despertar);
+      window.removeEventListener("touchstart", despertar);
+    };
+  }, [pantallaCompleta]);
+
   const bloque = bloques.find((b) => b.jornada === jornada);
   const lista = bloque?.lista ?? [];
   const ganador = bloque?.ganador;
   const segundo = bloque?.segundo;
   const sinJornada = presentes.length === 0 && candidatos.length > 0;
+  const tablero = sinJornada ? candidatos : lista;
 
   return (
-    <section className="tv-panel">
+    <section
+      ref={panelRef}
+      className={`tv-panel${pantallaCompleta ? " is-full" : ""}${idle ? " is-idle" : ""}`}
+    >
       <div className="tv-panel-head">
         <div>
           <h2>Escrutinio en vivo</h2>
@@ -74,10 +131,21 @@ export function PanelResultadosJornada({
             {cargando ? " · Cargando…" : ""}
           </p>
         </div>
-        <div className="tv-live" aria-live="polite">
-          <i />
-          EN VIVO
-          <span>{textoHace(actualizado)}</span>
+        <div className="tv-panel-actions">
+          <div className="tv-live" aria-live="polite">
+            <i />
+            EN VIVO
+            <span>{textoHace(actualizado)}</span>
+          </div>
+          <button
+            type="button"
+            className="tv-full-btn"
+            onClick={() => void alternar()}
+            aria-pressed={pantallaCompleta}
+          >
+            {pantallaCompleta ? <FaCompress /> : <FaExpand />}
+            {pantallaCompleta ? "Salir" : "Pantalla completa"}
+          </button>
         </div>
       </div>
 
@@ -161,9 +229,18 @@ export function PanelResultadosJornada({
       </div>
 
       <TableroResultadosTv
-        candidatos={sinJornada ? candidatos : lista}
+        candidatos={tablero}
         vacio={`No hay tarjetones de ${jornada} en esta elección.`}
       />
+
+      {pantallaCompleta ? (
+        <p className="tv-full-hint">
+          SIGEVA
+          {jornadasConDatos.length > 1 ? " · Las jornadas se alternan solas" : ""}
+          {" · "}
+          Esc o el botón Salir para volver
+        </p>
+      ) : null}
     </section>
   );
 }

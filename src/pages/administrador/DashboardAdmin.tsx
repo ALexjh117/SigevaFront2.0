@@ -1,6 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/auth/auth.context";
 import { nombreDeUsuario } from "../../utils/usuario";
+import { esAdminSistema } from "../../utils/roles";
 import { DiosBulb, DiosChip, DiosLeaf, DiosTarget } from "../../theme/DiosIcons";
 import { useDatosDashboard } from "../../hooks/useDatosDashboard";
 import { PanelGraficasApp } from "../../components/graficas/PanelGraficasApp";
@@ -33,16 +34,16 @@ export const DashboardAdmin = () => {
         },
         {
           clase: "admin-shortcut--innovador",
-          to: "/aprendiz-form",
-          titulo: "Añadir aprendiz",
-          pie: "Registro individual",
+          to: "/admins-centro",
+          titulo: "Admin de centro",
+          pie: "Uno por sede, eliges el centro",
           icono: <DiosBulb />,
         },
         {
           clase: "admin-shortcut--oferta",
           to: "/funcionarios",
           titulo: "Funcionarios",
-          pie: "Equipo de bienestar",
+          pie: "Eliges el centro al crearlos",
           icono: <DiosTarget />,
         },
         {
@@ -50,6 +51,37 @@ export const DashboardAdmin = () => {
           to: "/elecciones",
           titulo: "Elecciones de la red",
           pie: "Todos los centros",
+          icono: <DiosLeaf />,
+        },
+      ]
+    : esAdminSistema(user?.perfil)
+    ? [
+        {
+          clase: "admin-shortcut--digital",
+          to: "/aprendices",
+          titulo: "Aprendices del centro",
+          pie: "Padrón de tu sede",
+          icono: <DiosChip />,
+        },
+        {
+          clase: "admin-shortcut--innovador",
+          to: "/funcionarios",
+          titulo: "Funcionarios",
+          pie: "De tu centro de formación",
+          icono: <DiosBulb />,
+        },
+        {
+          clase: "admin-shortcut--oferta",
+          to: "/cargar-aprendices",
+          titulo: "Cargar aprendices",
+          pie: "Excel de tu sede",
+          icono: <DiosTarget />,
+        },
+        {
+          clase: "admin-shortcut--sostenible",
+          to: "/elecciones",
+          titulo: "Elecciones del centro",
+          pie: "Procesos de tu sede",
           icono: <DiosLeaf />,
         },
       ]
