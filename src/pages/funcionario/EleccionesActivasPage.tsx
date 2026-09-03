@@ -1,6 +1,6 @@
 import { Container, Button } from "react-bootstrap";
 import { FaPlusCircle } from "react-icons/fa";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { useAuth } from "../../context/auth/auth.context";
 import { api } from "../../api";
 import { useNavigate } from "react-router-dom";
@@ -11,6 +11,7 @@ import { FiUserPlus, FiEdit, FiEye } from "react-icons/fi";
 import { Row, Col, Form } from "react-bootstrap";
 import EleccionEditarModal from "../../components/EleccionEditarModal";
 import { esAdministradorRed } from "../../utils/roles";
+import { comoLista } from "../../utils/comoLista";
 import { adminTableStyles } from "../../theme/adminTableStyles";
 import {
   DetalleFilaModal,
@@ -48,14 +49,15 @@ interface Eleccion {
 }
 
 interface CentroRed {
-  idcentroFormacion: number;
-  centroFormacioncol: string;
-  idregional: number;
+  idcentroFormacion?: number;
+  idcentro_formacion?: number;
+  centroFormacioncol?: string;
+  idregional?: number;
 }
 
 interface RegionalRed {
-  idregional: number;
-  regional: string;
+  idregional?: number;
+  regional?: string;
 }
 
 function etiquetaLugar(valor: unknown) {
@@ -70,15 +72,46 @@ function etiquetaLugar(valor: unknown) {
   return "—";
 }
 
-function comoLista<T>(payload: unknown): T[] {
-  if (Array.isArray(payload)) return payload as T[];
-  if (payload && typeof payload === "object") {
-    const o = payload as Record<string, unknown>;
-    if (Array.isArray(o.data)) return o.data as T[];
-    if (Array.isArray(o.elecciones)) return o.elecciones as T[];
-    if (Array.isArray(o.eleccionesActivas)) return o.eleccionesActivas as T[];
+function textoDe(row: Record<string, unknown>, ...claves: string[]) {
+  for (const clave of claves) {
+    const valor = row[clave];
+    if (valor == null) continue;
+    const texto = String(valor).trim();
+    if (texto && texto !== "null" && texto !== "undefined") return texto;
   }
-  return [];
+  return undefined;
+}
+
+/** Une las listas que manda el back para no perder elecciones recién creadas. */
+function filasDeEleccion(payload: unknown): Record<string, unknown>[] {
+  const listas: unknown[][] = [];
+  const recoger = (valor: unknown, profundidad: number) => {
+    if (profundidad > 2 || valor == null) return;
+    if (Array.isArray(valor)) {
+      listas.push(valor);
+      return;
+    }
+    if (typeof valor !== "object") return;
+    const o = valor as Record<string, unknown>;
+    for (const clave of ["data", "elecciones", "eleccionesActivas", "rows"]) {
+      recoger(o[clave], profundidad + 1);
+    }
+  };
+  recoger(payload, 0);
+
+  const visto = new Set<number>();
+  const filas: Record<string, unknown>[] = [];
+  for (const lista of listas) {
+    for (const item of lista) {
+      if (!item || typeof item !== "object") continue;
+      const row = item as Record<string, unknown>;
+      const id = Number(row.ideleccion ?? row.idEleccion ?? row.id);
+      if (id && visto.has(id)) continue;
+      if (id) visto.add(id);
+      filas.push(row);
+    }
+  }
+  return filas;
 }
 
 function mapearEleccion(
@@ -86,13 +119,20 @@ function mapearEleccion(
   centrosPorId: Map<number, CentroRed>,
   regionalesPorId: Map<number, string>
 ): Eleccion {
-  const idCentro = Number(row.idcentroFormacion ?? row.idcentro_formacion) || undefined;
+  const anidado = row.centro as Record<string, unknown> | undefined;
+  const idCentro =
+    Number(
+      row.idcentroFormacion ??
+        row.idcentro_formacion ??
+        anidado?.idcentroFormacion ??
+        anidado?.idcentro_formacion
+    ) || undefined;
   const centroInfo = idCentro ? centrosPorId.get(idCentro) : undefined;
   const centroEnFila = etiquetaLugar(row.centro);
   const regionalEnFila = etiquetaLugar(row.regional);
 
   return {
-    ideleccion: Number(row.ideleccion),
+    ideleccion: Number(row.ideleccion ?? row.idEleccion ?? row.id) || 0,
     titulo: String(row.titulo ?? row.nombre ?? "").trim(),
     centro:
       centroEnFila !== "—"
@@ -101,30 +141,45 @@ function mapearEleccion(
     regional:
       regionalEnFila !== "—"
         ? regionalEnFila
-        : (centroInfo ? regionalesPorId.get(centroInfo.idregional) : undefined) ?? "—",
+        : (centroInfo?.idregional
+            ? regionalesPorId.get(centroInfo.idregional)
+            : undefined) ?? "—",
     jornada: (row.jornada as string | null) ?? null,
-    fechaInicio: String(row.fechaInicio ?? ""),
-    fechaFin: String(row.fechaFin ?? ""),
-    horaInicio: row.horaInicio ? String(row.horaInicio) : undefined,
-    horaFin: row.horaFin ? String(row.horaFin) : undefined,
+    fechaInicio: textoDe(row, "fechaInicio", "fecha_inicio") ?? "",
+    fechaFin: textoDe(row, "fechaFin", "fecha_fin") ?? "",
+    horaInicio: textoDe(row, "horaInicio", "hora_inicio"),
+    horaFin: textoDe(row, "horaFin", "hora_fin"),
+    estado: textoDe(row, "estado"),
     idcentroFormacion: idCentro,
-    createdAt: row.createdAt ? String(row.createdAt) : undefined,
+    createdAt: textoDe(row, "createdAt", "created_at", "updatedAt", "updated_at"),
   };
 }
 
+function aMillis(valor?: string) {
+  if (!valor) return NaN;
+  const normalizado = valor.includes("T") ? valor : valor.replace(" ", "T");
+  return new Date(normalizado).getTime();
+}
+
 function esEleccionVigente(row: Eleccion) {
+  const estado = (row.estado || "").toLowerCase();
+  if (
+    ["cerrada", "cerrado", "finalizada", "finalizado", "inactiva", "inactivo"].includes(
+      estado
+    )
+  ) {
+    return false;
+  }
   const fin = row.horaFin || row.fechaFin;
   if (!fin) return true;
-  const cierre = new Date(fin);
-  return Number.isNaN(cierre.getTime()) || Date.now() <= cierre.getTime();
+  const cierre = aMillis(fin);
+  return Number.isNaN(cierre) || Date.now() <= cierre;
 }
 
 function claveReciente(row: Eleccion) {
-  if (row.createdAt) {
-    const t = new Date(row.createdAt).getTime();
-    if (!Number.isNaN(t)) return t;
-  }
-  return row.ideleccion;
+  const creado = aMillis(row.createdAt);
+  if (!Number.isNaN(creado) && creado > 0) return creado;
+  return 0;
 }
 
 function ordenarElecciones(lista: Eleccion[]) {
@@ -151,23 +206,64 @@ export default function EleccionesActivasPage() {
   const navegar = useNavigate();
   const esRed = esAdministradorRed(user?.perfil);
 
-  const loadData = async () => {
-    if (!esRed && !user?.centroFormacion) return;
-    try {
-      const res = await api.get(`/api/eleccion/traerTodas/${user.centroFormacion}`);
-  
-      setEleccionActiva(res.data.eleccionesActivas);
+  const loadData = useCallback(async () => {
+    if (!user || (!esRed && !user.centroFormacion)) {
+      setEleccionActiva([]);
       setLoading(false);
+      return;
+    }
+    setLoading(true);
+    try {
+      const centrosPorId = new Map<number, CentroRed>();
+      const regionalesPorId = new Map<number, string>();
+      let crudas: Record<string, unknown>[] = [];
+
+      if (esRed) {
+        const [resEle, resCentros, resRegionales] = await Promise.all([
+          api.get("/api/eleccion").catch(() => api.get("api/eleccion/activas")),
+          api.get("api/centrosFormacion/obtiene").catch(() => ({ data: [] })),
+          api.get("api/regionales").catch(() => ({ data: [] })),
+        ]);
+
+        comoLista<RegionalRed>(resRegionales.data).forEach((r) => {
+          const id = Number(r.idregional);
+          if (id && r.regional) regionalesPorId.set(id, r.regional);
+        });
+        comoLista<CentroRed>(resCentros.data).forEach((c) => {
+          const id = Number(c.idcentroFormacion ?? c.idcentro_formacion);
+          if (id) centrosPorId.set(id, c);
+        });
+        crudas = filasDeEleccion(resEle.data);
+      } else {
+        const idCentro = Number(user.centroFormacion);
+        const respuestas = await Promise.allSettled([
+          api.get(`/api/eleccion/traerTodas/${idCentro}`),
+          api.get(`/api/eleccionPorCentro/${idCentro}`),
+        ]);
+        const combinadas: Record<string, unknown>[] = [];
+        for (const r of respuestas) {
+          if (r.status !== "fulfilled") continue;
+          combinadas.push(...filasDeEleccion(r.value.data));
+        }
+        crudas = filasDeEleccion(combinadas);
+      }
+
+      const lista = crudas
+        .map((row) => mapearEleccion(row, centrosPorId, regionalesPorId))
+        .filter((row) => Number.isFinite(row.ideleccion) && row.ideleccion > 0);
+
+      setEleccionActiva(ordenarElecciones(lista));
     } catch (error) {
       console.error("Error al cargar las votaciones:", error);
       setEleccionActiva([]);
     } finally {
       setLoading(false);
     }
-  };
+  }, [esRed, user]);
+
   useEffect(() => {
-    loadData();
-  }, [user?.centroFormacion, esRed]);
+    void loadData();
+  }, [loadData]);
 
   // 🔹 Formatear fecha + hora en la misma celda
   const formatDateTime = (fecha: string, hora?: string) => {
@@ -191,7 +287,7 @@ export default function EleccionesActivasPage() {
     setLoadingCandidatos(true);
     try {
       const res = await api.get(`/api/candidatos/listar/${eleccion.ideleccion}`);
-      setCandidatos(comoLista<Candidato>(res.data.data ?? res.data));
+      setCandidatos(comoLista<Candidato>(res.data));
     } catch (error) {
       console.error("Error al cargar los candidatos:", error);
       setCandidatos([]);
@@ -286,12 +382,18 @@ export default function EleccionesActivasPage() {
 
   const query = (buscador ?? "").toLowerCase();
 
-  const eleccionesFiltradas = eleccionActiva.filter((eleccion) =>
-    [eleccion?.titulo, etiquetaLugar(eleccion?.centro), etiquetaLugar(eleccion?.regional)]
-      .filter(Boolean)
-      .join(" ")
-      .toLowerCase()
-      .includes(query)
+  const eleccionesFiltradas = useMemo(
+    () =>
+      ordenarElecciones(
+        eleccionActiva.filter((eleccion) =>
+          [eleccion?.titulo, etiquetaLugar(eleccion?.centro), etiquetaLugar(eleccion?.regional)]
+            .filter(Boolean)
+            .join(" ")
+            .toLowerCase()
+            .includes(query)
+        )
+      ),
+    [eleccionActiva, query]
   );
 
   return (
@@ -380,13 +482,16 @@ export default function EleccionesActivasPage() {
           data={eleccionesFiltradas}
           progressPending={loading}
           pagination
+          paginationPerPage={10}
+          paginationRowsPerPageOptions={[10, 20, 50]}
+          paginationResetDefaultPage
           highlightOnHover
           striped
           customStyles={adminTableStyles}
           noDataComponent={
             esRed
               ? "No hay elecciones registradas en la red."
-              : "No hay elecciones activas en este momento."
+              : "No hay elecciones registradas en este centro."
           }
         />
       </div>
@@ -431,15 +536,8 @@ export default function EleccionesActivasPage() {
         onHide={() => setShowEditarModal(false)}
         eleccion={selectedEleccion as any}
         onUpdated={() => {
-          if (user?.centroFormacion) {
-            api.get(`/api/eleccionPorCentro/${user?.centroFormacion}`)
-              .then(res => {
-                setEleccionActiva(res.data.eleccionesActivas)
-                setLoading(false);
-                loadData();
-              })
-              .catch(err => console.error("Error al recargar elecciones:", err));
-          }
+          setShowEditarModal(false);
+          void loadData();
         }}
 
       />

@@ -18,8 +18,9 @@ import "./sidebar.css";
 import { useAuth } from '../context/auth/auth.context';
 import {
   esAdministradorRed,
+  esAdminSistema,
   esAprendiz,
-  esRolDeCentro,
+  esFuncionario,
   usaTemaAdmin
 } from '../utils/roles';
 import { jornadaDelAprendiz } from '../utils/jornadaAprendiz';
@@ -111,8 +112,8 @@ const Sidebar: React.FC<SidebarProps> = ({ onNavigate }) => {
 
     }
 
-    // ROL DE CENTRO
-    if (esRolDeCentro(user.perfil)) {
+    // FUNCIONARIO DE MESA
+    if (esFuncionario(user.perfil)) {
 
       return [
         { to: '/dashboard', icon: <FaHome />, text: 'Inicio', type: 'link' },
@@ -147,6 +148,47 @@ const Sidebar: React.FC<SidebarProps> = ({ onNavigate }) => {
 
     }
 
+    // ADMIN DE CENTRO
+    if (esAdminSistema(user.perfil)) {
+
+      return [
+        { to: '/dashboard', icon: <FaHome />, text: 'Inicio', type: 'link' },
+        { to: '/panel-metricas', icon: <FaChartBar />, text: 'Resultados en vivo', type: 'link' },
+        { 
+          type: 'dropdown', 
+          text: 'Gestión de Usuarios', 
+          icon: <FaUsers />,
+          items: [
+            {
+              to: '/aprendices',
+              icon: <FaUserGraduate />,
+              text: 'Aprendices'
+            },
+            {
+              to: '/funcionarios',
+              icon: <FaUserTie />,
+              text: 'Funcionarios'
+            },
+          ]
+        },
+
+        {
+          to: '/cargar-aprendices',
+          icon: <FaUserPlus />,
+          text: 'Cargar Aprendices',
+          type: 'link'
+        },
+
+        {
+          to: '/elecciones',
+          icon: <FaClipboardList />,
+          text: 'Elecciones',
+          type: 'link'
+        },
+      ];
+
+    }
+
     // ADMINISTRADOR DE RED
     if (esAdministradorRed(user.perfil)) {
 
@@ -160,6 +202,11 @@ const Sidebar: React.FC<SidebarProps> = ({ onNavigate }) => {
           text: 'Gestión de Usuarios', 
           icon: <FaUsers />,
           items: [
+            {
+              to: '/admins-centro',
+              icon: <FaUserTie />,
+              text: 'Admin de centro'
+            },
             {
               to: '/funcionarios',
               icon: <FaUserTie />,

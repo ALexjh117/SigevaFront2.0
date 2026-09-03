@@ -374,6 +374,51 @@
   color: #39a900;
 }
 
+.login-otp .form-control {
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  font-weight: 700;
+  text-align: center;
+}
+
+.login-alt-actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.2rem 1.2rem;
+  margin: 0.85rem 0 0;
+}
+
+.login-alt-actions .login-recover {
+  margin: 0;
+  cursor: pointer;
+}
+
+.login-eye {
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #6c757d;
+  display: flex;
+  align-items: center;
+  padding: 0;
+  z-index: 5;
+}
+
+.login-input-icon .form-control {
+  padding-right: 2.4rem;
+}
+
+.login-success-copy {
+  color: #5a6560;
+  font-size: 0.9rem;
+  margin: -0.6rem 0 1.2rem;
+}
+
 .login-steps {
   display: flex;
   align-items: center;

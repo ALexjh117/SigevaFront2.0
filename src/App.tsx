@@ -30,7 +30,14 @@ import { Toaster } from "react-hot-toast";
 import CargarAprendicesAdmin from "./pages/administrador/CargarAprendicesAdmin";
 import Equipo from "./pages/Equipo";
 import ResultadosDemoPage from "./pages/funcionario/ResultadosDemoPage";
-import { esAprendiz, esRolDeCentro } from "./utils/roles";
+import AdminsCentro from "./pages/administrador/AdminsCentro";
+import {
+  esAdminSistema,
+  esAdministradorRed,
+  esAprendiz,
+  esFuncionario,
+  esRolDeCentro,
+} from "./utils/roles";
 
 
 function PublicLayout() {
@@ -74,6 +81,17 @@ function RedSenaLayout() {
   );
 }
 
+function AltaPersonalLayout() {
+  const { user } = useAuth();
+  if (esFuncionario(user?.perfil)) {
+    return <Navigate to="/dashboard" replace />;
+  }
+  if (!esAdministradorRed(user?.perfil) && !esAdminSistema(user?.perfil)) {
+    return <Navigate to="/" replace />;
+  }
+  return <Outlet />;
+}
+
 function App() {
   return (
     <BrowserRouter>
@@ -110,12 +128,15 @@ function App() {
             <Route path="/nueva-eleccion" element={<FormEleccion />} />
             <Route path="/aprendices" element={<Aprendices />} />
             <Route path="/aprendiz-form" element={<AprendizForm />} />
+            <Route element={<AltaPersonalLayout />}>
+              <Route path="/funcionarios" element={<Funcionarios />} />
+            </Route>
           </Route>
 
           {/* Torre de red: solo Administrador */}
           <Route element={<RedSenaLayout />}>
             <Route path="/dashboard-admin" element={<DashboardAdmin />} />
-            <Route path="/funcionarios" element={<Funcionarios />} />
+            <Route path="/admins-centro" element={<AdminsCentro />} />
             <Route path="/cargar-aprendices-admin" element={<CargarAprendicesAdmin/>} />
           </Route>
         </Route>

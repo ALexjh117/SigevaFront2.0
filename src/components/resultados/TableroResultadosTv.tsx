@@ -50,7 +50,7 @@ export function TableroResultadosTv({ candidatos, vacio }: Props) {
 
   return (
     <div className="tv-studio">
-      <div className="tv-board" role="list">
+      <div className="tv-board" data-n={candidatos.length} role="list">
         {candidatos.map((c, i) => {
           const alto = Math.max(8, (c.porcentaje / maxPct) * 100);
           return (

@@ -295,7 +295,13 @@ export default function PanelMetricas() {
 
   const eleccionesDelCentro = useMemo(() => {
     if (!idCentro) return [];
-    return elecciones.filter((e) => e.idcentroFormacion === idCentro);
+    return elecciones
+      .filter((e) => e.idcentroFormacion === idCentro)
+      .sort((a, b) => {
+        const vigente = Number(esEleccionVigente(b)) - Number(esEleccionVigente(a));
+        if (vigente !== 0) return vigente;
+        return b.ideleccion - a.ideleccion;
+      });
   }, [elecciones, idCentro]);
 
   const centroActual = centros.find((c) => c.id === idCentro);
@@ -305,12 +311,13 @@ export default function PanelMetricas() {
       setIdEleccion("");
       return;
     }
-    const delCentro = elecciones.filter((e) => e.idcentroFormacion === idCentro);
-    const sigue = delCentro.some((e) => String(e.ideleccion) === idEleccion);
+    const sigue = eleccionesDelCentro.some((e) => String(e.ideleccion) === idEleccion);
     if (!sigue) {
-      setIdEleccion(delCentro[0] ? String(delCentro[0].ideleccion) : "");
+      setIdEleccion(
+        eleccionesDelCentro[0] ? String(eleccionesDelCentro[0].ideleccion) : ""
+      );
     }
-  }, [idCentro, elecciones, idEleccion]);
+  }, [idCentro, eleccionesDelCentro, idEleccion]);
 
   useEffect(() => {
     const actual = elecciones.find((e) => String(e.ideleccion) === idEleccion);
