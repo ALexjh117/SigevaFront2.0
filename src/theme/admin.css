@@ -428,20 +428,23 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 34px;
-  height: 34px;
-  border: 1px solid var(--admin-line);
-  background: #fff;
   color: var(--dios-o);
-  border-radius: 8px;
   cursor: pointer;
+  background: transparent;
+  border: none;
+  padding: 0;
+  width: auto;
+  height: auto;
+  border-radius: 0;
+  box-shadow: none;
 }
 
 .tabla-lupa:hover {
-  border-color: var(--dios-d);
   color: var(--dios-d);
-  background: rgba(57, 169, 0, 0.08);
+  background: transparent;
+  border: none;
 }
+
 
 .semaforo-wrap {
   display: inline-flex;
