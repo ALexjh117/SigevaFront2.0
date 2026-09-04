@@ -106,9 +106,9 @@ const Aprendices: React.FC = () => {
       center: true,
       cell: (row) => (
         <Button
-          variant="light"
-          size="sm"
-          title="Editar"
+          variant="link"
+          className="tabla-accion-icono"
+          title="Editar aprendiz"
           onClick={() => navigate("/aprendiz-form", { state: { aprendiz: row } })}
         >
           <FaEdit />

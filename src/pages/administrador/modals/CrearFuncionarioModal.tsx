@@ -215,6 +215,8 @@ export const CrearFuncionarioModal: React.FC<CrearFuncionarioModalProps> = ({
     };
     if (eligeCentro) {
       submissionData.idcentro_formacion = idCentroFormacion;
+    } else if (user?.centroFormacion) {
+      submissionData.idcentro_formacion = Number(user.centroFormacion);
     }
 
     const url = esAdminCentro

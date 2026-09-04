@@ -424,23 +424,65 @@
   width: 100%;
 }
 
-.tabla-lupa {
-  display: inline-flex;
+/* =========================================================
+   ACCIONES DE TABLA - SOLO ICONO
+   ========================================================= */
+
+.tabla-accion-icono {
+  border: none !important;
+  outline: none !important;
+
+  background: transparent !important;
+
+  padding: 4px !important;
+
+  width: 32px;
+  height: 32px;
+
+  display: inline-flex !important;
   align-items: center;
   justify-content: center;
-  width: 34px;
-  height: 34px;
-  border: 1px solid var(--admin-line);
-  background: #fff;
-  color: var(--dios-o);
-  border-radius: 8px;
-  cursor: pointer;
+
+  color: #006b30 !important;
+
+  box-shadow: none !important;
+
+  border-radius: 6px !important;
+
+  transition:
+    color 0.2s ease,
+    background 0.2s ease,
+    transform 0.2s ease;
 }
 
-.tabla-lupa:hover {
-  border-color: var(--dios-d);
-  color: var(--dios-d);
-  background: rgba(57, 169, 0, 0.08);
+/* Hover */
+
+.tabla-accion-icono:hover {
+  background: rgba(22, 160, 0, 0.10) !important;
+
+  color: #16a000 !important;
+
+  transform: translateY(-1px);
+}
+
+/* Cuando se hace clic */
+
+.tabla-accion-icono:active,
+.tabla-accion-icono:focus {
+  background: rgba(22, 160, 0, 0.14) !important;
+
+  color: #006b30 !important;
+
+  box-shadow: none !important;
+
+  outline: none !important;
+}
+
+/* Tamaño del icono */
+
+.tabla-accion-icono svg {
+  width: 17px;
+  height: 17px;
 }
 
 .semaforo-wrap {
