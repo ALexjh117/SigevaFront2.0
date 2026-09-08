@@ -40,9 +40,7 @@ export default function LandingFooter() {
 
         <div>
           <h4>Información legal</h4>
-          <a href="https://www.sena.edu.co" target="_blank" rel="noopener noreferrer">
-            Política de privacidad
-          </a>
+          <Link to="/politica-privacidad">Política de privacidad</Link>
           <a href="https://www.sena.edu.co" target="_blank" rel="noopener noreferrer">
             Términos de uso
           </a>

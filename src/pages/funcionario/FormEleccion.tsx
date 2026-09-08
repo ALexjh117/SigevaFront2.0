@@ -6,36 +6,49 @@ import "../funcionario/form.css";
 import { useAuth } from "../../context/auth/auth.context";
 import { api } from "../../api";
 import { ADMIN_PALETTE } from "../../theme/tokens";
+import {
+  hayEleccionEnElMismoDia,
+  obtenerEleccionesDelCentro,
+} from "../../utils/eleccionPorDia";
 
 function FormEleccion() {
-
   const [nombre, setNombre] = useState("");
- 
   const [fecha_inicio, setFechaInicio] = useState("");
   const [fecha_fin, setFechaCierre] = useState("");
   const [hora_inicio, setHoraInicio] = useState("");
   const [hora_fin, setHoraFin] = useState("");
-  
-  const {user} = useAuth()
+  const [enviando, setEnviando] = useState(false);
 
+  const { user } = useAuth();
   const navigate = useNavigate();
 
+  const handleSubmit2 = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!user?.centroFormacion || enviando) return;
 
+    const idCentro = Number(user.centroFormacion);
+    try {
+      setEnviando(true);
+      const existentes = await obtenerEleccionesDelCentro(idCentro);
+      if (hayEleccionEnElMismoDia(existentes, fecha_inicio, fecha_fin)) {
+        await Swal.fire({
+          title: "Ya hay una elección ese día",
+          text: "En este centro solo se permite una elección por día. Elige otra fecha.",
+          icon: "warning",
+          confirmButtonText: "Aceptar",
+          confirmButtonColor: ADMIN_PALETTE.confirm,
+        });
+        return;
+      }
 
-  const handleSubmit2 = async (e:React.FormEvent) =>{
-    e.preventDefault()
-      if(!user?.centroFormacion)return
-      try {
-        await api.post(`/api/eleccion/crear`, 
-          {
-            idcentro_formacion: user?.centroFormacion,
-            nombre,
-            fecha_inicio,
-            fecha_fin,
-            hora_inicio: `${fecha_inicio} ${hora_inicio}:00`,
-            hora_fin: `${fecha_fin} ${hora_fin}:00`,
-            
-          });
+      await api.post(`/api/eleccion/crear`, {
+        idcentro_formacion: user?.centroFormacion,
+        nombre,
+        fecha_inicio,
+        fecha_fin,
+        hora_inicio: `${fecha_inicio} ${hora_inicio}:00`,
+        hora_fin: `${fecha_fin} ${hora_fin}:00`,
+      });
 
       await Swal.fire({
         title: "Elección creada",
@@ -54,8 +67,10 @@ function FormEleccion() {
         confirmButtonText: "Aceptar",
         confirmButtonColor: ADMIN_PALETTE.confirm,
       });
+    } finally {
+      setEnviando(false);
     }
-  }
+  };
   
 
 
@@ -67,7 +82,8 @@ function FormEleccion() {
             <div className="form-container form-responsive">
               <h2 className="mb-4 fw-bold">Crear nueva elección</h2>
               <p className="text-muted mb-4">
-                Complete el formulario para configurar una nueva votación.
+                Complete el formulario para configurar una nueva votación. Solo se
+                permite una elección por día en el centro.
               </p>
 
               <Form onSubmit={handleSubmit2}>
@@ -142,8 +158,8 @@ function FormEleccion() {
                 </Row>
 
                 <div className="d-grid gap-2 mt-5">
-                  <Button type="submit" size="lg" className="btn-primary">
-                    Crear elección
+                  <Button type="submit" size="lg" className="btn-primary" disabled={enviando}>
+                    {enviando ? "Creando…" : "Crear elección"}
                   </Button>
                 </div>
                 {/* boton regresar */}

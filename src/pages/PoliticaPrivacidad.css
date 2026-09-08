@@ -1,0 +1,139 @@
+.pp-page {
+  width: 100%;
+  max-width: 860px;
+  margin: 0 auto;
+  padding: 48px clamp(20px, 4vw, 32px) 72px;
+  background: linear-gradient(180deg, #f4f9f4 0%, #fff 120px);
+}
+
+.pp-intro {
+  margin-bottom: 28px;
+}
+
+.pp-kicker {
+  margin: 0 0 8px;
+  color: var(--lp-green);
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.pp-intro h1 {
+  margin: 0 0 12px;
+  color: var(--lp-green-dark);
+  font-size: clamp(1.7rem, 3.2vw, 2.15rem);
+  font-weight: 800;
+  line-height: 1.2;
+}
+
+.pp-intro p {
+  margin: 0;
+  color: var(--lp-muted);
+  font-size: 1rem;
+  line-height: 1.6;
+}
+
+.pp-indice {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 0 0 32px;
+  padding: 16px;
+  background: #fff;
+  border: 1px solid var(--lp-line);
+  border-radius: 14px;
+}
+
+.pp-indice a {
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--lp-green-mid) !important;
+  text-decoration: none;
+  padding: 0.28rem 0.7rem;
+  border-radius: 999px;
+  background: #f4f9f4;
+  border: 1px solid #dceee0;
+}
+
+.pp-indice a:hover {
+  background: var(--lp-green);
+  color: #fff !important;
+  border-color: var(--lp-green);
+}
+
+.pp-seccion {
+  margin-bottom: 28px;
+  padding: 22px 22px 8px;
+  background: #fff;
+  border: 1px solid var(--lp-line);
+  border-radius: 14px;
+  scroll-margin-top: 88px;
+}
+
+.pp-seccion h2 {
+  margin: 0 0 12px;
+  color: var(--lp-green-dark);
+  font-size: 1.15rem;
+  font-weight: 800;
+}
+
+.pp-seccion p,
+.pp-seccion li {
+  color: #374151;
+  font-size: 0.95rem;
+  line-height: 1.65;
+}
+
+.pp-seccion p {
+  margin: 0 0 12px;
+}
+
+.pp-seccion ul,
+.pp-seccion ol {
+  margin: 0 0 14px;
+  padding-left: 1.2rem;
+}
+
+.pp-seccion li {
+  margin-bottom: 6px;
+}
+
+.pp-seccion a {
+  color: var(--lp-green-mid) !important;
+  font-weight: 600;
+}
+
+.pp-datos {
+  list-style: none;
+  padding-left: 0 !important;
+}
+
+.pp-datos li {
+  padding: 8px 0;
+  border-bottom: 1px solid var(--lp-line);
+}
+
+.pp-datos li:last-child {
+  border-bottom: 0;
+}
+
+.pp-volver {
+  margin: 8px 0 0;
+}
+
+.pp-volver a {
+  color: var(--lp-green-mid) !important;
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.pp-volver a:hover {
+  color: var(--lp-green) !important;
+}
+
+@media (max-width: 640px) {
+  .pp-seccion {
+    padding: 16px 16px 4px;
+  }
+}

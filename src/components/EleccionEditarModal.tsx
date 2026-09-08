@@ -1,8 +1,14 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { useState, useEffect } from "react";
 import { Modal, Button, Form, Row, Col } from "react-bootstrap";
+import Swal from "sweetalert2";
 import { api } from "../api";
 import { useAuth } from "../context/auth/auth.context";
+import { ADMIN_PALETTE } from "../theme/tokens";
+import {
+  hayEleccionEnElMismoDia,
+  obtenerEleccionesDelCentro,
+} from "../utils/eleccionPorDia";
 
 interface Eleccion {
   ideleccion: number;
@@ -97,9 +103,26 @@ export default function EleccionEditarModal({
     if (formData.hora_fin && formData.fecha_fin)
       payload.hora_fin = `${formData.fecha_fin}T${formData.hora_fin}:00`;
 
-    
-
     try {
+      const existentes = await obtenerEleccionesDelCentro(Number(idCentro));
+      if (
+        hayEleccionEnElMismoDia(
+          existentes,
+          formData.fecha_inicio,
+          formData.fecha_fin,
+          eleccion.ideleccion
+        )
+      ) {
+        await Swal.fire({
+          title: "Ya hay una elección ese día",
+          text: "En este centro solo se permite una elección por día. Elige otra fecha.",
+          icon: "warning",
+          confirmButtonText: "Aceptar",
+          confirmButtonColor: ADMIN_PALETTE.confirm,
+        });
+        return;
+      }
+
       await api.put(
         `/api/eleccionActualizar/${eleccion.ideleccion}`,
         payload
