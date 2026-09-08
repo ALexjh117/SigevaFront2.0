@@ -10,10 +10,14 @@ import ProgressBar from "react-bootstrap/ProgressBar";
 import Spinner from "react-bootstrap/Spinner";
 import { api } from "../../api";
 import { useAuth } from "../../context/auth/auth.context";
-import type { Gestor } from "../../context/auth/types/authTypes";
 import Toast from "react-bootstrap/Toast";
 import ToastContainer from "react-bootstrap/ToastContainer";
 import Modal from "react-bootstrap/Modal";
+import {
+  ResumenImportacion,
+  ResultadosImportacionModal,
+  avisarImportacionOk,
+} from "../../components/importacion/ResultadosImportacion";
 
 import axios from "axios";
 type FilaExcel = {
@@ -80,8 +84,6 @@ export default function CargarAprendices() {
     isAuthenticated &&
     user?.perfil?.toString().trim().toLowerCase() === "administrador";
 
-  const userId = isAdmin ? (user as Gestor).id : null;
-
   // estados
   const [centros, setCentros] = useState<CentroFormacion[]>([]);
   const [centroId, setCentroId] = useState<string>("");
@@ -96,7 +98,6 @@ export default function CargarAprendices() {
   const [showConfirmModal, setShowConfirmModal] = useState(false);
 
   const [file, setFile] = useState<File | null>(null);
-  const [jornada, setJornada] = useState("Mañana");
   const [preview, setPreview] = useState<FilaExcel[]>([]);
   const [programaDetectado, setProgramaDetectado] = useState("");
   const [fichaDetectada, setFichaDetectada] = useState("");
@@ -221,6 +222,8 @@ export default function CargarAprendices() {
     setUploaded(false); // resetea estado de subida cuando cambia archivo
     setController(null);
     setUploadPct(0);
+    setProcessed([]);
+    setShowProcessedModal(false);
     if (!f) {
       setPreview([]);
       return;
@@ -249,10 +252,6 @@ export default function CargarAprendices() {
       });
       return;
     }
-    if (!userId) {
-      setMsg({ type: "danger", text: "No se encontró el userId en sesión." });
-      return;
-    }
     if (!file) {
       setMsg({ type: "danger", text: "Selecciona un archivo Excel primero." });
       return;
@@ -275,8 +274,6 @@ export default function CargarAprendices() {
     // Construimos FormData
     const fd = new FormData();
     fd.append("excel", file, file.name);
-    fd.append("userId", String(userId));
-    fd.append("jornada", jornada);
     fd.append("centroFormacionId", String(centroId));
     fd.append("idregional", String(regionalId));
     // nuevo: enviar flag updateIfExists
@@ -329,25 +326,15 @@ export default function CargarAprendices() {
 
       setProcessed(processedResp);
 
-      // Mensaje resumido en toast
-      const resumen = `Insertados: ${inserted} • Actualizados: ${updated} • Omitidos: ${skippedCount}`;
-      setToastMsg(resp?.message ? `${resp.message} — ${resumen}` : resumen);
-      setShowToast(true);
-
-      // Abrir modal si hay omitidos
-      if (
-        (Array.isArray(skippedFromProcessed) && skippedFromProcessed.length > 0) ||
-        (Array.isArray(skipped) && skipped.length > 0)
-      ) {
-        setShowSkippedModal(true);
-      } else {
-        setShowSkippedModal(false);
-      }
-
-      // Mostrar modal con processed si hay datos
-      if (Array.isArray(processedResp) && processedResp.length > 0) {
-        setShowProcessedModal(true);
-      }
+      const texto = `${resp?.message || "Importación procesada"} — Insertados: ${inserted} • Actualizados: ${updated} • Omitidos: ${skippedCount}. Clave inicial = número de documento.`;
+      setMsg({ type: "success", text: texto });
+      window.scrollTo({ top: 0, behavior: "smooth" });
+      await avisarImportacionOk({
+        inserted,
+        updated,
+        skipped: skippedCount,
+        message: resp?.message,
+      });
 
       setUploaded(true);
       setController(null);
@@ -389,13 +376,20 @@ export default function CargarAprendices() {
 
   return (
     <div>
-      <Container className="mb-5">
-        <h1>Cargar Archivos de Aprendices Admin</h1>
+      <Container className="mb-3">
+        <h1 className="mb-2">Cargar aprendices (red SENA)</h1>
+        <p className="text-muted mb-0">
+          Elegí la regional y el <strong>centro de formación</strong> destino. El Excel es el
+          Reporte de Aprendices de Sofia Plus. La contraseña inicial es el{" "}
+          <strong>número de documento</strong>. La jornada la elige el aprendiz al entrar, no
+          se pide en esta carga.
+        </p>
 
         {!isAdmin && (
           <Alert variant="warning" className="mt-3">
-            Debes iniciar sesión como <strong>Admin</strong> para importar
-            aprendices
+            Debes iniciar sesión como <strong>Administrador</strong> (red SENA) para elegir el
+            centro e importar. El funcionario y el admin de centro usan Cargar aprendices de su
+            sede, sin combo de centros.
           </Alert>
         )}
         {msg && (
@@ -411,8 +405,8 @@ export default function CargarAprendices() {
       </Container>
 
       <Container className="mb-4">
-        <div className="d-flex gap-3 align-items-end">
-          <Form.Group controlId="fileExcel" className="flex-grow-1">
+        <div className="import-toolbar">
+          <Form.Group controlId="fileExcel" className="import-toolbar-field mb-0">
             <Form.Label>Archivo Excel</Form.Label>
             <Form.Control
               type="file"
@@ -422,7 +416,7 @@ export default function CargarAprendices() {
             />
           </Form.Group>
 
-          <Form.Group controlId="regionalSelect">
+          <Form.Group controlId="regionalSelect" className="import-toolbar-field mb-0">
             <Form.Label>Regionales</Form.Label>
             <Form.Select
               value={regionalId}
@@ -447,7 +441,7 @@ export default function CargarAprendices() {
             )}
           </Form.Group>
 
-          <Form.Group controlId="centroSelect">
+          <Form.Group controlId="centroSelect" className="import-toolbar-field mb-0">
             <Form.Label>Centro de Formación</Form.Label>
             <Form.Select
               value={centroId}
@@ -476,22 +470,7 @@ export default function CargarAprendices() {
             )}
           </Form.Group>
 
-          <Form.Group controlId="jornadaSelect">
-            <Form.Label>Jornada</Form.Label>
-            <Form.Select
-              value={jornada}
-              onChange={(e) => setJornada(e.target.value)}
-              disabled={!isAdmin || subiendo}
-            >
-           
-              <option value="Mañana">Mañana</option>
-                <option value="Tarde">Tarde</option>
-              <option value="Noche">Noche</option>
-            </Form.Select>
-          </Form.Group>
-
-          {/* Checkbox para updateIfExists */}
-          <Form.Group controlId="updateIfExists" className="d-flex align-items-center">
+          <Form.Group controlId="updateIfExists" className="mb-0">
             <Form.Check
               type="checkbox"
               id="updateIfExistsCheckbox"
@@ -500,8 +479,27 @@ export default function CargarAprendices() {
               onChange={(e) => setUpdateIfExists(e.target.checked)}
               disabled={!isAdmin || subiendo}
             />
-            <small className="text-muted ms-2">Si está activado actualizará registros existentes.</small>
           </Form.Group>
+
+          {subiendo && controller && (
+            <Button variant="outline-danger" onClick={() => controller.abort()}>
+              Cancelar
+            </Button>
+          )}
+          <Button
+            variant="success"
+            onClick={() => setShowConfirmModal(true)}
+            disabled={!isAdmin || !file || subiendo || !centroId || !regionalId}
+          >
+            {subiendo ? (
+              <>
+                <Spinner animation="border" size="sm" className="me-2" />
+                Subiendo…
+              </>
+            ) : (
+              "Subir y procesar"
+            )}
+          </Button>
         </div>
 
         {(fichaDetectada || programaDetectado || centroSeleccionado) && (
@@ -519,6 +517,11 @@ export default function CargarAprendices() {
             <ProgressBar now={uploadPct} label={`${uploadPct}%`} animated />
           </div>
         )}
+
+        <ResumenImportacion
+          processed={processed}
+          onVerDetalle={() => setShowProcessedModal(true)}
+        />
       </Container>
 
       <ToastContainer position="top-end" className="p-3">
@@ -551,9 +554,8 @@ export default function CargarAprendices() {
           </p>
           <p>
             El archivo debe ser el reporte oficial de aprendices generado desde{" "}
-            <span className="text-success">Sofia plus</span>. Asegúrate de no
-            modificar los nombres de columnas ni el formato original del
-            reporte.
+            <span className="text-success">Sofia plus</span> (C2 = ficha - programa, filas desde la
+            5). La contraseña inicial será el número de documento.
           </p>
 
           <ul>
@@ -610,6 +612,7 @@ export default function CargarAprendices() {
         onHide={() => setShowSkippedModal(false)}
         size="lg"
         centered
+        scrollable
       >
         <Modal.Header closeButton>
           <Modal.Title>
@@ -654,83 +657,30 @@ export default function CargarAprendices() {
         </Modal.Footer>
       </Modal>
 
-      {/* Modal con processed (resultado por fila) */}
-      <Modal
+      <ResultadosImportacionModal
         show={showProcessedModal}
         onHide={() => setShowProcessedModal(false)}
-        size="lg"
-        centered
-      >
-        <Modal.Header closeButton>
-          <Modal.Title>Resultados por fila ({processed.length})</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          {processed.length === 0 ? (
-            <p>No hay resultados procesados.</p>
-          ) : (
-            <Table responsive className="align-middle m-0">
-              <thead className="table-light">
-                <tr>
-                  <th>Documento</th>
-                  <th>Correo</th>
-                  <th>Nombre</th>
-                  <th>Apellidos</th>
-                  <th>Estado</th>
-                  <th>Motivo</th>
-                </tr>
-              </thead>
-              <tbody>
-                {processed.map((p, i) => (
-                  <tr key={i}>
-                    <td>{p["Número de Documento"] || "—"}</td>
-                    <td>{p["Correo Electrónico"] || "—"}</td>
-                    <td>{p.Nombre || "—"}</td>
-                    <td>{p.Apellidos || "—"}</td>
-                    <td>
-                      <Badge
-                        bg={
-                          p.status === "inserted"
-                            ? "success"
-                            : p.status === "updated"
-                            ? "primary"
-                            : "secondary"
-                        }
-                        pill
-                      >
-                        {p.status}
-                      </Badge>
-                    </td>
-                    <td>{p.motivo || "—"}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </Table>
-          )}
-        </Modal.Body>
-        <Modal.Footer>
-          <Button variant="secondary" onClick={() => setShowProcessedModal(false)}>
-            Cerrar
-          </Button>
-        </Modal.Footer>
-      </Modal>
+        processed={processed}
+      />
 
-      <Container>
+      <Container className="mb-4">
         <div className="d-flex justify-content-between align-items-center mb-2">
-          <h2 className="m-0">Vista Previa de los Datos</h2>
+          <h2 className="m-0 fs-5">Vista previa</h2>
           <small className="text-muted">
-            Mostrando {preview.length} filas (solo vista previa)
+            {preview.length === 0
+              ? "Elige un Excel para ver las primeras filas"
+              : `${preview.length} primeras filas`}
           </small>
         </div>
 
-        <div className="border rounded">
-          <Table responsive className="align-middle m-0">
-            <thead className="table-light">
+        <div className="import-preview-scroll">
+          <Table responsive size="sm" className="align-middle mb-0">
+            <thead>
               <tr>
                 <th>Nombre</th>
                 <th>Documento</th>
                 <th>Correo</th>
                 <th>Programa (C2)</th>
-                <th>Jornada</th>
                 <th>Centro</th>
                 <th>Estado</th>
               </tr>
@@ -738,7 +688,7 @@ export default function CargarAprendices() {
             <tbody>
               {preview.length === 0 ? (
                 <tr>
-                  <td colSpan={7} className="text-center py-4">
+                  <td colSpan={6} className="text-center py-4 text-muted">
                     No hay datos para mostrar.
                   </td>
                 </tr>
@@ -758,7 +708,6 @@ export default function CargarAprendices() {
                       <td>{doc}</td>
                       <td>{correo}</td>
                       <td>{programaDetectado || "—"}</td>
-                      <td>{jornada}</td>
                       <td>{centroSeleccionado?.nombre || "-"}</td>
                       <td>
                         {estado ? (
@@ -776,34 +725,6 @@ export default function CargarAprendices() {
             </tbody>
           </Table>
         </div>
-      </Container>
-      <Container className="d-flex justify-content-end gap-2 mt-3">
-        {subiendo && controller && (
-          <Button variant="danger" onClick={() => controller.abort()}>
-            Cancelar subida
-          </Button>
-        )}
-
-        {/* Botón para abrir processed si quieres verlo manualmente */}
-        {processed.length > 0 && (
-          <Button variant="outline-secondary" onClick={() => setShowProcessedModal(true)}>
-            Ver resultados por fila
-          </Button>
-        )}
-
-        <Button
-          variant="primary"
-          onClick={() => setShowConfirmModal(true)}
-          disabled={!isAdmin || !file || subiendo || !centroId || !regionalId}
-        >
-          {subiendo ? (
-            <>
-              <Spinner animation="border" size="sm" className="me-2" /> Subiendo…
-            </>
-          ) : (
-            "Subir Archivos y Procesar"
-          )}
-        </Button>
       </Container>
     </div>
   );

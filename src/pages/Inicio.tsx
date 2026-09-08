@@ -1,75 +1,397 @@
-import { Container, Row, Col, Button } from "react-bootstrap";
-import { Link } from "react-router-dom";
-import Sigeva from "../assets/sena-sigeva.svg";
+import { useEffect, useRef, useState } from "react";
+import { Link, useLocation } from "react-router-dom";
+import ChatBot from "../components/ChatBot/ChatBot";
+import {
+  FaArrowRight,
+  FaSearch,
+  FaHome,
+  FaUser,
+  FaCalendarCheck,
+  FaUsers,
+  FaBullhorn,
+  FaChartBar,
+  FaCheck,
+  FaCogs,
+  FaShieldAlt,
+  FaVoteYea,
+} from "react-icons/fa";
+import LandingHeader from "../components/landing/LandingHeader";
+import LandingFooter from "../components/landing/LandingFooter";
+import { SigevaMark, SigevaWordmark, SigevaName } from "../components/landing/SigevaMark";
+import "./Inicio.css";
+
+function Marca() {
+  return <SigevaName />;
+}
+
+const infoCards = [
+  {
+    id: "que-es",
+    titulo: <>¿Qué es <Marca />?</>,
+    aria: "¿Qué es SIGEVA?",
+    texto:
+      "Es la plataforma oficial del SENA para gestionar y participar en los procesos electorales de forma digital, clara y segura.",
+    icon: (
+      <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" strokeWidth="1.7">
+        <path d="M12 3 20 7.5v9L12 21 4 16.5v-9L12 3Z" />
+        <path d="M12 12 20 7.5M12 12v9M12 12 4 7.5" />
+      </svg>
+    ),
+  },
+  {
+    id: "para-que",
+    titulo: "¿Para qué sirve?",
+    aria: "¿Para qué sirve?",
+    texto:
+      "Consulta elecciones, conoce candidatos, emite tu voto y revisa resultados desde un solo lugar, con tu cuenta institucional.",
+    icon: <FaCheck />,
+  },
+  {
+    id: "como",
+    titulo: "¿Cómo funciona?",
+    aria: "¿Cómo funciona?",
+    texto:
+      "Ingresas, eliges tu jornada y participas en los procesos activos de tu centro. El sistema organiza cada etapa del proceso.",
+    icon: <FaCogs />,
+  },
+  {
+    id: "quien",
+    titulo: "¿Quién puede usarlo?",
+    aria: "¿Quién puede usarlo?",
+    texto:
+      "Aprendices, funcionarios y administradores del SENA, cada uno con las acciones que le corresponden dentro de la plataforma.",
+    icon: <FaUsers />,
+  },
+  {
+    id: "por-que",
+    titulo: <>¿Por qué usar <Marca />?</>,
+    aria: "¿Por qué usar SIGEVA?",
+    texto:
+      "Porque hace el proceso más simple, seguro y transparente, y te permite participar desde cualquier dispositivo, cuando lo necesites.",
+    icon: <FaShieldAlt />,
+  },
+];
+
+const acciones = [
+  {
+    titulo: "Elecciones",
+    texto: "Consulta y participa en los procesos electorales disponibles.",
+    cta: "Ver elecciones",
+    to: "/login-aprendiz",
+    img: "/landing/login-voto.png",
+    alt: "Aprendiz depositando su voto",
+    icon: <FaCalendarCheck />,
+  },
+  {
+    titulo: "Candidatos",
+    texto: "Conoce los candidatos y consulta información de sus postulaciones.",
+    cta: "Ver candidatos",
+    to: "/login-aprendiz",
+    img: "/landing/hero-equipo.jpg",
+    alt: "Aprendices trabajando en equipo",
+    icon: <FaUsers />,
+  },
+  {
+    titulo: "Convocatorias",
+    texto: "Consulta las convocatorias disponibles y conoce cómo participar en los procesos.",
+    cta: "Ver convocatorias",
+    to: "/login-aprendiz",
+    img: "/landing/convocatorias.jpg",
+    alt: "Aprendices en una convocatoria",
+    icon: <FaBullhorn />,
+  },
+  {
+    titulo: "Resultados",
+    texto: "Consulta información y estadísticas relacionadas con los procesos electorales.",
+    cta: "Ver resultados",
+    to: "/login",
+    img: "/landing/resultados.svg",
+    alt: "Consulta de resultados y métricas",
+    icon: <FaChartBar />,
+  },
+];
 
 const Inicio: React.FC = () => {
+  const scroller = useRef<HTMLDivElement>(null);
+  const { hash } = useLocation();
+  const [tarjetaActiva, setTarjetaActiva] = useState<string | null>(null);
+
+  useEffect(() => {
+    const id = hash.replace("#", "");
+    if (!id) return;
+    const t = window.setTimeout(() => {
+      document.getElementById(id)?.scrollIntoView({ behavior: "smooth" });
+    }, 50);
+    return () => window.clearTimeout(t);
+  }, [hash]);
+
   return (
-    <main className="min-vh-100 bg-white d-flex align-items-center justify-content-center px-3 py-5">
-      <Container>
-        <Row>
-          <Col xs={12} className="p-0">
-            <img
-              src="/coverphoto.png"
-              alt="Imagen SENA"
-              className="w-100 mb-4"
-              style={{ maxHeight: "230px", objectFit: "cover", borderRadius: "8px" }}
-            />
-          </Col>
-        </Row>
+    <div className="landing">
+      <LandingHeader />
 
-        <Row className="justify-content-center text-center" style={{ marginTop: "30px" }}>
-          <Col xs={12} md={10} lg={9}>
-            <h1 className="fw-bold display-5 fs-1 mb-3" >
-              Participa, elige y haz parte del cambio
+      <section className="lp-hero">
+        <picture>
+          <img
+            className="lp-hero-photo"
+            src="/landing/imagenlanding.jpg"
+            alt="Aprendices consultando información en un celular y una tableta"
+            fetchPriority="high"
+          />
+        </picture>
+        <div className="lp-hero-veil" />
+        <div className="lp-hero-inner">
+          <div className="lp-hero-copy">
+            <h1>
+              ¿Ya conoces
+              <em>
+                <SigevaName />?
+              </em>
             </h1>
-
-            <p className="text-muted fs-6 mb-4 max-w-600 mx-auto" style={{ maxWidth: "700px" }}>
-              Una plataforma construida para que los aprendices del SENA puedan
-              elegir a sus representantes.
+            <p>
+              Gestiona y participa en los procesos electorales del SENA de manera fácil, segura y
+              transparente.
             </p>
+            <p>Consulta elecciones, conoce candidatos y participa desde cualquier dispositivo.</p>
+            <Link to="/login-aprendiz" className="lp-btn lp-btn-dark lp-btn-hero">
+              Ingresa aquí <FaArrowRight />
+            </Link>
+          </div>
 
-            <div className="mb-4">
-              <Button
-                as={Link as any}
-                to="/login-aprendiz"
-                className="px-5 py-2 fw-semibold"
-                style={{
-                  backgroundColor: "#4CAF0C",
-                  border: "none",
-                  fontSize: "1.2rem",
-                  marginTop: "20px",
-                }}
-              >
-                Ingresar
-              </Button>
+          <div className="lp-hero-visual">
+            <div className="lp-phone" aria-hidden>
+              <div className="lp-phone-notch" />
+              <div className="lp-phone-screen">
+                <div className="lp-app-status">
+                  <span>9:41</span>
+                  <b />
+                </div>
+                <header className="lp-app-head">
+                  <SigevaMark size={26} />
+                  <FaSearch />
+                </header>
+                <p className="lp-app-hi">¡Hola, Aprendiz! 👋</p>
+                <article className="lp-app-election">
+                  <strong>Elección Representantes Aprendices 2023</strong>
+                  <span>Votación abierta</span>
+                </article>
+                <p className="lp-app-label">Acciones rápidas</p>
+                <div className="lp-app-quick">
+                  <span>
+                    <FaCalendarCheck />
+                  </span>
+                  <span>
+                    <FaUsers />
+                  </span>
+                </div>
+                <nav className="lp-app-bar">
+                  <span className="on">
+                    <FaHome />
+                  </span>
+                  <span>
+                    <FaVoteYea />
+                  </span>
+                  <span>
+                    <FaUsers />
+                  </span>
+                  <span>
+                    <FaUser />
+                  </span>
+                </nav>
+              </div>
             </div>
 
-            <div className="d-flex flex-column flex-md-row align-items-center justify-content-center gap-3 mt-8" style={{ marginTop: "60px" }}>
-              <img src={Sigeva} alt="Logo SIGEVA" height={40} />
-              <div
-                className="d-none d-md-block"
-                style={{ width: 1, height: 30, backgroundColor: "gray" }}
-              />
-              <img
-                src="/logo_fabrica.png"
-                alt="Logo fábrica de software"
-                height={50}
-              />
-              <div
-                className="d-none d-md-block"
-                style={{ width: 1, height: 30, backgroundColor: "gray" }}
-              />
-              <Link
-                to="/equipo"
-                className="text-decoration-none fw-semibold text-muted"
-              >
-                Sobre nosotros
+            <aside className="lp-qr">
+              <h4>
+                Lleva <Marca /> contigo
+              </h4>
+              <p>Escanea el código QR y accede a SIGEVA desde tu dispositivo móvil.</p>
+              <img src="/landing/qr.png" alt="Código QR de SIGEVA" />
+              <div className="lp-qr-status">
+                <i /> Disponible para móviles
+              </div>
+            </aside>
+          </div>
+        </div>
+      </section>
+
+      <section className="lp-section lp-info" id="informacion">
+        
+        <div className="lp-carousel">
+          <div
+            className="lp-info-track"
+            ref={scroller}
+            onScroll={() => {
+              const el = scroller.current;
+              if (!el) return;
+
+              // sin puntos ni flechas: solo mantenemos el seguimiento visual del scroll
+              void el.querySelector("article")?.clientWidth;
+            }}
+          >
+            {infoCards.map((c) => {
+              const activa = tarjetaActiva === c.id;
+
+              return (
+                <article
+                  key={c.id}
+                  className={`lp-info-card ${activa ? "is-flipped" : ""}`}
+                  onClick={() =>
+                    setTarjetaActiva((actual) => (actual === c.id ? null : c.id))
+                  }
+                  tabIndex={0}
+                  role="button"
+                  aria-label={c.aria}
+                >
+                  <div className="lp-info-card-inner">
+                    <div className="lp-info-card-face lp-info-card-front">
+                      <span className="lp-info-icon">{c.icon}</span>
+                      <h3>{c.titulo}</h3>
+                    </div>
+
+                    <div className="lp-info-card-face lp-info-card-back">
+                      <p>{c.texto}</p>
+                    </div>
+                  </div>
+                </article>
+              );
+            })}
+          </div>
+        </div>
+      </section>
+
+      <section className="lp-section" id="acciones">
+        <h2>
+          ¿Qué puedes hacer en <Marca />?
+        </h2>
+        <p className="lp-lead">Explora las principales acciones que puedes realizar en la plataforma.</p>
+        <div className="lp-actions">
+          {acciones.map((a) => (
+            <article key={a.titulo} className="lp-action">
+              <div className="lp-action-media">
+                <img src={a.img} alt={a.alt} />
+                <span className="lp-action-icon">{a.icon}</span>
+              </div>
+              <div className="lp-action-body">
+                <h3>{a.titulo}</h3>
+                <p>{a.texto}</p>
+                <Link to={a.to} className="lp-btn lp-btn-green">
+                  {a.cta} <FaArrowRight />
+                </Link>
+              </div>
+            </article>
+          ))}
+        </div>
+      </section>
+
+      <section className="lp-section" id="elecciones">
+        <h2>Elecciones y convocatorias</h2>
+        <p className="lp-lead">
+          Conoce las elecciones y convocatorias disponibles y encuentra toda la información necesaria
+          para participar.
+        </p>
+        <div className="lp-duos">
+          <article className="lp-duo">
+            <img
+              src="/landing/login-voto.png"
+              alt="Aprendiz depositando su voto"
+            />
+
+            <div className="lp-duo-copy">
+              <span className="lp-duo-icon lp-duo-icon-vote" aria-hidden="true">
+                <FaVoteYea />
+              </span>
+
+              <h3>Elecciones</h3>
+
+              <p>
+                Consulta las elecciones disponibles y participa activamente.
+              </p>
+
+              <Link to="/login-aprendiz" className="lp-btn lp-btn-dark">
+                Ver elecciones <FaArrowRight />
               </Link>
             </div>
-          </Col>
-        </Row>
-      </Container>
-    </main>
+          </article>
+          <article className="lp-duo">
+            <img
+              src="/landing/convocatorias.jpg"
+              alt="Aprendices revisando una convocatoria"
+            />
+
+            <div className="lp-duo-copy">
+              <span className="lp-duo-icon lp-duo-icon-call" aria-hidden="true">
+                <FaBullhorn />
+              </span>
+
+              <h3>Convocatorias</h3>
+
+              <p>
+                Conoce las convocatorias y oportunidades para participar.
+              </p>
+
+              <Link to="/login-aprendiz" className="lp-btn lp-btn-dark">
+                Ver convocatorias <FaArrowRight />
+              </Link>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <section className="lp-section lp-cta-wrap">
+        <div className="lp-cta">
+          <span className="lp-cta-icon" aria-hidden>
+            <svg viewBox="0 0 48 48" width="34" height="34" fill="none" stroke="currentColor" strokeWidth="2.2">
+              <path d="M10 20h28v18a3 3 0 0 1-3 3H13a3 3 0 0 1-3-3V20Z" />
+              <path d="M8 20h32l-4-10H12L8 20Z" />
+              <path d="M24 8v8" />
+              <path d="M19 30.5 22.2 34l7-8" />
+            </svg>
+          </span>
+          <div>
+            <h2>Tu participación hace la diferencia</h2>
+            <p>
+              Forma parte de los procesos electorales del SENA de manera sencilla, segura y
+              transparente.
+            </p>
+          </div>
+          <Link to="/login-aprendiz" className="lp-btn lp-btn-white">
+            Ingresar a <Marca /> <FaArrowRight />
+          </Link>
+        </div>
+      </section>
+
+      <section className="lp-section lp-backers" id="sobre">
+        <h2>Una plataforma respaldada por nuestra comunidad</h2>
+
+        <div className="lp-logos">
+          <div className="lp-logo-item">
+            <img src="/sena.png" alt="SENA" className="lp-logo-sena" />
+            <span>SENA</span>
+          </div>
+
+          <span className="lp-logo-sep" />
+
+          <div className="lp-logo-item">
+            <img
+              src="/logo_fabrica.png"
+              alt="Fábrica de Software"
+              className="lp-logo-fab"
+            />
+            <span>FÁBRICA DE SOFTWARE</span>
+          </div>
+
+          <span className="lp-logo-sep" />
+
+          <div className="lp-logo-item">
+            <SigevaWordmark />
+          </div>
+        </div>
+
+      </section>
+
+      <LandingFooter />
+         <ChatBot />
+    </div>
   );
 };
 

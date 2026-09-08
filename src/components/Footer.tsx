@@ -3,6 +3,7 @@ import { Container, Row, Col } from 'react-bootstrap';
 import { FaFacebook, FaTwitter, FaInstagram, FaYoutube, FaLink } from 'react-icons/fa';
 import { BsArrowUpCircle } from 'react-icons/bs';
 import logo from '../assets/icon-sena-2.svg';
+import { SigevaName } from './landing/SigevaMark';
 import '../Footer.css';
 
 const Footer: React.FC = () => {
@@ -97,7 +98,7 @@ const Footer: React.FC = () => {
         <Row>
           <Col className="text-center">
             <p className="mb-0">
-              © {new Date().getFullYear()} SIGEVA - SENA. Todos los derechos reservados.
+              © {new Date().getFullYear()} <SigevaName /> - SENA. Todos los derechos reservados.
             </p>
           </Col>
         </Row>

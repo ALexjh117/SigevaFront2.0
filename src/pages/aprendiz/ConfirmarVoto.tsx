@@ -1,64 +1,34 @@
-import Container from "react-bootstrap/Container"
-import Form from "react-bootstrap/Form"
-import Button from "react-bootstrap/Button"
-import Swal from "sweetalert2"
-import { useNavigate } from "react-router-dom"
-import Navbar from "../../components/aprendiz/Navbar"
+import { useNavigate } from "react-router-dom";
+import Swal from "sweetalert2";
 
-export default function ConfirmarVoto(){
-    const navigate=useNavigate()
-    const submit=async(e:React.FormEvent)=>{
-        e.preventDefault();
-        try{
-            Swal.fire({
-                title:"Tu Voto Fue Registrado Con Éxito",
-                icon: "success",
-                draggable: true,
-                showConfirmButton:true,
-                confirmButtonText:"Volver"
-            }).then((result)=>{
-                if(result.isConfirmed){
-                    navigate("/")
-                }
-            })
+export default function ConfirmarVoto() {
+  const navigate = useNavigate();
 
-            
-        }catch{
-            Swal.fire({
-                title:"Tu Voto No Fue Registrado Con Éxito",
-                icon: "error",
-                draggable: true,
-                showConfirmButton:true,
-                confirmButtonText:"Intenta votar de nuevo"
-            }).then((result)=>{
-                if(result.isConfirmed){
-                    navigate("/")
-                }
-            })
-            
-        }
-        
+  const submit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    Swal.fire({
+      title: "Usa la ficha del candidato",
+      text: "El código se pide al votar desde la lista de candidatos.",
+      icon: "info",
+      confirmButtonText: "Ir a mis elecciones",
+    }).then(() => navigate("/votaciones"));
+  };
 
-    }
-    return(
-        <>
-            <Navbar />
-            <div className="d-flex justify-content-center align-items-center vh-100 ">
-
-                <Container style={{ maxWidth: "450px" }} className="bg-white p-5 rounded shadow">
-                    <h1 className="fw-bold text-center" >Confirmar Voto</h1>
-                    <p className=" text-center">Ingresa el código de 6 dígitos enviado a tu correo.</p>
-                    <Form onSubmit={submit}>
-                    <Form.Group className="mb-4">
-                        <Form.Control type="text" placeholder=" - - - - - - " className="text-center border-success" />
-                    </Form.Group>
-                    <Form.Group>
-                        <Button type="submit" className="w-100">Confirmar Voto</Button>
-                    </Form.Group>
-                    </Form>
-
-                </Container>
-            </div>
-        </>
-    )
+  return (
+    <div className="admin-dash">
+      <header className="admin-dash-hero">
+        <p className="admin-dash-eyebrow">Paso final</p>
+        <h1>Confirmar voto</h1>
+        <p className="admin-dash-lead">
+          El código de 6 caracteres llega a tu correo cuando eliges un candidato.
+        </p>
+      </header>
+      <form onSubmit={submit} className="apz-otp" style={{ marginTop: "1.5rem" }}>
+        <input className="form-control mb-3" type="text" maxLength={6} placeholder="------" />
+        <button type="submit" className="admin-vote-cta admin-vote-cta--go">
+          Volver a elecciones
+        </button>
+      </form>
+    </div>
+  );
 }

@@ -29,6 +29,8 @@ const AgregarCandidatoModal = ({ show, onHide, onSave, idEleccion, aprendices }:
     ideleccion: number | null;
     propuesta: string;
     numero_tarjeton: string;
+    jornada: string;
+    
   }>({
     nombres: "",
     foto: null as File | null,
@@ -36,6 +38,7 @@ const AgregarCandidatoModal = ({ show, onHide, onSave, idEleccion, aprendices }:
     ideleccion: idEleccion || null,
     propuesta: "",
     numero_tarjeton: "",
+    jornada: "",
   });
   const [previewUrl, setPreviewUrl] = useState<string>("");
 
@@ -65,36 +68,41 @@ const AgregarCandidatoModal = ({ show, onHide, onSave, idEleccion, aprendices }:
       data.append("ideleccion", String(formData.ideleccion));
       data.append("idaprendiz", String(formData.idaprendiz));
       data.append("propuesta", formData.propuesta);
+      data.append("jornada", formData.jornada);
       data.append("numero_tarjeton", String(formData.numero_tarjeton));
 
       if (formData.foto instanceof File) {
         data.append("foto", formData.foto);
       }
 
-      const response = await api.post(
-        `/api/candidatos/crear`,
-
-        data,
-        {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
-        }
-      );
+      const response = await api.post(`/api/candidatos/crear`, data, {
+        headers: { "Content-Type": "multipart/form-data" },
+      });
 
       toast.success(response.data.message, { id: "toast" });
 
       if (onSave) {
-        onSave({
-          ...response.data,
-          programa: response.data.aprendiz?.programa?.programa ?? "",
-        });
+        onSave(response.data.data);
       }
 
+      setFormData({
+        nombres: "",
+        foto: null,
+        idaprendiz: null,
+        ideleccion: idEleccion || null,
+        propuesta: "",
+        numero_tarjeton: "",
+        jornada: "",
+      });
+      setPreviewUrl("");
       onHide();
     } catch (error: any) {
       console.error("Error al crear candidato:", error.response?.data || error.message);
-      toast.error("Error al guardar candidato");
+      const mensaje =
+        error.response?.data?.message ||
+        error.response?.data?.errors?.jornada?.[0] ||
+        "Error al guardar candidato";
+      toast.error(mensaje);
     }
   };
 
@@ -219,6 +227,20 @@ const AgregarCandidatoModal = ({ show, onHide, onSave, idEleccion, aprendices }:
                   onChange={handleChange}
                   placeholder="Número de Tarjetón"
                 />
+              </Form.Group>
+              <Form.Group className="mb-3">
+                <Form.Label>Jornada del tarjetón</Form.Label>
+                <Form.Select
+                  name="jornada"
+                  value={formData.jornada}
+                  onChange={handleChange}
+                  required
+                >
+                  <option value="">Seleccione ...</option>
+                  <option value="Mañana">Mañana</option>
+                  <option value="Tarde">Tarde</option>
+                  <option value="Noche">Noche</option>
+                </Form.Select>
               </Form.Group>
             </Col>
           </Row>

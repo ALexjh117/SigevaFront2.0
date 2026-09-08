@@ -1,0 +1,1615 @@
+/* =========================================================
+   SIGEVA - ESCRUTINIO EN VIVO
+   REDISEÑO PALETA DIOS
+
+   D = Digital
+   I = Innovador
+   O = Oferta pertinente
+   S = Sostenibilidad
+
+   SOLO ESTILOS
+   NO MODIFICA FUNCIONALIDAD
+   ========================================================= */
+
+
+/* =========================================================
+   VARIABLES
+   ========================================================= */
+
+.tv-panel {
+  --dios-digital: #16a000;
+  --dios-innovador: #006b30;
+  --dios-oferta: #007b78;
+  --dios-sostenibilidad: #009640;
+
+  --dios-green-light: #72d34f;
+  --dios-green-soft: #dff3df;
+
+  --tv-text: #17382d;
+  --tv-muted: #687a72;
+
+  --tv-border: #d9e9df;
+  --tv-border-strong: #bdd9c9;
+
+  --tv-background: #ffffff;
+  --tv-soft: #f5faf7;
+
+  --tv-danger: #ef4444;
+}
+
+
+/* =========================================================
+   PANEL PRINCIPAL
+   ========================================================= */
+
+.tv-panel {
+  color: var(--tv-text);
+}
+
+
+/* =========================================================
+   ENCABEZADO
+   ========================================================= */
+
+.tv-panel-head {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: flex-start;
+
+  gap: 0.85rem 1.25rem;
+
+  margin-bottom: 1rem;
+}
+
+.tv-panel-head h2 {
+  margin: 0 0 0.2rem;
+
+  font-size: 1.28rem;
+  font-weight: 800;
+
+  letter-spacing: -0.03em;
+
+  color: var(--tv-text);
+}
+
+.tv-panel-head p {
+  margin: 0;
+
+  color: var(--admin-muted, var(--tv-muted));
+
+  font-size: 0.9rem;
+}
+
+
+/* =========================================================
+   ACCIONES DEL ENCABEZADO
+   ========================================================= */
+
+.tv-panel-actions {
+  display: flex;
+  flex-wrap: wrap;
+
+  align-items: center;
+
+  gap: 0.55rem;
+}
+
+
+/* =========================================================
+   BOTÓN PANTALLA COMPLETA
+   ========================================================= */
+
+.tv-full-btn {
+  appearance: none;
+
+  display: inline-flex;
+
+  align-items: center;
+  justify-content: center;
+
+  gap: 0.45rem;
+
+  border: 1px solid var(--dios-innovador);
+
+  background: #ffffff;
+
+  color: var(--dios-innovador);
+
+  font-weight: 800;
+
+  font-size: 0.82rem;
+
+  padding: 0.42rem 0.85rem;
+
+  border-radius: 8px;
+
+  cursor: pointer;
+
+  transition:
+    background 0.2s ease,
+    color 0.2s ease,
+    border-color 0.2s ease,
+    box-shadow 0.2s ease,
+    transform 0.2s ease;
+}
+
+.tv-full-btn:hover {
+  background:
+    linear-gradient(
+      135deg,
+      var(--dios-innovador),
+      var(--dios-sostenibilidad)
+    );
+
+  color: #ffffff;
+
+  border-color: transparent;
+
+  box-shadow:
+    0 5px 14px rgba(0, 107, 48, 0.16);
+
+  transform: translateY(-1px);
+}
+
+
+/* =========================================================
+   EN VIVO
+   ========================================================= */
+
+.tv-live {
+  display: inline-flex;
+
+  align-items: center;
+
+  gap: 0.45rem;
+
+  align-self: flex-start;
+
+  padding: 0.35rem 0.7rem;
+
+  border-radius: 999px;
+
+  background:
+    linear-gradient(
+      135deg,
+      #064f35,
+      var(--dios-innovador)
+    );
+
+  color: #ffffff;
+
+  font-size: 0.72rem;
+
+  font-weight: 800;
+
+  letter-spacing: 0.08em;
+
+  text-transform: uppercase;
+
+  box-shadow:
+    0 4px 12px rgba(0, 90, 55, 0.10);
+}
+
+.tv-live i {
+  width: 8px;
+  height: 8px;
+
+  flex: 0 0 auto;
+
+  border-radius: 50%;
+
+  background: #ef4444;
+
+  box-shadow:
+    0 0 0 0 rgba(239, 68, 68, 0.7);
+
+  animation: tv-pulse 1.4s ease-out infinite;
+}
+
+.tv-live span {
+  font-weight: 600;
+
+  letter-spacing: 0;
+
+  text-transform: none;
+
+  color: #d8eee0;
+}
+
+@keyframes tv-pulse {
+  0% {
+    box-shadow:
+      0 0 0 0 rgba(239, 68, 68, 0.65);
+  }
+
+  70% {
+    box-shadow:
+      0 0 0 8px rgba(239, 68, 68, 0);
+  }
+
+  100% {
+    box-shadow:
+      0 0 0 0 rgba(239, 68, 68, 0);
+  }
+}
+
+
+/* =========================================================
+   JORNADAS
+   ========================================================= */
+
+.tv-jornadas {
+  display: flex;
+
+  flex-wrap: wrap;
+
+  gap: 0.5rem;
+
+  margin-bottom: 1rem;
+}
+
+.tv-jornada {
+  appearance: none;
+
+  min-width: 7.5rem;
+
+  border: 1px solid var(--tv-border);
+
+  background: #ffffff;
+
+  color: #18352d;
+
+  font-weight: 800;
+
+  font-size: 0.92rem;
+
+  padding: 0.55rem 1.05rem;
+
+  border-radius: 8px;
+
+  cursor: pointer;
+
+  transition:
+    color 0.2s ease,
+    background 0.2s ease,
+    border-color 0.2s ease,
+    box-shadow 0.2s ease,
+    transform 0.2s ease;
+}
+
+.tv-jornada:hover {
+  border-color: var(--dios-digital);
+
+  color: var(--dios-innovador);
+
+  transform: translateY(-1px);
+}
+
+.tv-jornada.is-on {
+  background:
+    linear-gradient(
+      135deg,
+      var(--dios-innovador),
+      var(--dios-sostenibilidad)
+    );
+
+  border-color: transparent;
+
+  color: #ffffff;
+
+  box-shadow:
+    0 5px 14px rgba(0, 107, 48, 0.16);
+}
+
+.tv-jornada small {
+  display: block;
+
+  margin-top: 0.1rem;
+
+  font-weight: 600;
+
+  font-size: 0.7rem;
+
+  opacity: 0.75;
+}
+
+
+/* =========================================================
+   MENSAJE GANADOR
+   ========================================================= */
+
+.tv-ganador {
+  display: flex;
+
+  flex-wrap: wrap;
+
+  justify-content: space-between;
+
+  align-items: center;
+
+  gap: 0.75rem 1rem;
+
+  margin-bottom: 0.9rem;
+
+  padding: 0.85rem 1rem;
+
+  background:
+    linear-gradient(
+      90deg,
+      rgba(22, 160, 0, 0.045),
+      rgba(0, 123, 120, 0.025),
+      rgba(0, 150, 64, 0.04)
+    );
+
+  border: 1px solid var(--tv-border-strong);
+
+  border-radius: 10px;
+
+  box-shadow:
+    0 3px 12px rgba(0, 80, 45, 0.035);
+}
+
+.tv-ganador strong {
+  color: var(--dios-innovador);
+}
+
+.tv-ganador .text-muted,
+.tv-ganador small {
+  color: var(--tv-muted) !important;
+}
+
+
+/* =========================================================
+   BOTONES PDF
+   ========================================================= */
+
+.tv-pdfs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.55rem;
+  margin-bottom: 1rem;
+}
+
+.tv-pdfs .btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 36px;
+  padding: 0.42rem 0.85rem;
+  border-radius: 8px;
+  font-weight: 700;
+  font-size: 0.82rem;
+  line-height: 1;
+  transition: background 0.22s ease, border-color 0.22s ease, color 0.22s ease, transform 0.18s ease, box-shadow 0.22s ease;
+}
+
+.tv-pdfs .btn-success {
+  background: linear-gradient(135deg, var(--dios-innovador) 0%, var(--dios-sostenibilidad) 100%);
+  border-color: var(--dios-innovador);
+  color: #ffffff;
+  box-shadow: 0 4px 10px rgba(0, 107, 48, 0.14);
+}
+
+.tv-pdfs .btn-success:hover {
+  background: linear-gradient(135deg, var(--dios-digital) 0%, var(--dios-sostenibilidad) 100%);
+  border-color: var(--dios-digital);
+  color: #ffffff;
+  transform: translateY(-1px);
+  box-shadow: 0 6px 14px rgba(22, 160, 0, 0.18);
+}
+
+.tv-pdfs .btn-outline-success {
+  background: #ffffff;
+  color: var(--dios-sostenibilidad);
+  border: 1px solid #a8cfb8;
+  box-shadow: none;
+}
+
+.tv-pdfs .btn-outline-success:hover {
+  background: linear-gradient(135deg, var(--dios-innovador) 0%, var(--dios-sostenibilidad) 100%);
+  border-color: var(--dios-innovador);
+  color: #ffffff;
+  transform: translateY(-1px);
+  box-shadow: 0 6px 14px rgba(0, 107, 48, 0.16);
+}
+
+.tv-pdfs .btn-outline-secondary {
+  background: #ffffff;
+  color: #54655e;
+  border: 1px solid #aebbb4;
+  border-radius: 8px;
+  box-shadow: none;
+  transition: background 0.22s ease, border-color 0.22s ease, color 0.22s ease, transform 0.18s ease, box-shadow 0.22s ease;
+}
+
+.tv-pdfs .btn-outline-secondary:hover {
+  background: linear-gradient(135deg, var(--dios-innovador) 0%, var(--dios-sostenibilidad) 100%);
+  border-color: var(--dios-innovador);
+  color: #ffffff;
+  transform: translateY(-1px);
+  box-shadow: 0 6px 14px rgba(0, 107, 48, 0.16);
+}
+
+.tv-pdfs .btn:disabled,
+.tv-pdfs .btn.disabled {
+  opacity: 0.58;
+  transform: none;
+  box-shadow: none;
+  cursor: not-allowed;
+}
+
+
+/* =========================================================
+   TABLERO / FONDO
+   ========================================================= */
+
+.tv-studio {
+  position: relative;
+
+  background:
+    radial-gradient(
+      ellipse 45% 65% at 0% 100%,
+      rgba(22, 160, 0, 0.10),
+      transparent 68%
+    ),
+    radial-gradient(
+      ellipse 40% 55% at 100% 100%,
+      rgba(0, 123, 120, 0.07),
+      transparent 70%
+    ),
+    linear-gradient(
+      180deg,
+      #ffffff 0%,
+      #f8fcf9 100%
+    );
+
+  border: 1px solid var(--tv-border);
+
+  border-radius: 16px;
+
+  padding: 1.1rem 0.85rem 1.2rem;
+
+  overflow-x: auto;
+
+  min-height: 240px;
+
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.95);
+}
+
+
+/*
+   Decoración ondulada sutil.
+*/
+
+.tv-studio::before {
+  content: "";
+
+  position: absolute;
+
+  left: 0;
+  bottom: 0;
+
+  width: 38%;
+  height: 85px;
+
+  pointer-events: none;
+
+  opacity: 0.32;
+
+  background:
+    radial-gradient(
+      ellipse at left bottom,
+      rgba(22, 160, 0, 0.12),
+      transparent 68%
+    );
+
+  border-radius: 0 100% 0 0;
+}
+
+
+/* =========================================================
+   TABLERO
+   ========================================================= */
+
+.tv-board {
+  position: relative;
+
+  z-index: 1;
+
+  display: flex;
+
+  justify-content: center;
+
+  align-items: stretch;
+
+  gap: 16px;
+
+  min-width: min-content;
+
+  padding: 0.15rem;
+}
+
+
+/* =========================================================
+   TARJETA
+   ========================================================= */
+
+.tv-card {
+  width: 250px;
+
+  flex: 0 0 250px;
+
+  background: #ffffff;
+
+  border: 1px solid #deebe3;
+
+  border-radius: 11px;
+
+  overflow: hidden;
+
+  display: flex;
+
+  flex-direction: column;
+
+  box-shadow:
+    0 8px 22px rgba(0, 65, 40, 0.10);
+
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.tv-card:hover {
+  transform: translateY(-2px);
+
+  box-shadow:
+    0 12px 28px rgba(0, 65, 40, 0.13);
+}
+
+
+/* =========================================================
+   GANADOR
+   ========================================================= */
+
+.tv-card.is-lead {
+  outline:
+    2px solid var(--dios-digital);
+
+  outline-offset: -2px;
+
+  box-shadow:
+    0 10px 28px rgba(22, 160, 0, 0.14);
+}
+
+
+/* =========================================================
+   NOMBRE
+   ========================================================= */
+
+.tv-name {
+  background:
+    linear-gradient(
+      135deg,
+      var(--dios-innovador) 0%,
+      var(--dios-sostenibilidad) 100%
+    );
+
+  color: #ffffff;
+
+  text-align: center;
+
+  font-weight: 800;
+
+  letter-spacing: 0.035em;
+
+  text-transform: uppercase;
+
+  font-size: 0.78rem;
+
+  line-height: 1.2;
+
+  min-height: 2.7rem;
+
+  padding: 0.45rem 0.4rem;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+}
+
+
+/* =========================================================
+   CUERPO
+   ========================================================= */
+
+.tv-body {
+  display: grid;
+
+  grid-template-columns: 96px 1fr;
+
+  min-height: 170px;
+
+  height: 170px;
+
+  background:
+    linear-gradient(
+      90deg,
+      #edf7f1 0%,
+      #fbfefc 100%
+    );
+}
+
+
+/* =========================================================
+   FOTO
+   ========================================================= */
+
+.tv-foto {
+  background:
+    linear-gradient(
+      180deg,
+      #dcefe3,
+      #c6dfd0
+    );
+
+  overflow: hidden;
+
+  display: flex;
+
+  align-items: flex-end;
+
+  justify-content: center;
+}
+
+.tv-foto img {
+  width: 100%;
+
+  height: 100%;
+
+  max-height: 170px;
+
+  object-fit: cover;
+
+  object-position: top center;
+
+  display: block;
+}
+
+.tv-foto span {
+  width: 100%;
+
+  height: 100%;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  font-size: 2.1rem;
+
+  font-weight: 800;
+
+  color: #ffffff;
+
+  background:
+    linear-gradient(
+      160deg,
+      var(--dios-oferta),
+      var(--dios-innovador)
+    );
+}
+
+
+/* =========================================================
+   ESTADÍSTICAS
+   ========================================================= */
+
+.tv-stats {
+  position: relative;
+
+  display: flex;
+
+  flex-direction: column;
+
+  align-items: center;
+
+  justify-content: center;
+
+  gap: 0.45rem;
+
+  padding: 0.55rem 0.35rem;
+
+  background:
+    linear-gradient(
+      180deg,
+      #ffffff 0%,
+      #f5faf7 100%
+    );
+}
+
+
+/* =========================================================
+   CONTENEDOR DE BARRA
+   ========================================================= */
+
+.tv-track {
+  width: 100%;
+
+  height: auto;
+
+  min-height: 0;
+
+  display: flex;
+
+  flex-direction: column;
+
+  align-items: center;
+
+  justify-content: center;
+
+  gap: 0.5rem;
+}
+
+
+/* =========================================================
+   CONTENEDOR DE PORCENTAJE
+   ========================================================= */
+
+.tv-stack {
+  width: 100%;
+
+  min-height: 0;
+
+  height: auto !important;
+
+  display: flex;
+
+  flex-direction: column;
+
+  align-items: center;
+
+  justify-content: center;
+
+  gap: 0.45rem;
+
+  transition:
+    none;
+}
+
+
+/* =========================================================
+   PORCENTAJE
+   ========================================================= */
+
+.tv-pct {
+  position: relative;
+
+  z-index: 2;
+
+  background:
+    linear-gradient(
+      135deg,
+      var(--dios-innovador),
+      var(--dios-sostenibilidad)
+    );
+
+  color: #ffffff;
+
+  font-weight: 800;
+
+  font-size: 0.92rem;
+
+  letter-spacing: -0.02em;
+
+  padding: 0.28rem 0.45rem;
+
+  min-width: 4.6rem;
+
+  text-align: center;
+
+  margin: 0;
+
+  border-radius: 5px;
+
+  box-shadow:
+    0 3px 7px rgba(0, 90, 50, 0.16);
+}
+
+
+/*
+   Retiramos la antigua punta roja.
+*/
+
+.tv-pct::after {
+  display: none;
+}
+
+
+/* =========================================================
+   BARRA DE PORCENTAJE
+   ========================================================= */
+
+.tv-bar {
+  width: 86%;
+
+  height: 11px;
+
+  min-height: 11px;
+
+  flex: none;
+
+  border: 0;
+
+  border-radius: 999px;
+
+  background:
+    linear-gradient(
+      90deg,
+      var(--dios-innovador) 0%,
+      var(--dios-sostenibilidad) 38%,
+      var(--dios-oferta) 68%,
+      var(--dios-green-light) 100%
+    );
+
+  box-shadow:
+    inset 0 1px 2px rgba(0, 60, 40, 0.12),
+    0 2px 5px rgba(0, 80, 45, 0.08);
+
+  transition:
+    width 0.5s ease,
+    height 0.5s ease;
+}
+
+
+/* =========================================================
+   PORCENTAJE 0 %
+   ========================================================= */
+
+.tv-pct[data-value="0"],
+.tv-pct[data-percentage="0"] {
+  background:
+    linear-gradient(
+      135deg,
+      #005a30,
+      #2d8e63
+    );
+}
+
+
+/* =========================================================
+   PIE DE TARJETA
+   ========================================================= */
+
+.tv-foot {
+  background: #ffffff;
+
+  text-align: center;
+
+  padding: 0.5rem 0.4rem 0.65rem;
+
+  border-top:
+    1px solid #e7efe9;
+}
+
+.tv-foot small {
+  display: block;
+
+  color: var(--tv-muted);
+
+  font-size: 0.62rem;
+
+  font-weight: 800;
+
+  letter-spacing: 0.14em;
+}
+
+.tv-foot b {
+  display: block;
+
+  color: var(--dios-innovador);
+
+  font-size: 1.22rem;
+
+  font-weight: 900;
+
+  letter-spacing: -0.03em;
+
+  line-height: 1.1;
+
+  margin-top: 0.1rem;
+}
+
+
+/* =========================================================
+   SIN RESULTADOS
+   ========================================================= */
+
+.tv-empty {
+  text-align: center;
+
+  padding: 2.2rem 1rem;
+
+  color: var(--tv-text);
+
+  background:
+    rgba(255, 255, 255, 0.72);
+
+  border-radius: 12px;
+}
+
+.tv-empty p {
+  margin: 0.35rem 0 0;
+
+  color: var(--tv-muted);
+
+  font-size: 0.9rem;
+}
+
+
+/* =========================================================
+   =========================================================
+   PANTALLA COMPLETA
+   =========================================================
+   ========================================================= */
+
+.tv-panel.is-full:fullscreen,
+.tv-panel.is-full:-webkit-full-screen {
+  width: 100%;
+  height: 100%;
+}
+
+
+/* =========================================================
+   CONTENEDOR COMPLETO
+   ========================================================= */
+
+.tv-panel.is-full {
+  position: fixed;
+
+  inset: 0;
+
+  z-index: 5000;
+
+  width: 100vw;
+
+  height: 100vh;
+
+  height: 100dvh;
+
+  margin: 0;
+
+  padding:
+    clamp(0.8rem, 1.3vw, 1.25rem)
+    clamp(0.9rem, 1.7vw, 1.5rem)
+    0.55rem;
+
+  background:
+    radial-gradient(
+      ellipse 45% 75% at 0% 100%,
+      rgba(22, 160, 0, 0.10),
+      transparent 68%
+    ),
+    radial-gradient(
+      ellipse 40% 60% at 100% 100%,
+      rgba(0, 123, 120, 0.07),
+      transparent 70%
+    ),
+    linear-gradient(
+      180deg,
+      #ffffff 0%,
+      #f8fcf9 100%
+    );
+
+  display: flex;
+
+  flex-direction: column;
+
+  gap: 0.5rem;
+
+  overflow: hidden;
+
+  box-sizing: border-box;
+
+  user-select: none;
+}
+
+
+/* =========================================================
+   DECORACIÓN PANTALLA COMPLETA
+   ========================================================= */
+
+.tv-panel.is-full::before {
+  content: "";
+
+  position: absolute;
+
+  left: 0;
+  bottom: 0;
+
+  width: 32%;
+
+  height: 32%;
+
+  pointer-events: none;
+
+  background:
+    radial-gradient(
+      ellipse at left bottom,
+      rgba(22, 160, 0, 0.12),
+      transparent 68%
+    );
+
+  opacity: 0.55;
+}
+
+.tv-panel.is-full::after {
+  content: "";
+
+  position: absolute;
+
+  right: 0;
+  top: 0;
+
+  width: 26%;
+
+  height: 35%;
+
+  pointer-events: none;
+
+  background:
+    radial-gradient(
+      ellipse at right top,
+      rgba(0, 123, 120, 0.055),
+      transparent 70%
+    );
+}
+
+
+/* =========================================================
+   ENCABEZADO PANTALLA COMPLETA
+   ========================================================= */
+
+.tv-panel.is-full .tv-panel-head {
+  position: relative;
+
+  z-index: 2;
+
+  margin: 0;
+
+  align-items: center;
+
+  flex-shrink: 0;
+}
+
+.tv-panel.is-full .tv-panel-head h2 {
+  color: var(--dios-innovador);
+
+  font-size:
+    clamp(1.15rem, 2.2vw, 1.85rem);
+}
+
+.tv-panel.is-full .tv-panel-head p {
+  color: var(--tv-text);
+
+  font-size:
+    clamp(0.78rem, 1.2vw, 1.02rem);
+}
+
+
+/* =========================================================
+   BOTÓN FULLSCREEN
+   ========================================================= */
+
+.tv-panel.is-full .tv-full-btn {
+  background: #ffffff;
+
+  color: var(--dios-innovador);
+
+  border-color: #a9ccb6;
+}
+
+.tv-panel.is-full .tv-full-btn:hover {
+  background:
+    linear-gradient(
+      135deg,
+      var(--dios-innovador),
+      var(--dios-sostenibilidad)
+    );
+
+  color: #ffffff;
+
+  border-color: transparent;
+}
+
+
+/* =========================================================
+   JORNADAS FULLSCREEN
+   ========================================================= */
+
+.tv-panel.is-full .tv-jornadas {
+  position: relative;
+
+  z-index: 2;
+
+  margin: 0;
+
+  flex-shrink: 0;
+}
+
+.tv-panel.is-full .tv-jornada {
+  background: rgba(255, 255, 255, 0.88);
+
+  border-color: #cfe2d6;
+
+  color: var(--tv-text);
+
+  min-width: 6.2rem;
+
+  padding: 0.42rem 0.85rem;
+}
+
+.tv-panel.is-full .tv-jornada:hover {
+  background: #ffffff;
+
+  border-color: var(--dios-digital);
+
+  color: var(--dios-innovador);
+}
+
+.tv-panel.is-full .tv-jornada.is-on {
+  background:
+    linear-gradient(
+      135deg,
+      var(--dios-innovador),
+      var(--dios-sostenibilidad)
+    );
+
+  border-color: transparent;
+
+  color: #ffffff;
+}
+
+
+/* =========================================================
+   GANADOR FULLSCREEN
+   ========================================================= */
+
+.tv-panel.is-full .tv-ganador {
+  position: relative;
+
+  z-index: 2;
+
+  margin: 0;
+
+  flex-shrink: 0;
+
+  background:
+    rgba(255, 255, 255, 0.86);
+
+  border: 1px solid var(--tv-border-strong);
+
+  padding: 0.5rem 0.9rem;
+}
+
+
+/* =========================================================
+   PDF OCULTO EN FULLSCREEN
+   ========================================================= */
+
+.tv-panel.is-full .tv-pdfs {
+  display: none;
+}
+
+
+/* =========================================================
+   TABLERO FULLSCREEN
+   ========================================================= */
+
+.tv-panel.is-full .tv-studio {
+  position: relative;
+
+  z-index: 1;
+
+  flex: 1 1 auto;
+
+  min-height: 0;
+
+  height: auto;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  overflow: auto;
+
+  padding:
+    clamp(0.7rem, 1.3vw, 1rem);
+
+  border:
+    1px solid rgba(190, 219, 202, 0.60);
+
+  border-radius: 14px;
+
+  background:
+    repeating-linear-gradient(
+      180deg,
+      rgba(0, 107, 48, 0.025) 0,
+      rgba(0, 107, 48, 0.025) 1px,
+      transparent 1px,
+      transparent 74px
+    ),
+    radial-gradient(
+      ellipse 32% 55% at 0% 100%,
+      rgba(22, 160, 0, 0.09),
+      transparent 70%
+    ),
+    radial-gradient(
+      ellipse 32% 50% at 100% 100%,
+      rgba(0, 123, 120, 0.07),
+      transparent 70%
+    ),
+    #fbfefc;
+}
+
+
+/* =========================================================
+   TABLERO FULLSCREEN
+   ========================================================= */
+
+.tv-panel.is-full .tv-board {
+  position: relative;
+
+  z-index: 2;
+
+  width: auto;
+
+  max-width: 100%;
+
+  height: auto;
+
+  display: flex;
+
+  justify-content: center;
+
+  align-items: stretch;
+
+  gap: clamp(14px, 1.35vw, 20px);
+
+  min-width: 0;
+}
+
+
+/* =========================================================
+   TARJETAS FULLSCREEN
+   ========================================================= */
+
+.tv-panel.is-full .tv-card {
+  width: 255px;
+
+  flex: 0 0 255px;
+
+  height: auto;
+
+  max-height: none;
+
+  overflow: hidden;
+
+  border-radius: 11px;
+
+  box-shadow:
+    0 12px 28px rgba(0, 65, 40, 0.12);
+}
+
+
+/* =========================================================
+   NOMBRE FULLSCREEN
+   ========================================================= */
+
+.tv-panel.is-full .tv-name {
+  font-size: 0.78rem;
+
+  min-height: 2.55rem;
+}
+
+
+/* =========================================================
+   CUERPO FULLSCREEN
+   ========================================================= */
+
+.tv-panel.is-full .tv-body {
+  flex: none;
+
+  min-height: 160px;
+
+  height: 160px;
+
+  grid-template-columns: 92px 1fr;
+}
+
+
+/* =========================================================
+   FOTO / STATS FULLSCREEN
+   ========================================================= */
+
+.tv-panel.is-full .tv-stats,
+.tv-panel.is-full .tv-foto {
+  height: 160px;
+}
+
+.tv-panel.is-full .tv-foto img {
+  max-height: 160px;
+}
+
+
+/* =========================================================
+   TRACK FULLSCREEN
+   ========================================================= */
+
+.tv-panel.is-full .tv-track {
+  width: 100%;
+
+  height: 138px;
+
+  min-height: 0;
+
+  display: flex;
+
+  flex-direction: column;
+
+  align-items: center;
+
+  justify-content: flex-end;
+}
+
+
+/* =========================================================
+   STACK FULLSCREEN
+   ========================================================= */
+
+.tv-panel.is-full .tv-stack {
+  width: 100%;
+
+  height: 138px !important;
+
+  min-height: 0;
+
+  display: flex;
+
+  flex-direction: column;
+
+  align-items: center;
+
+  justify-content: flex-end;
+
+  gap: 0;
+}
+
+
+/* =========================================================
+   PORCENTAJE FULLSCREEN
+   ========================================================= */
+
+.tv-panel.is-full .tv-pct {
+  position: relative;
+
+  z-index: 2;
+
+  margin-bottom: 0.45rem;
+
+  font-size:
+    clamp(0.78rem, 1.5vw, 1.35rem);
+
+  min-width: 4.2rem;
+}
+
+
+/* =========================================================
+   BARRA VERTICAL FULLSCREEN
+   ========================================================= */
+
+.tv-panel.is-full .tv-bar {
+  width: 58%;
+
+  flex: 1 1 auto;
+
+  min-height: 12px;
+
+  height: auto;
+
+  border-radius: 4px 4px 2px 2px;
+
+  background:
+    linear-gradient(
+      180deg,
+      var(--dios-green-light) 0%,
+      var(--dios-sostenibilidad) 35%,
+      var(--dios-oferta) 68%,
+      var(--dios-innovador) 100%
+    );
+
+  box-shadow:
+    inset 0 3px 5px rgba(255, 255, 255, 0.24),
+    3px 4px 0 rgba(0, 60, 40, 0.08);
+}
+
+
+/* =========================================================
+   FOOT FULLSCREEN
+   ========================================================= */
+
+.tv-panel.is-full .tv-foot b {
+  color: var(--dios-innovador);
+
+  font-size:
+    clamp(1.05rem, 2.4vw, 2rem);
+}
+
+
+/* =========================================================
+   EMPTY FULLSCREEN
+   ========================================================= */
+
+.tv-panel.is-full .tv-empty {
+  position: relative;
+
+  z-index: 2;
+
+  width: 100%;
+
+  margin: auto;
+
+  background:
+    rgba(255, 255, 255, 0.84);
+}
+
+
+/* =========================================================
+   TEXTO DE AYUDA FULLSCREEN
+   ========================================================= */
+
+.tv-panel.is-full .tv-full-hint {
+  position: relative;
+
+  z-index: 3;
+
+  display: block;
+
+  flex-shrink: 0;
+
+  margin: 0;
+
+  padding: 0.15rem 0 0.2rem;
+
+  text-align: center;
+
+  color: rgba(0, 85, 50, 0.55);
+
+  font-size:
+    clamp(0.68rem, 1vw, 0.85rem);
+
+  letter-spacing: 0.04em;
+}
+
+
+/* =========================================================
+   ESTADO IDLE
+   ========================================================= */
+
+.tv-panel.is-full.is-idle {
+  cursor: none;
+}
+
+.tv-panel.is-full.is-idle .tv-full-btn {
+  opacity: 0;
+
+  pointer-events: none;
+}
+
+
+/* =========================================================
+   RESPONSIVE
+   ========================================================= */
+
+@media (max-width: 767.98px) {
+
+  .tv-card {
+    width: 168px;
+
+    flex-basis: 168px;
+  }
+
+  .tv-name {
+    font-size: 0.68rem;
+
+    min-height: 2.4rem;
+  }
+
+  .tv-body {
+    grid-template-columns: 84px 1fr;
+
+    min-height: 148px;
+
+    height: 148px;
+  }
+
+  .tv-foto img {
+    max-height: 148px;
+  }
+
+  .tv-pct {
+    font-size: 0.78rem;
+
+    min-width: 3.8rem;
+  }
+
+  .tv-foot b {
+    font-size: 1rem;
+  }
+
+}
+
+
+@media (max-width: 900px) {
+
+  .tv-panel.is-full .tv-card {
+    width: 200px;
+
+    flex-basis: 200px;
+  }
+
+  .tv-panel.is-full .tv-body {
+    grid-template-columns: 84px 1fr;
+
+    min-height: 148px;
+
+    height: 148px;
+  }
+
+  .tv-panel.is-full .tv-stats,
+  .tv-panel.is-full .tv-foto {
+    height: 148px;
+  }
+
+  .tv-panel.is-full .tv-track,
+  .tv-panel.is-full .tv-stack {
+    height: 125px !important;
+  }
+
+}
+
+
+@media (orientation: portrait) and (max-width: 1100px) {
+
+  .tv-panel.is-full .tv-board {
+    flex-wrap: wrap;
+
+    max-width: 480px;
+  }
+
+}
+
+
+@media (max-height: 700px) {
+
+  .tv-panel.is-full .tv-panel-head h2 {
+    font-size: 1.05rem;
+  }
+
+  .tv-panel.is-full .tv-ganador {
+    padding: 0.35rem 0.7rem;
+
+    font-size: 0.85rem;
+  }
+
+  .tv-panel.is-full .tv-jornada small {
+    display: none;
+  }
+
+}

@@ -1,31 +1,26 @@
-import { Card } from "react-bootstrap";
-import { Button } from "react-bootstrap";
+import { useState } from "react";
+
+type FichaCandidato = {
+  nombre: string;
+  programa: string;
+  propuesta: string;
+  foto: string;
+  numeroTarjeton: string;
+  idCandidato: string;
+};
 
 interface Props {
   idcandidatos: string;
-  nombre: string;
   programa: string;
   propuesta: string;
   foto: string;
   seleccionado: boolean;
   numeroTarjeton: string;
-  onSelect: () => void;
-  onMoreInfo: (data: {
-    nombre: string;
-    programa: string;
-    propuesta: string;
-    foto: string;
-    numeroTarjeton: string;
-    idCandidato: string;
-  }) => void;
   aprendiz: {
     nombres: string;
     apellidos: string;
-
   };
-  setIdCandidato: (id: string) => void;
-  idCandidato: string;
-
+  onOpen: (data: FichaCandidato) => void;
 }
 
 export default function CandidateCard({
@@ -33,34 +28,51 @@ export default function CandidateCard({
   propuesta,
   foto,
   seleccionado,
-  onSelect,
-  onMoreInfo,
+  onOpen,
   aprendiz,
   numeroTarjeton,
-  setIdCandidato,
-  idCandidato: _idCandidato,
-  idcandidatos
+  idcandidatos,
 }: Props) {
+  const [fotoOk, setFotoOk] = useState(Boolean(foto));
+  const nombre = `${aprendiz.nombres} ${aprendiz.apellidos}`.trim();
+
+  const abrir = () => {
+    onOpen({
+      nombre,
+      programa,
+      propuesta,
+      foto,
+      numeroTarjeton,
+      idCandidato: idcandidatos,
+    });
+  };
+
   return (
-    <Card
-      className={`h-100 shadow-sm ${seleccionado ? "border-1 border-primary" : ""}`}
-      onClick={onSelect}
+    <article
+      className={`grafica-card admin-cand${seleccionado ? " is-on" : ""}`}
+      role="button"
+      tabIndex={0}
+      onClick={abrir}
+      onKeyDown={(e) => {
+        if (e.key === "Enter" || e.key === " ") {
+          e.preventDefault();
+          abrir();
+        }
+      }}
     >
-      <Card.Img
-        variant="top"
-        src={foto}
-        style={{ height: "250px", objectFit: "cover" }}
-      />
-      <Card.Body>
-        <Card.Title className="fw-bold">{aprendiz.nombres} {aprendiz.apellidos}</Card.Title>
-        <Card.Subtitle className="text-muted">{programa}</Card.Subtitle>
-        <Card.Text className="mt-2">{propuesta}</Card.Text>
-        <Card.Text className="mt-2">{numeroTarjeton}</Card.Text>
-        {/* <Card.Text className="text-success fw-semibold">
-          Ver descripción ampliada <span>▼</span>
-        </Card.Text> */}
-        <Button variant="success" onClick={(e) => { e.stopPropagation(); setIdCandidato(idcandidatos); onMoreInfo({ nombre: `${aprendiz.nombres} ${aprendiz.apellidos}`, programa, propuesta, foto, numeroTarjeton, idCandidato: idcandidatos }); }}>Quiero Saber Más</Button>
-      </Card.Body>
-    </Card>
+      <div className="admin-cand-foto">
+        {fotoOk ? (
+          <img src={foto} alt="" onError={() => setFotoOk(false)} />
+        ) : (
+          <span aria-hidden>
+            {(numeroTarjeton || nombre.slice(0, 1) || "?").toString().slice(0, 2)}
+          </span>
+        )}
+        {numeroTarjeton ? <em>Tarjetón {numeroTarjeton}</em> : null}
+      </div>
+      <h3>{nombre}</h3>
+      <small>{programa}</small>
+      <p>{propuesta}</p>
+    </article>
   );
 }

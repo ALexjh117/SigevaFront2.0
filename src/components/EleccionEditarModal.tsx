@@ -1,7 +1,14 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { useState, useEffect } from "react";
 import { Modal, Button, Form, Row, Col } from "react-bootstrap";
+import Swal from "sweetalert2";
 import { api } from "../api";
+import { useAuth } from "../context/auth/auth.context";
+import { ADMIN_PALETTE } from "../theme/tokens";
+import {
+  hayEleccionEnElMismoDia,
+  obtenerEleccionesDelCentro,
+} from "../utils/eleccionPorDia";
 
 interface Eleccion {
   ideleccion: number;
@@ -11,7 +18,7 @@ interface Eleccion {
   horaInicio?: string;
   horaFin?: string;
   jornada?: string | null;
-
+  idcentroFormacion?: number;
 }
 
 interface Props {
@@ -28,6 +35,7 @@ export default function EleccionEditarModal({
   eleccion,
   onUpdated,
 }: Props) {
+  const { user } = useAuth();
   const [formData, setFormData] = useState({
     nombre: "",
     fecha_inicio: "",
@@ -76,10 +84,16 @@ export default function EleccionEditarModal({
   const handleSubmit = async () => {
     if (!eleccion) return;
 
-    // Payload seguro: solo enviar campos con valor válido
-    const payload: any = {
+    const idCentro =
+      eleccion.idcentroFormacion ?? user?.centroFormacion;
+    if (!idCentro) {
+      alert("No se pudo determinar el centro de formación de esta elección.");
+      return;
+    }
+
+    const payload: Record<string, string | number> = {
+      idcentro_formacion: idCentro,
       nombre: formData.nombre,
-      jornada: formData.jornada,
     };
 
     if (formData.fecha_inicio) payload.fecha_inicio = formData.fecha_inicio;
@@ -89,9 +103,26 @@ export default function EleccionEditarModal({
     if (formData.hora_fin && formData.fecha_fin)
       payload.hora_fin = `${formData.fecha_fin}T${formData.hora_fin}:00`;
 
-    
-
     try {
+      const existentes = await obtenerEleccionesDelCentro(Number(idCentro));
+      if (
+        hayEleccionEnElMismoDia(
+          existentes,
+          formData.fecha_inicio,
+          formData.fecha_fin,
+          eleccion.ideleccion
+        )
+      ) {
+        await Swal.fire({
+          title: "Ya hay una elección ese día",
+          text: "En este centro solo se permite una elección por día. Elige otra fecha.",
+          icon: "warning",
+          confirmButtonText: "Aceptar",
+          confirmButtonColor: ADMIN_PALETTE.confirm,
+        });
+        return;
+      }
+
       await api.put(
         `/api/eleccionActualizar/${eleccion.ideleccion}`,
         payload
@@ -176,17 +207,7 @@ export default function EleccionEditarModal({
 
             <Col sm={12}>
               <Form.Group className="mb-3">
-                <Form.Label>Jornada</Form.Label>
-                <Form.Select
-                  name="jornada"
-                  value={formData.jornada}
-                  onChange={handleChange}
-                >
-                  <option value="">Seleccionar</option>
-                  <option value="Mañana">Mañana</option>
-                  <option value="Tarde">Tarde</option>
-                  <option value="Noche">Noche</option>
-                </Form.Select>
+
               </Form.Group>
             </Col>
           </Row>

@@ -1,10 +1,10 @@
-import Container from "react-bootstrap/Container";
+import { useState } from "react";
 import toast from "react-hot-toast";
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, Navigate, useLocation, useNavigate } from "react-router-dom";
+import { FaArrowLeft, FaArrowRight, FaLock, FaUserGraduate, FaUserTie, FaEye, FaEyeSlash } from "react-icons/fa";
 import { api } from "../api";
-import Logo from "../assets/Sigeva white.svg";
 import { useAuth } from "../context/auth/auth.context";
 import type { ResponseType, User } from "../context/auth/types/authTypes";
 import { Controller, useForm, type SubmitHandler } from "react-hook-form";
@@ -13,14 +13,26 @@ import {
   loginSchema,
   type FormValues,
 } from "../components/LoginForm/models/login.schema";
+import { getJornadaGuardada, idDelAprendiz } from "../utils/jornadaAprendiz";
+import {
+  esAdministradorRed,
+  esAdminSistema,
+  esAprendiz as perfilEsAprendiz,
+  esFuncionario,
+} from "../utils/roles";
+import { SigevaWordmark, SigevaName } from "../components/landing/SigevaMark";
+import "./Login.css";
 
 interface Props {
-  perfil: "gestor" | "aprendiz";
+  perfil?: "gestor" | "aprendiz";
 }
 
-export default function Login({ perfil }: Props) {
-  const { login } = useAuth();
+export default function Login(_props: Props) {
+  const [showPassword, setShowPassword] = useState(false);
+  const { login, isAuthenticated, sesionLista, user } = useAuth();
   const navigate = useNavigate();
+  const { pathname } = useLocation();
+  const esAprendiz = pathname.includes("login-aprendiz");
 
   const {
     control,
@@ -35,107 +47,107 @@ export default function Login({ perfil }: Props) {
     },
   });
 
+  if (sesionLista && isAuthenticated && user) {
+    if (perfilEsAprendiz(user.perfil)) {
+      const id = idDelAprendiz(user);
+      const yaEligio = id ? Boolean(getJornadaGuardada(id)) : false;
+      return <Navigate to={yaEligio ? "/votaciones" : "/elegir-jornada"} replace />;
+    }
+    if (esFuncionario(user.perfil) || esAdminSistema(user.perfil)) {
+      return <Navigate to="/dashboard" replace />;
+    }
+    if (esAdministradorRed(user.perfil)) {
+      return <Navigate to="/dashboard-admin" replace />;
+    }
+  }
+
   const onSubmit: SubmitHandler<FormValues> = async (data) => {
     try {
-      const endpoint =
-        perfil === "aprendiz" ? "/api/aprendiz/login" : "/api/usuarios/login";
+      const endpoint = esAprendiz
+        ? "/api/aprendiz/login"
+        : "/api/usuarios/login";
       const res = await api.post<ResponseType<User>>(endpoint, data);
 
-      login(res.data);
+      if (!login(res.data)) return;
 
       if (res.data.success && res.data.data) {
-        switch (res.data.data.perfil) {
-          case "Aprendiz":
-            navigate("/votaciones");
-            break;
-          case "Funcionario":
-            navigate("/dashboard");
-            break;
-          case "Administrador":
-            navigate("/dashboard-admin");
-            break;
+        const perfil = res.data.data.perfil;
+        if (perfilEsAprendiz(perfil)) {
+          const id = idDelAprendiz(res.data.data);
+          const yaEligio = id ? Boolean(getJornadaGuardada(id)) : false;
+          navigate(yaEligio ? "/votaciones" : "/elegir-jornada");
+        } else if (esFuncionario(perfil) || esAdminSistema(perfil)) {
+          navigate("/dashboard");
+        } else if (esAdministradorRed(perfil)) {
+          navigate("/dashboard-admin");
         }
       }
-    } catch (error) {
-      toast.error("Credenciales inválidas. Verifica tu correo y contraseña.")
+    } catch {
+      toast.error("Credenciales inválidas. Verifica tu correo y contraseña.");
     }
   };
-  
-  return (
-    <div
-      className="d-flex justify-content-center align-items-center vh-100 bg-primary "
-      style={{
-        background:
-          "linear-gradient(95deg, #6136BF 2.31%, #542EA6 20.84%, #4B68BF 48.18%, #049DBF 72.74%, #04BFBF 98.69%)",
-      }}
-    >
-      <Container style={{ maxWidth: "600px", maxHeight: "480px" }}>
-        <div className="text-center mb-4">
-          <img src={`${Logo}`} alt="Logo" height="50px" />
-        </div>
 
-        <p className="text-center text-white">
-          Sistema de Gestión de Votos para Aprendices
-        </p>
-        <Container
-          style={{
-            maxWidth: "450px",
-            minHeight: "40px",
-            borderRadius: "1.5rem",
-          }}
-          className="bg-white p-5 shadow"
-        >
-          {/* Cambio de login */}
-          <div className="d-flex justify-content-center mb-4">
-            <div
-              className="rounded-pill d-flex"
-              style={{
-                backgroundColor: "#fff",
-                border: "2px solid #5031C9",
-                padding: "3px",
-                gap: "2px",
-              }}
-            >
-              <Link
-                to="/login-aprendiz"
-                className={`text-decoration-none text-center px-4 py-2 rounded-pill ${
-                  perfil === "aprendiz"
-                    ? "text-white fw-bold"
-                    : "text-dark fw-semibold"
-                }`}
-                style={{
-                  backgroundColor: perfil === "aprendiz" ? "#5031C9" : "#fff",
-                  transition: "background 0.3s",
-                  fontSize: "0.9rem",
-                  minWidth: "130px",
-                }}
-              >
-                Aprendiz
-              </Link>
-              <Link
-                to="/login"
-                className={`text-decoration-none text-center px-4 py-2 rounded-pill ${
-                  perfil === "gestor"
-                    ? "text-white fw-bold"
-                    : "text-dark fw-semibold"
-                }`}
-                style={{
-                  backgroundColor: perfil === "gestor" ? "#5031C9" : "#fff",
-                  transition: "background 0.3s",
-                  fontSize: "0.9rem",
-                  minWidth: "130px",
-                }}
-              >
-                Funcionario
-              </Link>
+  return (
+    <div className="login-page">
+      <section className="login-card" aria-label="Inicio de sesión">
+        <aside className="login-visual">
+          <img
+            className="login-visual-photo"
+            src="/landing/login-voto.png"
+            alt="Aprendices depositando su voto en urna"
+          />
+          <div className="login-visual-copy">
+            <p className="login-visual-kicker">Una voz, un voto</p>
+            <h2>
+              <SigevaName />
+            </h2>
+            <p>Sistema de Gestión de Votos para Aprendices. Ético y fácil de usar.</p>
+          </div>
+        </aside>
+
+        <div className="login-panel">
+          <div className="login-panel-brands">
+            <div className="login-brand-sigeva">
+              <SigevaWordmark />
+              <small>Sistema Electoral SENA</small>
             </div>
+            <span className="login-brand-sep" aria-hidden />
+            <img
+              src="/logo_fabrica.png"
+              alt="Fábrica de Software SENA"
+              className="login-brand-fab"
+            />
+          </div>
+
+          <h1>Iniciar sesión</h1>
+          <p className="login-panel-lead">
+            Accede para garantizar tu voto de forma confiable y segura.
+          </p>
+
+          <div className="login-switch" role="tablist" aria-label="Tipo de usuario">
+            <Link
+              to="/login-aprendiz"
+              className={esAprendiz ? "is-on" : undefined}
+              role="tab"
+              aria-selected={esAprendiz}
+            >
+              <FaUserGraduate />
+              Aprendiz
+            </Link>
+            <Link
+              to="/login"
+              className={!esAprendiz ? "is-on" : undefined}
+              role="tab"
+              aria-selected={!esAprendiz}
+            >
+              <FaUserTie />
+              Funcionario
+            </Link>
           </div>
 
           <Form onSubmit={handleSubmit(onSubmit)}>
             <Form.Group className="mb-3">
-              <Form.Label>
-                <strong>Correo electrónico</strong>{" "}
-              </Form.Label>
+              <Form.Label>Correo electrónico</Form.Label>
               <Controller
                 name="email"
                 control={control}
@@ -143,55 +155,82 @@ export default function Login({ perfil }: Props) {
                   <Form.Control
                     id="email"
                     type="email"
-                    placeholder="Ingrese su correo electrónico"
+                    placeholder="nombreusuario@email.com"
                     {...field}
-                    className={`form-control ${
-                      errors.email ? "is-invalid" : ""
-                    }`}
+                    className={errors.email ? "is-invalid" : ""}
                   />
                 )}
               />
-              {errors.email && <p className="error">{errors.email.message}</p>}
+              {errors.email && <p className="login-error">{errors.email.message}</p>}
             </Form.Group>
 
-            <Form.Group className="mb-4">
-              <Form.Label>
-                <strong>Contraseña</strong>{" "}
-              </Form.Label>
+            <Form.Group className="mb-3">
+              <Form.Label>Contraseña</Form.Label>
               <Controller
                 name="password"
                 control={control}
                 render={({ field }) => (
-                  <Form.Control
-                    id="password"
-                    type="password"
-                    placeholder="Ingrese su contraseña"
-                    {...field}
-                    className={`form-control ${
-                      errors.password ? "is-invalid" : ""
-                    }`}
-                  />
+                  <div className="password-input-wrapper" style={{ position: "relative" }}>
+                    <Form.Control
+                      id="password"
+                      type={showPassword ? "text" : "password"}
+                      placeholder="Ingrese su contraseña"
+                      {...field}
+                      className={errors.password ? "is-invalid" : ""}
+                    />
+                    <button
+                      type="button"
+                      onClick={() => setShowPassword(!showPassword)}
+                      style={{
+                        position: "absolute",
+                        right: "12px",
+                        top: "50%",
+                        transform: "translateY(-50%)",
+                        background: "none",
+                        border: "none",
+                        cursor: "pointer",
+                        color: "#6c757d",
+                        display: "flex",
+                        alignItems: "center",
+                        padding: 0,
+                        zIndex: 5
+                      }}
+                      aria-label={showPassword ? "Ocultar contraseña" : "Mostrar contraseña"}
+                    >
+                      {showPassword ? <FaEyeSlash /> : <FaEye />}
+                    </button>
+                  </div>
                 )}
               />
               {errors.password && (
-                <p className="error">{errors.password.message}</p>
+                <p className="login-error">{errors.password.message}</p>
               )}
             </Form.Group>
 
-            <Form.Group>
-              <Button
-                variant="primary"
-                type="submit"
-                className="w-100 rounded"
-                style={{ backgroundColor: "#5031C9", border: "none" }}
-                disabled={isSubmitting}
-              >
-                {isSubmitting ? "Ingresando..." : "Ingresar"}
-              </Button>
-            </Form.Group>
+            <Button type="submit" className="login-submit" disabled={isSubmitting}>
+              <span>{isSubmitting ? "Ingresando..." : "Ingresar"}</span>
+              <FaArrowRight />
+            </Button>
           </Form>
-        </Container>
-      </Container>
+
+          <Link
+            to={`/recuperar-contrasena?desde=${esAprendiz ? "aprendiz" : "funcionario"}`}
+            className="login-recover"
+          >
+            <FaLock /> Recuperar contraseña
+          </Link>
+
+          <div className="login-steps" aria-hidden>
+            <i />
+            <span />
+          </div>
+
+          <Link to="/" className="login-devolver">
+            <FaArrowLeft />
+            <span>Devolver</span>
+          </Link>
+        </div>
+      </section>
     </div>
   );
 }

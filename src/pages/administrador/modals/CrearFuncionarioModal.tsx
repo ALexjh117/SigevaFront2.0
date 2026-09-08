@@ -5,6 +5,14 @@ import { api } from "../../../api";
 import Select from "react-select";
 import { useForm } from "react-hook-form";
 import type { FieldValues } from "react-hook-form";
+import { useAuth } from "../../../context/auth/auth.context";
+import { esAdministradorRed } from "../../../utils/roles";
+import {
+  idDeCentro,
+  listaDe,
+  mensajeApi,
+  nombreDeCentro,
+} from "../../../utils/centro";
 
 // Interfaces
 interface Regional {
@@ -32,7 +40,8 @@ interface CrearFuncionarioModalProps {
   onHide: () => void;
   error?: string;
   loading?: boolean;
-  onSuccess?: () => void; // Callback para recargar datos
+  onSuccess?: () => void;
+  tipo?: "funcionario" | "admin_sistema";
 }
 
 export const CrearFuncionarioModal: React.FC<CrearFuncionarioModalProps> = ({
@@ -41,7 +50,14 @@ export const CrearFuncionarioModal: React.FC<CrearFuncionarioModalProps> = ({
   error,
   loading = false,
   onSuccess,
+  tipo = "funcionario",
 }) => {
+  const { user } = useAuth();
+  const esRed = esAdministradorRed(user?.perfil);
+  const esAdminCentro = tipo === "admin_sistema";
+  const eligeCentro = esAdminCentro || esRed;
+  const titulo = esAdminCentro ? "Nuevo admin de centro" : "Nuevo funcionario";
+
   const [regionales, setRegionales] = useState<Regional[]>([]);
   const [centros, setCentros] = useState<CentroFormacion[]>([]);
   const [idRegional, setIdRegional] = useState<number>(0);
@@ -156,16 +172,21 @@ export const CrearFuncionarioModal: React.FC<CrearFuncionarioModalProps> = ({
 
   useEffect(() => {
     if (show) {
-      api.get<Regional[]>("api/regionales").then((res) => setRegionales(res.data));
+      api.get("api/regionales").then((res) => setRegionales(listaDe<Regional>(res.data)));
       reset({});
+      setIdRegional(0);
+      setIdCentroFormacion(0);
     }
   }, [show, reset]);
 
   useEffect(() => {
-    if (!idRegional) return;
+    if (!idRegional) {
+      setCentros([]);
+      return;
+    }
     api
-      .get<{ data: CentroFormacion[] }>(`api/centrosFormacion/obtiene/porRegional/${idRegional}`)
-      .then((res) => setCentros(res.data.data));
+      .get(`api/centrosFormacion/obtiene/porRegional/${idRegional}`)
+      .then((res) => setCentros(listaDe<CentroFormacion>(res.data)));
   }, [idRegional]);
 
   const optionsRegionales: SelectOption[] = regionales.map((r) => ({
@@ -174,34 +195,36 @@ export const CrearFuncionarioModal: React.FC<CrearFuncionarioModalProps> = ({
   }));
 
   const optionsCentros: SelectOption[] = centros.map((c) => ({
-    value: c.idcentroFormacion,
-    label: c.centroFormacioncol,
+    value: idDeCentro(c as unknown as Record<string, unknown>),
+    label: nombreDeCentro(c as unknown as Record<string, unknown>),
   }));
 
   const onSubmit = async (data: FieldValues) => {
-    if (!idCentroFormacion) {
+    if (eligeCentro && !idCentroFormacion) {
       return alert("Selecciona un centro de formación");
     }
-    
-    // Filtrar solo los campos que el backend espera
-    const submissionData = {
-    nombres: data.nombres,
-    apellidos: data.apellidos,
-    celular: data.celular,
-    tipo_documento: data.tipo_documento || "CC", 
-    numero_documento: data.numero_documento,
-    email: data.email,
-    password: data.password,
-    idcentro_formacion: idCentroFormacion,
-   idperfil: Number(data.rol),
 
-    estado: data.estado ? String(data.estado) : "Activo",
-  };
+    const submissionData: Record<string, string | number> = {
+      nombres: data.nombres,
+      apellidos: data.apellidos,
+      celular: data.celular,
+      tipo_documento: data.tipo_documento || "CC",
+      numero_documento: data.numero_documento,
+      email: data.email,
+      password: data.password,
+    };
+    if (eligeCentro) {
+      submissionData.idcentro_formacion = idCentroFormacion;
+    } else if (user?.centroFormacion) {
+      submissionData.idcentro_formacion = Number(user.centroFormacion);
+    }
 
-  
-    
+    const url = esAdminCentro
+      ? "api/usuarios/admin-sistema"
+      : "api/usuarios/funcionarios";
+
     try {
-      await api.post("api/usuarios/crear", submissionData);
+      await api.post(url, submissionData);
 
       const nombreCompleto = `${data.nombres} ${data.apellidos}`;
       setCreatedFuncionario(nombreCompleto);
@@ -212,25 +235,14 @@ export const CrearFuncionarioModal: React.FC<CrearFuncionarioModalProps> = ({
 
       onHide();
       setShowSuccessModal(true);
-      
-      // Recargar la lista de funcionarios
+
       if (onSuccess) {
         onSuccess();
       }
-    } catch (err: any) {
-  console.error("ERROR axios ->", err);
-  console.error("err.message ->", err?.message);
-  console.error("err.config ->", err?.config);
-  console.error("err.request ->", err?.request);
-  console.error("err.response ->", err?.response);
-  console.error("err.response?.status ->", err?.response?.status);
-  console.error("err.response?.headers ->", err?.response?.headers);
-  console.error("err.response?.data ->", err?.response?.data);
-  // mostrar algo al usuario
-  const serverMsg = err?.response?.data?.message || JSON.stringify(err?.response?.data) || err?.message;
-  alert(`Error al crear: ${serverMsg}`);
-}
-  }
+    } catch (err: unknown) {
+      alert(`Error al crear: ${mensajeApi(err)}`);
+    }
+  };
 
   const handleSuccessModalClose = () => {
     setShowSuccessModal(false);
@@ -241,7 +253,7 @@ export const CrearFuncionarioModal: React.FC<CrearFuncionarioModalProps> = ({
     <>
       <Modal show={show} onHide={onHide} size="lg" centered>
         <Modal.Header closeButton>
-          <Modal.Title>Nuevo Funcionario</Modal.Title>
+          <Modal.Title>{titulo}</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           {error && <Alert variant="danger">{error}</Alert>}
@@ -458,6 +470,8 @@ export const CrearFuncionarioModal: React.FC<CrearFuncionarioModalProps> = ({
                 )}
               </Form.Group>
 
+              {eligeCentro ? (
+                <>
               {/* Regional */}
               <div className="col-md-6">
                 <Form.Label>
@@ -468,6 +482,7 @@ export const CrearFuncionarioModal: React.FC<CrearFuncionarioModalProps> = ({
                   value={optionsRegionales.find((o) => o.value === idRegional) || null}
                   onChange={(opt) => {
                     setIdRegional(opt ? opt.value : 0);
+                    setIdCentroFormacion(0);
                     setValue("idregional", opt ? opt.value : 0);
                   }}
                   placeholder="Selecciona una regional..."
@@ -500,48 +515,14 @@ export const CrearFuncionarioModal: React.FC<CrearFuncionarioModalProps> = ({
                   </div>
                 )}
               </div>
-
-              {/* Estado */}
-              <Form.Group className="col-md-6">
-                <Form.Label>
-                  Estado <span className="text-danger">*</span>
-                </Form.Label>
-                <Form.Select
-                  {...register("estado", {
-                    required: "Seleccione un estado",
-                  })}
-                  isInvalid={!!errors.estado}
-                >
-                  <option value="">Seleccione un estado</option>
-                  <option value="activo">Activo</option>
-                  <option value="inactivo">Inactivo</option>
-                </Form.Select>
-                <Form.Control.Feedback type="invalid">
-                  {errors.estado?.message as string}
-                </Form.Control.Feedback>
-              </Form.Group>
-
-              {/* Rol */}
-              <Form.Group className="col-md-6">
-                <Form.Label>
-                  Rol <span className="text-danger">*</span>
-                </Form.Label>
-               <Form.Select
-  {...register("rol", {
-    required: "Seleccione un rol",
-  })}
-  isInvalid={!!errors.rol}
->
-  <option value="">Seleccione un rol</option>
-  {/* usar ids que espera tu backend */}
-  <option value="2">Funcionario</option>
-  <option value="1">Administrador</option> {/* si aplica */}
-</Form.Select>
-
-                <Form.Control.Feedback type="invalid">
-                  {errors.rol?.message as string}
-                </Form.Control.Feedback>
-              </Form.Group>
+                </>
+              ) : (
+                <div className="col-12">
+                  <Alert variant="info" className="mb-0">
+                    Este funcionario queda en <strong>tu centro de formación</strong>. No eliges otra sede.
+                  </Alert>
+                </div>
+              )}
             </div>
 
             <div className="mt-4 d-flex justify-content-end gap-2">
@@ -559,7 +540,7 @@ export const CrearFuncionarioModal: React.FC<CrearFuncionarioModalProps> = ({
       {/* Modal de éxito */}
       <Modal show={showSuccessModal} onHide={handleSuccessModalClose} centered>
         <Modal.Header closeButton>
-          <Modal.Title>Funcionario Creado</Modal.Title>
+          <Modal.Title>{esAdminCentro ? "Admin de centro creado" : "Funcionario creado"}</Modal.Title>
         </Modal.Header>
         <Modal.Body className="text-center">
           <FaCheckCircle className="text-success mb-3" size={50} />

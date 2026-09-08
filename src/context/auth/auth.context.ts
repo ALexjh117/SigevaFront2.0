@@ -1,11 +1,14 @@
 import { createContext, use } from "react";
 import type { UserNormalizado } from "./types/authTypes";
+import type { Jornada } from "../../constants/jornada";
 
 interface AuthContextType {
   isAuthenticated: boolean;
+  sesionLista: boolean;
   user: UserNormalizado | null;
-  login: (response: any) => void;   
+  login: (response: any) => boolean;
   logout: () => void;
+  setJornada: (jornada: Jornada) => void;
 }
 
 export const AuthContext = createContext({} as AuthContextType);
