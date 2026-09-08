@@ -350,7 +350,12 @@ const Funcionarios: React.FC = () => {
       width: "110px",
       cell: (row: Funcionario) => (
         <div className="d-flex gap-1">
-          <Button variant="outline-primary" size="sm" onClick={() => handleEditar(row)} title="Editar funcionario">
+          <Button
+            variant="link"
+            className="tabla-accion-icono"
+            onClick={() => handleEditar(row)}
+            title="Editar funcionario"
+          >
             <FaEdit />
           </Button>
           <Button

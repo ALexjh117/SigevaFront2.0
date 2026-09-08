@@ -1,6 +1,11 @@
 import { useEffect, useMemo, useState } from "react";
 import { Button, Col, Container, Form, Row } from "react-bootstrap";
-import { FaArrowLeft } from "react-icons/fa";
+import {
+  FaArrowLeft,
+  FaUsers,
+  FaVoteYea,
+  FaChartPie,
+} from "react-icons/fa";
 import DataTable from "react-data-table-component";
 import type { TableColumn } from "react-data-table-component";
 import { api } from "../../api";
@@ -513,29 +518,59 @@ export default function PanelMetricas() {
                   </Form.Select>
                 </Form.Group>
 
-                <Row className="g-3 mb-4">
-                  <Col md>
-                    <div className="grafica-card grafica-kpi">
-                      <small>Habilitados del centro</small>
-                      <p>{habilitados.toLocaleString("es-CO")}</p>
+                <Row className="g-3 mb-4 escrutinio-kpis">
+                  <Col md={true}>
+                    <div className="grafica-card grafica-kpi escrutinio-kpi escrutinio-kpi--habilitados">
+                      <div className="escrutinio-kpi-icon">
+                        <FaUsers />
+                      </div>
+
+                      <div className="escrutinio-kpi-info">
+                        <small>Habilitados del centro</small>
+                        <p>{habilitados.toLocaleString("es-CO")}</p>
+                      </div>
                     </div>
                   </Col>
-                  <Col md>
-                    <div className="grafica-card grafica-kpi">
-                      <small>Votos emitidos</small>
-                      <p>{totalVotos.toLocaleString("es-CO")}</p>
+
+                  <Col md={true}>
+                    <div className="grafica-card grafica-kpi escrutinio-kpi escrutinio-kpi--votos">
+                      <div className="escrutinio-kpi-icon">
+                        <FaVoteYea />
+                      </div>
+
+                      <div className="escrutinio-kpi-info">
+                        <small>Votos emitidos</small>
+                        <p>{totalVotos.toLocaleString("es-CO")}</p>
+                      </div>
                     </div>
                   </Col>
-                  <Col md>
-                    <div className="grafica-card grafica-kpi">
-                      <small>Participación</small>
-                      <p>{participacion.toFixed(1)}%</p>
+
+                  <Col md={true}>
+                    <div className="grafica-card grafica-kpi escrutinio-kpi escrutinio-kpi--participacion">
+                      <div className="escrutinio-kpi-icon">
+                        <FaChartPie />
+                      </div>
+
+                      <div className="escrutinio-kpi-info">
+                        <small>Participación</small>
+                        <p>
+                          {participacion.toFixed(1)}
+                          %
+                        </p>
+                      </div>
                     </div>
                   </Col>
-                  <Col md>
-                    <div className="grafica-card grafica-kpi">
-                      <small>Candidatos</small>
-                      <p>{candidatos.length}</p>
+
+                  <Col md={true}>
+                    <div className="grafica-card grafica-kpi escrutinio-kpi escrutinio-kpi--candidatos">
+                      <div className="escrutinio-kpi-icon">
+                        <FaUsers />
+                      </div>
+
+                      <div className="escrutinio-kpi-info">
+                        <small>Candidatos</small>
+                        <p>{candidatos.length}</p>
+                      </div>
                     </div>
                   </Col>
                 </Row>

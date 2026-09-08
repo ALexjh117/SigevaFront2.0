@@ -12,7 +12,7 @@ export function LupaDetalle({
   return (
     <button
       type="button"
-      className="tabla-lupa"
+      className="tabla-accion-icono"
       onClick={onClick}
       title={titulo}
       aria-label={titulo}

@@ -109,3 +109,305 @@
     grid-template-columns: 1fr;
   }
 }
+
+/* =========================================================
+   SIGEVA - KPIs DEL ESCRUTINIO
+   Paleta DIOS
+   ========================================================= */
+
+.admin-page--resultados .escrutinio-kpis {
+  --kpi-digital: #16a000;
+  --kpi-innovador: #006b30;
+  --kpi-oferta: #007b78;
+  --kpi-sostenibilidad: #8fcb00;
+
+  --kpi-text: #17382d;
+  --kpi-muted: #64756d;
+
+  margin-bottom: 1.5rem;
+}
+
+/* =========================================================
+   TARJETA BASE
+   ========================================================= */
+
+.admin-page--resultados .escrutinio-kpi {
+  position: relative;
+
+  min-height: 94px;
+
+  display: flex;
+  align-items: center;
+
+  gap: 14px;
+
+  padding: 15px 18px;
+
+  overflow: hidden;
+
+  border: 1px solid rgba(190, 215, 199, 0.75);
+
+  border-radius: 12px;
+
+  background: #ffffff;
+
+  box-shadow:
+    0 4px 14px rgba(0, 70, 45, 0.055);
+
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.admin-page--resultados .escrutinio-kpi:hover {
+  transform: translateY(-2px);
+
+  box-shadow:
+    0 8px 20px rgba(0, 70, 45, 0.10);
+}
+
+/* =========================================================
+   DIFUMINADO
+   ========================================================= */
+
+.admin-page--resultados .escrutinio-kpi::after {
+  content: "";
+
+  position: absolute;
+
+  width: 140px;
+  height: 140px;
+
+  left: -55px;
+  top: 50%;
+
+  transform: translateY(-50%);
+
+  border-radius: 50%;
+
+  filter: blur(25px);
+
+  opacity: 0.22;
+
+  pointer-events: none;
+}
+
+/* =========================================================
+   ICONO
+   ========================================================= */
+
+.admin-page--resultados .escrutinio-kpi-icon {
+  position: relative;
+
+  z-index: 2;
+
+  flex: 0 0 48px;
+
+  width: 48px;
+  height: 48px;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 50%;
+
+  font-size: 1.55rem;
+
+  background: rgba(255, 255, 255, 0.75);
+
+  box-shadow:
+    inset 0 0 0 1px rgba(255, 255, 255, 0.8);
+}
+
+/* =========================================================
+   TEXTO
+   ========================================================= */
+
+.admin-page--resultados .escrutinio-kpi-info {
+  position: relative;
+
+  z-index: 2;
+
+  min-width: 0;
+}
+
+.admin-page--resultados .escrutinio-kpi-info small {
+  display: block;
+
+  margin: 0 0 4px;
+
+  color: var(--kpi-muted);
+
+  font-size: 0.72rem;
+
+  font-weight: 600;
+
+  line-height: 1.2;
+}
+
+.admin-page--resultados .escrutinio-kpi-info p {
+  margin: 0;
+
+  color: var(--kpi-text);
+
+  font-size: 1.62rem;
+
+  line-height: 1;
+
+  font-weight: 800;
+
+  letter-spacing: -0.03em;
+}
+
+/* =========================================================
+   HABILITADOS
+   ========================================================= */
+
+.admin-page--resultados .escrutinio-kpi--habilitados {
+  background:
+    radial-gradient(
+      circle at 0% 50%,
+      rgba(22, 160, 0, 0.14),
+      transparent 55%
+    ),
+    #ffffff;
+}
+
+.admin-page--resultados .escrutinio-kpi--habilitados::after {
+  background: var(--kpi-digital);
+}
+
+.admin-page--resultados .escrutinio-kpi--habilitados
+  .escrutinio-kpi-icon {
+  color: var(--kpi-digital);
+
+  background:
+    linear-gradient(
+      135deg,
+      #eef9ee,
+      #ffffff
+    );
+}
+
+/* =========================================================
+   VOTOS
+   ========================================================= */
+
+.admin-page--resultados .escrutinio-kpi--votos {
+  background:
+    radial-gradient(
+      circle at 0% 50%,
+      rgba(143, 203, 0, 0.16),
+      transparent 55%
+    ),
+    #ffffff;
+}
+
+.admin-page--resultados .escrutinio-kpi--votos::after {
+  background: var(--kpi-sostenibilidad);
+}
+
+.admin-page--resultados .escrutinio-kpi--votos
+  .escrutinio-kpi-icon {
+  color: #75a900;
+
+  background:
+    linear-gradient(
+      135deg,
+      #f1f8df,
+      #ffffff
+    );
+}
+
+/* =========================================================
+   PARTICIPACIÓN
+   ========================================================= */
+
+.admin-page--resultados .escrutinio-kpi--participacion {
+  background:
+    radial-gradient(
+      circle at 0% 50%,
+      rgba(0, 123, 120, 0.15),
+      transparent 55%
+    ),
+    #ffffff;
+}
+
+.admin-page--resultados .escrutinio-kpi--participacion::after {
+  background: var(--kpi-oferta);
+}
+
+.admin-page--resultados .escrutinio-kpi--participacion
+  .escrutinio-kpi-icon {
+  color: var(--kpi-oferta);
+
+  background:
+    linear-gradient(
+      135deg,
+      #e7f7f6,
+      #ffffff
+    );
+}
+
+/* =========================================================
+   CANDIDATOS
+   ========================================================= */
+
+.admin-page--resultados .escrutinio-kpi--candidatos {
+  background:
+    radial-gradient(
+      circle at 0% 50%,
+      rgba(183, 220, 0, 0.17),
+      transparent 55%
+    ),
+    #ffffff;
+}
+
+.admin-page--resultados .escrutinio-kpi--candidatos::after {
+  background: #b7dc00;
+}
+
+.admin-page--resultados .escrutinio-kpi--candidatos
+  .escrutinio-kpi-icon {
+  color: #82a900;
+
+  background:
+    linear-gradient(
+      135deg,
+      #f5f9df,
+      #ffffff
+    );
+}
+
+/* =========================================================
+   RESPONSIVE
+   ========================================================= */
+
+@media (max-width: 992px) {
+  .admin-page--resultados .escrutinio-kpi {
+    min-height: 88px;
+  }
+}
+
+@media (max-width: 576px) {
+  .admin-page--resultados .escrutinio-kpi {
+    min-height: 82px;
+
+    padding: 13px 15px;
+  }
+
+  .admin-page--resultados .escrutinio-kpi-icon {
+    width: 43px;
+    height: 43px;
+
+    flex-basis: 43px;
+
+    font-size: 1.35rem;
+  }
+
+  .admin-page--resultados .escrutinio-kpi-info p {
+    font-size: 1.45rem;
+  }
+}
