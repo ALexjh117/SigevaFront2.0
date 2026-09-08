@@ -166,7 +166,7 @@ const equipoAnterior: Miembro[] = [
     nombre: "Dovin Richard Hoyos",
     rol: "Full Stack Developer",
     github: "dovinhoyos",
-    avatar: "/avatars/na.jpeg",
+    avatar: "/avatars/dovin.jpeg",
     grupo: "Desarrolladores",
   },
 
