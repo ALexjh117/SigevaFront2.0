@@ -4,6 +4,7 @@ import type { Jornada } from "../../constants/jornada";
 
 interface AuthContextType {
   isAuthenticated: boolean;
+  sesionLista: boolean;
   user: UserNormalizado | null;
   login: (response: any) => boolean;
   logout: () => void;

@@ -4,7 +4,7 @@ import Sidebar from '../sidebar/Sidebar';
 import '../Dashboard.css';
 import '../theme/admin.css';
 import { useAuth } from '../context/auth/auth.context';
-import { usaTemaAdmin } from '../utils/roles';
+import { esAprendiz, usaTemaAdmin } from '../utils/roles';
 import { jornadaDelAprendiz } from '../utils/jornadaAprendiz';
 import {
   etiquetaPerfil,
@@ -40,10 +40,11 @@ const MainLayout = ({ children, showSidebar = true, role = 'funcionario' }: Main
   const { user } = useAuth();
   const { pathname } = useLocation();
   const lookAdmin = usaTemaAdmin(user?.perfil);
+  const esApz = esAprendiz(user?.perfil);
   const jornada = jornadaDelAprendiz(user);
 
   return (
-    <div className={`main-layout ${role}${lookAdmin ? ' theme-admin' : ''}`}>
+    <div className={`main-layout ${role}${lookAdmin ? ' theme-admin' : ''}${esApz ? ' is-aprendiz' : ''}`}>
       {showSidebar && <Sidebar />}
 
       <main className={`main-content ${showSidebar ? 'with-sidebar' : ''}`}>

@@ -10,7 +10,6 @@ import ProgressBar from "react-bootstrap/ProgressBar";
 import Spinner from "react-bootstrap/Spinner";
 import { api } from "../../api";
 import { useAuth } from "../../context/auth/auth.context";
-import type { Gestor } from "../../context/auth/types/authTypes";
 import Toast from "react-bootstrap/Toast";
 import ToastContainer from "react-bootstrap/ToastContainer";
 import Modal from "react-bootstrap/Modal";
@@ -84,8 +83,6 @@ export default function CargarAprendices() {
   const isAdmin =
     isAuthenticated &&
     user?.perfil?.toString().trim().toLowerCase() === "administrador";
-
-  const userId = isAdmin ? (user as Gestor).id : null;
 
   // estados
   const [centros, setCentros] = useState<CentroFormacion[]>([]);
@@ -255,10 +252,6 @@ export default function CargarAprendices() {
       });
       return;
     }
-    if (!userId) {
-      setMsg({ type: "danger", text: "No se encontró el userId en sesión." });
-      return;
-    }
     if (!file) {
       setMsg({ type: "danger", text: "Selecciona un archivo Excel primero." });
       return;
@@ -281,7 +274,6 @@ export default function CargarAprendices() {
     // Construimos FormData
     const fd = new FormData();
     fd.append("excel", file, file.name);
-    fd.append("userId", String(userId));
     fd.append("centroFormacionId", String(centroId));
     fd.append("idregional", String(regionalId));
     // nuevo: enviar flag updateIfExists

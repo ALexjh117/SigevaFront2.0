@@ -45,7 +45,17 @@ function PublicLayout() {
 }
 
 function PrivateLayout() {
-  const { isAuthenticated } = useAuth();
+  const { isAuthenticated, sesionLista } = useAuth();
+
+  if (!sesionLista) {
+    return (
+      <div className="d-flex justify-content-center align-items-center min-vh-100">
+        <div className="spinner-border text-success" role="status">
+          <span className="visually-hidden">Cargando sesión…</span>
+        </div>
+      </div>
+    );
+  }
 
   if (!isAuthenticated) {
     return <Navigate to="/" replace />;

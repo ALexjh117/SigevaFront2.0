@@ -110,6 +110,11 @@
   font-size: 0.82rem;
   color: var(--admin-muted, #5a6560);
   line-height: 1.4;
+  overflow-wrap: anywhere;
+}
+
+.admin-vote-card h3 {
+  overflow-wrap: anywhere;
 }
 
 .admin-vote-cta--go {
@@ -434,7 +439,7 @@
   height: 58px !important;
   text-align: center;
   letter-spacing: 0.38em;
-  font-size: 1.35rem !important;
+  font-size: 16px !important;
   font-weight: 800;
   border-color: #39a900 !important;
   border-radius: 10px !important;
@@ -447,7 +452,18 @@
   background: #eef3ee;
 }
 
+.main-layout.is-aprendiz .admin-shortcut,
+.main-layout.is-aprendiz .admin-vote-card,
+.main-layout.is-aprendiz .admin-cand,
+.main-layout.is-aprendiz .apz-btn {
+  touch-action: manipulation;
+}
+
 @media (max-width: 991.98px) {
+  .sidebar-container.has-carrusel .side-cand {
+    display: none;
+  }
+
   .admin-election-grid,
   .admin-jornada-grid {
     grid-template-columns: 1fr 1fr;
@@ -455,6 +471,26 @@
 
   .admin-cand-grid {
     grid-template-columns: 1fr 1fr;
+  }
+
+  .main-layout.is-aprendiz .admin-shortcut-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .main-layout.is-aprendiz .admin-shortcut {
+    min-height: 72px;
+    padding: 1rem 0.9rem;
+    text-align: left;
+  }
+
+  .main-layout.is-aprendiz .admin-shortcut small {
+    white-space: normal;
+    display: block;
+    line-height: 1.4;
+  }
+
+  .admin-cand-foto {
+    height: 160px;
   }
 }
 
@@ -470,11 +506,85 @@
   }
 
   .apz-ficha-head {
+    flex-direction: column;
     align-items: flex-start;
+    gap: 0.75rem;
+    padding: 1.25rem 3.2rem 0.85rem 1.15rem !important;
   }
 
   .apz-ficha-foto {
     width: 72px;
     height: 72px;
+  }
+
+  .apz-ficha-id h2 {
+    font-size: 1.08rem;
+  }
+
+  .apz-ficha-body,
+  .modal-footer.apz-modal-actions--footer {
+    padding-left: 1.15rem;
+    padding-right: 1.15rem;
+  }
+
+  .apz-ficha-propuesta {
+    font-size: 0.95rem;
+  }
+
+  .admin-cand-foto {
+    height: 200px;
+  }
+
+  .admin-vote-card {
+    padding: 1.05rem 1rem 1.1rem;
+  }
+
+  .admin-vote-card header {
+    flex-wrap: wrap;
+    align-items: flex-start;
+  }
+
+  .admin-vote-cta--go {
+    display: inline-flex;
+    min-height: 44px;
+    align-items: center;
+  }
+
+  .apz-otp-input,
+  .apz-otp input {
+    height: 52px !important;
+    font-size: 16px !important;
+    letter-spacing: 0.18em;
+  }
+
+  .apz-modal-body {
+    padding: 2.4rem 1.15rem 1.35rem !important;
+  }
+
+  .modal-dialog.apz-modal--ficha,
+  .modal-dialog.apz-modal--otp {
+    margin: 0.6rem;
+    max-width: calc(100vw - 1.2rem);
+    width: calc(100vw - 1.2rem);
+  }
+
+  .modal-dialog-scrollable.apz-modal--ficha .modal-content {
+    max-height: min(92dvh, 720px);
+  }
+
+  .swal2-popup {
+    width: calc(100% - 1.5rem) !important;
+  }
+}
+
+@media (max-width: 380px) {
+  .admin-dash-hero h1 {
+    font-size: 1.45rem;
+  }
+
+  .admin-pill-on,
+  .admin-pill-off,
+  .admin-pill-done {
+    font-size: 0.62rem !important;
   }
 }

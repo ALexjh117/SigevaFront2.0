@@ -3,6 +3,7 @@ import { useAuth } from "../../context/auth/auth.context";
 import { useNavigate } from "react-router-dom";
 import { jornadaDelAprendiz } from "../../utils/jornadaAprendiz";
 import { DiosBulb, DiosChip, DiosLeaf } from "../../theme/DiosIcons";
+import { PertenenciaUsuario } from "../../components/dashboard/PertenenciaUsuario";
 
 const DETALLE: Record<Jornada, string> = {
   Mañana: "Verás la elección de tu centro y solo los candidatos de la mañana.",
@@ -39,6 +40,7 @@ export default function ElegirJornadaPage() {
         <h1>
           Elige tu <span>jornada</span>
         </h1>
+        <PertenenciaUsuario />
         <p className="admin-dash-lead">
           {actual
             ? `Ahora estás en ${actual}. Si ya votaste, cambiar de jornada solo cambia a quién ves: no puedes votar otra vez en la misma elección.`

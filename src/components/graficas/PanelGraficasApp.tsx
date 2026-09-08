@@ -16,6 +16,7 @@ export type AprendizGrafica = {
 
 export type EleccionGrafica = {
   ideleccion?: number;
+  idcentroFormacion?: number;
   centro?: unknown;
   regional?: unknown;
   jornada?: string | null;
@@ -140,7 +141,7 @@ export function PanelGraficasApp({
             datos={topN(contarPor(aprendices, (a) => etiquetaAnidada(a.grupo, ["grupo"]) || "Sin grupo"), 8)}
           />
         )}
-        {esRed && funcionarios.length > 0 ? (
+        {funcionarios.length > 0 ? (
           <>
             <GraficaBarras
               titulo="Funcionarios por regional"

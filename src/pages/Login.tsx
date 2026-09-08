@@ -2,7 +2,7 @@ import { useState } from "react";
 import toast from "react-hot-toast";
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
-import { Link, useLocation, useNavigate } from "react-router-dom";
+import { Link, Navigate, useLocation, useNavigate } from "react-router-dom";
 import { FaArrowLeft, FaArrowRight, FaLock, FaUserGraduate, FaUserTie, FaEye, FaEyeSlash } from "react-icons/fa";
 import { api } from "../api";
 import { useAuth } from "../context/auth/auth.context";
@@ -29,7 +29,7 @@ interface Props {
 
 export default function Login(_props: Props) {
   const [showPassword, setShowPassword] = useState(false);
-  const { login } = useAuth();
+  const { login, isAuthenticated, sesionLista, user } = useAuth();
   const navigate = useNavigate();
   const { pathname } = useLocation();
   const esAprendiz = pathname.includes("login-aprendiz");
@@ -46,6 +46,20 @@ export default function Login(_props: Props) {
       password: "",
     },
   });
+
+  if (sesionLista && isAuthenticated && user) {
+    if (perfilEsAprendiz(user.perfil)) {
+      const id = idDelAprendiz(user);
+      const yaEligio = id ? Boolean(getJornadaGuardada(id)) : false;
+      return <Navigate to={yaEligio ? "/votaciones" : "/elegir-jornada"} replace />;
+    }
+    if (esFuncionario(user.perfil) || esAdminSistema(user.perfil)) {
+      return <Navigate to="/dashboard" replace />;
+    }
+    if (esAdministradorRed(user.perfil)) {
+      return <Navigate to="/dashboard-admin" replace />;
+    }
+  }
 
   const onSubmit: SubmitHandler<FormValues> = async (data) => {
     try {

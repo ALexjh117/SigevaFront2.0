@@ -317,9 +317,9 @@
 .sidebar-toggle {
   position: fixed;
 
-  top: 1rem;
+  top: max(0.85rem, env(safe-area-inset-top));
 
-  left: 1rem;
+  left: max(0.85rem, env(safe-area-inset-left));
 
   z-index: 1050;
 
@@ -329,9 +329,9 @@
 
   border: none;
 
-  width: 40px;
+  width: 44px;
 
-  height: 40px;
+  height: 44px;
 
   border-radius: 50%;
 

@@ -1,6 +1,9 @@
 import { useEffect, useRef, useState } from "react";
 import "./ChatBot.css";
-
+import {
+  FaRobot,
+ 
+} from "react-icons/fa";
 interface Mensaje {
   texto: string;
   usuario: boolean;
@@ -483,7 +486,7 @@ export default function ChatBot() {
           onClick={() => setAbierto(true)}
           aria-label="Abrir asistente SIGEVA"
         >
-          🤖
+              <FaRobot />
         </button>
 
       )}
