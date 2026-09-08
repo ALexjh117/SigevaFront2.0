@@ -1,3 +1,4 @@
+import { useMemo } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/auth/auth.context";
 import { nombreDeUsuario } from "../../utils/usuario";
@@ -5,6 +6,46 @@ import { esAdminSistema } from "../../utils/roles";
 import { DiosBulb, DiosChip, DiosLeaf, DiosTarget } from "../../theme/DiosIcons";
 import { useDatosDashboard } from "../../hooks/useDatosDashboard";
 import { PanelGraficasApp } from "../../components/graficas/PanelGraficasApp";
+import type { AprendizGrafica, VotoGrafica } from "../../components/graficas/PanelGraficasApp";
+import { PertenenciaUsuario } from "../../components/dashboard/PertenenciaUsuario";
+import { FiltroCentroRed } from "../../components/dashboard/FiltroCentroRed";
+import { useFiltroCentroRed } from "../../hooks/useCatalogoCentros";
+import { etiquetaAnidada } from "../../utils/comoLista";
+
+function idCentroDeAprendiz(a: AprendizGrafica): number {
+  const o = a as AprendizGrafica & Record<string, unknown>;
+  const nested = o.centro_formacion ?? o.centroFormacion;
+  const nestedId =
+    nested && typeof nested === "object"
+      ? Number(
+          (nested as Record<string, unknown>).idcentroFormacion ??
+            (nested as Record<string, unknown>).idcentro_formacion
+        )
+      : 0;
+  return (
+    Number(
+      o.centroFormacionIdcentroFormacion ??
+        o.idcentroFormacion ??
+        o.centro_formacion_idcentro_formacion
+    ) ||
+    nestedId ||
+    0
+  );
+}
+
+function idEleccionDeVoto(v: VotoGrafica): number {
+  const extra = v as VotoGrafica & Record<string, unknown>;
+  const anidado = extra.eleccion as Record<string, unknown> | undefined;
+  return (
+    Number(
+      extra.ideleccion ??
+        extra.idEleccion ??
+        extra.eleccionId ??
+        anidado?.ideleccion ??
+        anidado?.id
+    ) || 0
+  );
+}
 
 export const DashboardAdmin = () => {
   const navigate = useNavigate();
@@ -22,6 +63,60 @@ export const DashboardAdmin = () => {
     funcionarios,
     votos,
   } = useDatosDashboard();
+  const {
+    regionales,
+    centrosFiltrados,
+    idRegional,
+    idCentro,
+    centroElegido,
+    elegirRegional,
+    elegirCentro,
+  } = useFiltroCentroRed(esRed);
+
+  const graficas = useMemo(() => {
+    if (!esRed) {
+      return { aprendices, elecciones, funcionarios, votos, mostrar: true };
+    }
+    if (!idCentro || !centroElegido) {
+      return {
+        aprendices: [],
+        elecciones: [],
+        funcionarios: [],
+        votos: [],
+        mostrar: false,
+      };
+    }
+    const nombreCentro = centroElegido.nombre.toLowerCase();
+    const eleccionesCentro = elecciones.filter((e) => {
+      if (e.idcentroFormacion === idCentro) return true;
+      return etiquetaAnidada(e.centro).toLowerCase() === nombreCentro;
+    });
+    const idsEleccion = new Set(
+      eleccionesCentro.map((e) => e.ideleccion).filter((id): id is number => Boolean(id))
+    );
+    const aprendicesCentro = aprendices.filter((a) => {
+      const id = idCentroDeAprendiz(a);
+      if (id === idCentro) return true;
+      if (id) return false;
+      const nombre =
+        etiquetaAnidada(a.centro_formacion) || etiquetaAnidada(a.centroFormacion);
+      return nombre.toLowerCase() === nombreCentro;
+    });
+    const votosCentro = votos.filter((v) => idsEleccion.has(idEleccionDeVoto(v)));
+    const funcionariosCentro = funcionarios.filter((f) => {
+      const id = Number(f.centroFormacion && (f.centroFormacion as { idcentroFormacion?: number }).idcentroFormacion);
+      if (id === idCentro) return true;
+      const nombre = f.centroFormacion?.centroFormacioncol?.toLowerCase() || "";
+      return nombre === nombreCentro;
+    });
+    return {
+      aprendices: aprendicesCentro,
+      elecciones: eleccionesCentro,
+      funcionarios: funcionariosCentro,
+      votos: votosCentro,
+      mostrar: true,
+    };
+  }, [esRed, idCentro, centroElegido, aprendices, elecciones, funcionarios, votos]);
 
   const atajos = esRed
     ? [
@@ -50,7 +145,7 @@ export const DashboardAdmin = () => {
           clase: "admin-shortcut--sostenible",
           to: "/elecciones",
           titulo: "Elecciones de la red",
-          pie: "Todos los centros",
+          pie: "Eliges el centro",
           icono: <DiosLeaf />,
         },
       ]
@@ -123,6 +218,7 @@ export const DashboardAdmin = () => {
         <h1>
           Bienvenido, <span>{nombreVisible}</span>
         </h1>
+        <PertenenciaUsuario />
         <p className="admin-dash-lead">
           {esRed
             ? "Números clave y gráficas de barras, donas y tendencia de votos de toda la red: aprendices, elecciones, funcionarios y participación."
@@ -200,13 +296,40 @@ export const DashboardAdmin = () => {
         ))}
       </div>
 
-      <PanelGraficasApp
-        aprendices={aprendices}
-        elecciones={elecciones}
-        funcionarios={funcionarios}
-        votos={votos}
-        esRed={esRed}
-      />
+      {esRed ? (
+        <>
+          <FiltroCentroRed
+            regionales={regionales}
+            centros={centrosFiltrados}
+            idRegional={idRegional}
+            idCentro={idCentro}
+            onRegional={elegirRegional}
+            onCentro={elegirCentro}
+          />
+          {graficas.mostrar ? (
+            <PanelGraficasApp
+              aprendices={graficas.aprendices}
+              elecciones={graficas.elecciones}
+              funcionarios={graficas.funcionarios}
+              votos={graficas.votos}
+              esRed={false}
+            />
+          ) : (
+            <p className="admin-dash-place admin-dash-place--muted">
+              Elige la regional y el centro de formación para ver las gráficas de esa sede,
+              sin recorrer todos los centros.
+            </p>
+          )}
+        </>
+      ) : (
+        <PanelGraficasApp
+          aprendices={graficas.aprendices}
+          elecciones={graficas.elecciones}
+          funcionarios={graficas.funcionarios}
+          votos={graficas.votos}
+          esRed={false}
+        />
+      )}
     </div>
   );
 };

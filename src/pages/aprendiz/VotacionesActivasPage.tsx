@@ -11,6 +11,7 @@ import {
   idDeEleccion,
 } from "../../utils/votoAprendiz";
 import { esJornada } from "../../constants/jornada";
+import { PertenenciaUsuario } from "../../components/dashboard/PertenenciaUsuario";
 
 type Votacion = {
   ideleccion: number;
@@ -91,8 +92,6 @@ const VotacionesActivasPage = () => {
     loadData();
   }, [user?.CentroFormacion, user?.id, jornada]);
 
-  const centro = votaciones[0]?.centro;
-
   return (
     <div className="admin-dash">
       <header className="admin-dash-hero">
@@ -100,10 +99,8 @@ const VotacionesActivasPage = () => {
         <h1>
           Bienvenido, <span>{nombreVisible}</span>
         </h1>
-        <p className="admin-dash-lead">
-          {centro ? `${centro}. ` : ""}
-          Elige una elección y vota.
-        </p>
+        <PertenenciaUsuario />
+        <p className="admin-dash-lead">Elige una elección y vota.</p>
       </header>
 
       <section className="grafica-panel" style={{ marginTop: "1.1rem" }} id="elecciones">

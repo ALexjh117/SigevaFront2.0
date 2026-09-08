@@ -7,18 +7,22 @@ export interface Gestor {
   nombres?: string;
   apellidos?: string;
   nombre?: string;
+  tipo?: "aprendiz" | "usuario";
 }
 
 export interface Aprendiz {
   id: number;
   idaprendiz?: number;
-  nombre: string;
+  nombre?: string;
+  nombres?: string;
   apellidos: string;
   estado: string;
   perfil: "Aprendiz";
   jornada: string | null;
   CentroFormacion: number;
+  centroFormacion?: number;
   centroFormacionIdcentroFormacion?: number;
+  tipo?: "aprendiz" | "usuario";
 }
 
 export type User = Gestor | Aprendiz;
@@ -40,5 +44,7 @@ export interface UserNormalizado {
   jornada?: string | null;
   CentroFormacion?: number;
   centroFormacion?: number;
+  nombreCentro?: string;
+  nombreRegional?: string;
   idaprendiz?: number;
 }

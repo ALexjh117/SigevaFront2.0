@@ -558,6 +558,44 @@
   color: var(--dios-d);
 }
 
+.admin-dash-place {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem 0.65rem;
+  margin: 0 0 0.85rem;
+}
+
+.admin-dash-place--muted {
+  margin: 0 0 0.85rem;
+  color: var(--admin-muted);
+  font-size: 0.9rem;
+}
+
+.admin-dash-chip {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.12rem;
+  padding: 0;
+  border: none;
+  background: transparent;
+  line-height: 1.2;
+}
+
+.admin-dash-chip small {
+  color: var(--admin-muted);
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  font-size: 0.62rem;
+}
+
+.admin-dash-chip strong {
+  font-weight: 700;
+  font-size: 0.9rem;
+  color: var(--admin-ink);
+}
+
 .admin-dash-lead {
   margin: 0;
   max-width: 52ch;
@@ -791,6 +829,23 @@
   .admin-shortcut:nth-child(n + 3) {
     border-top: 1px solid var(--admin-line);
   }
+
+  .main-layout.is-aprendiz .admin-topbar-trace,
+  .main-layout.is-aprendiz .admin-topbar-jornada {
+    display: none;
+  }
+
+  .main-layout.is-aprendiz .content-wrapper {
+    padding: 1.25rem 1.15rem max(2.4rem, env(safe-area-inset-bottom));
+  }
+
+  .main-layout.is-aprendiz .admin-dash-hero h1 {
+    font-size: clamp(1.45rem, 6.5vw, 2rem);
+  }
+
+  .main-layout.is-aprendiz .admin-dash-place {
+    gap: 0.85rem 1rem;
+  }
 }
 
 @media (max-width: 575.98px) {
@@ -822,5 +877,20 @@
   .admin-shortcut + .admin-shortcut {
     border-left: none;
     border-top: 1px solid var(--admin-line);
+  }
+
+  .main-layout.is-aprendiz .admin-topbar-fabrica,
+  .main-layout.is-aprendiz .admin-topbar-sep {
+    display: none;
+  }
+
+  .main-layout.is-aprendiz .admin-topbar {
+    padding-top: 0.55rem;
+    padding-bottom: 0.55rem;
+  }
+
+  .main-layout.is-aprendiz .admin-dash-lead {
+    max-width: none;
+    font-size: 0.92rem;
   }
 }

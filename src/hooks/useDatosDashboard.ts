@@ -41,7 +41,13 @@ function diaDeVoto(iso?: string | null): string {
 }
 
 function idCentroDe(row: Record<string, unknown>): number | undefined {
-  const n = Number(row.idcentroFormacion ?? row.idcentro_formacion);
+  const anidado = row.centro as Record<string, unknown> | undefined;
+  const n = Number(
+    row.idcentroFormacion ??
+      row.idcentro_formacion ??
+      anidado?.idcentroFormacion ??
+      anidado?.idcentro_formacion
+  );
   return n || undefined;
 }
 
@@ -57,6 +63,7 @@ function mapearEleccion(
 
   return {
     ideleccion: Number(row.ideleccion) || undefined,
+    idcentroFormacion: idCentro,
     centro:
       centroFila ||
       centroInfo?.centroFormacioncol ||

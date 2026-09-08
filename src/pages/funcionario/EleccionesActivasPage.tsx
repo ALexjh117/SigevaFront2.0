@@ -18,7 +18,9 @@ import {
   LupaDetalle,
   textoCorto,
 } from "../../components/tabla/detalleTabla";
-import { MiniGraficas, contarPor, topN } from "../../components/graficas/MiniGraficas";
+import { MiniGraficas, contarPor } from "../../components/graficas/MiniGraficas";
+import { FiltroCentroRed } from "../../components/dashboard/FiltroCentroRed";
+import { useFiltroCentroRed } from "../../hooks/useCatalogoCentros";
 
 interface Aprendiz {
   nombres: string;
@@ -53,11 +55,6 @@ interface CentroRed {
   idcentro_formacion?: number;
   centroFormacioncol?: string;
   idregional?: number;
-}
-
-interface RegionalRed {
-  idregional?: number;
-  regional?: string;
 }
 
 function etiquetaLugar(valor: unknown) {
@@ -205,9 +202,25 @@ export default function EleccionesActivasPage() {
   const { user } = useAuth();
   const navegar = useNavigate();
   const esRed = esAdministradorRed(user?.perfil);
+  const {
+    regionales,
+    centros,
+    centrosFiltrados,
+    idRegional,
+    idCentro,
+    centroElegido,
+    elegirRegional,
+    elegirCentro,
+  } = useFiltroCentroRed(esRed);
+  const centroConsulta = esRed ? idCentro : Number(user?.centroFormacion) || 0;
 
   const loadData = useCallback(async () => {
     if (!user || (!esRed && !user.centroFormacion)) {
+      setEleccionActiva([]);
+      setLoading(false);
+      return;
+    }
+    if (esRed && !centroConsulta) {
       setEleccionActiva([]);
       setLoading(false);
       return;
@@ -216,39 +229,26 @@ export default function EleccionesActivasPage() {
     try {
       const centrosPorId = new Map<number, CentroRed>();
       const regionalesPorId = new Map<number, string>();
-      let crudas: Record<string, unknown>[] = [];
-
-      if (esRed) {
-        const [resEle, resCentros, resRegionales] = await Promise.all([
-          api.get("/api/eleccion").catch(() => api.get("api/eleccion/activas")),
-          api.get("api/centrosFormacion/obtiene").catch(() => ({ data: [] })),
-          api.get("api/regionales").catch(() => ({ data: [] })),
-        ]);
-
-        comoLista<RegionalRed>(resRegionales.data).forEach((r) => {
-          const id = Number(r.idregional);
-          if (id && r.regional) regionalesPorId.set(id, r.regional);
+      centros.forEach((c) => {
+        centrosPorId.set(c.id, {
+          idcentroFormacion: c.id,
+          centroFormacioncol: c.nombre,
+          idregional: c.idRegional,
         });
-        comoLista<CentroRed>(resCentros.data).forEach((c) => {
-          const id = Number(c.idcentroFormacion ?? c.idcentro_formacion);
-          if (id) centrosPorId.set(id, c);
-        });
-        crudas = filasDeEleccion(resEle.data);
-      } else {
-        const idCentro = Number(user.centroFormacion);
-        const respuestas = await Promise.allSettled([
-          api.get(`/api/eleccion/traerTodas/${idCentro}`),
-          api.get(`/api/eleccionPorCentro/${idCentro}`),
-        ]);
-        const combinadas: Record<string, unknown>[] = [];
-        for (const r of respuestas) {
-          if (r.status !== "fulfilled") continue;
-          combinadas.push(...filasDeEleccion(r.value.data));
-        }
-        crudas = filasDeEleccion(combinadas);
+      });
+      regionales.forEach((r) => regionalesPorId.set(r.id, r.nombre));
+
+      const respuestas = await Promise.allSettled([
+        api.get(`/api/eleccion/traerTodas/${centroConsulta}`),
+        api.get(`/api/eleccionPorCentro/${centroConsulta}`),
+      ]);
+      const combinadas: Record<string, unknown>[] = [];
+      for (const r of respuestas) {
+        if (r.status !== "fulfilled") continue;
+        combinadas.push(...filasDeEleccion(r.value.data));
       }
 
-      const lista = crudas
+      const lista = filasDeEleccion(combinadas)
         .map((row) => mapearEleccion(row, centrosPorId, regionalesPorId))
         .filter((row) => Number.isFinite(row.ideleccion) && row.ideleccion > 0);
 
@@ -259,7 +259,7 @@ export default function EleccionesActivasPage() {
     } finally {
       setLoading(false);
     }
-  }, [esRed, user]);
+  }, [esRed, user, centroConsulta, centros, regionales]);
 
   useEffect(() => {
     void loadData();
@@ -307,17 +307,6 @@ export default function EleccionesActivasPage() {
       grow: 2,
       cell: (row) => textoCorto(row.titulo, 34),
     },
-    ...(esRed
-      ? [
-          {
-            name: "Centro",
-            selector: (row: Eleccion) => etiquetaLugar(row.centro),
-            sortable: true,
-            grow: 2,
-            cell: (row: Eleccion) => textoCorto(etiquetaLugar(row.centro), 36),
-          } satisfies TableColumn<Eleccion>,
-        ]
-      : []),
     {
       name: "Estado",
       width: "110px",
@@ -401,11 +390,30 @@ export default function EleccionesActivasPage() {
       {esRed ? (
         <>
           <h3 className="fw-bold">
-            Elecciones de la <span className="app-accent">red</span>
+            Elecciones por <span className="app-accent">centro</span>
           </h3>
           <p className="text-muted">
-            Procesos de votación de todos los centros de formación.
+            {centroElegido
+              ? `Activas y cerradas de ${centroElegido.nombre}${
+                  centroElegido.regional ? ` · ${centroElegido.regional}` : ""
+                }.`
+              : "Elige la regional y el centro de formación para ver sus elecciones y gráficas."}
           </p>
+          <FiltroCentroRed
+            regionales={regionales}
+            centros={centrosFiltrados}
+            idRegional={idRegional}
+            idCentro={idCentro}
+            onRegional={(id) => {
+              elegirRegional(id);
+              setBuscador("");
+              setEleccionActiva([]);
+            }}
+            onCentro={(id) => {
+              elegirCentro(id);
+              setBuscador("");
+            }}
+          />
         </>
       ) : (
         <>
@@ -423,20 +431,12 @@ export default function EleccionesActivasPage() {
         </>
       )}
 
+      {(!esRed || idCentro) && (
+        <>
       <MiniGraficas
         barras={{
-          titulo: esRed ? "Elecciones por centro" : "Elecciones por jornada",
-          datos: topN(
-            contarPor(
-              eleccionActiva,
-              (e) =>
-                esRed
-                  ? etiquetaLugar(e.centro)
-                  : e.jornada || "Sin jornada"
-            ),
-            8
-          ),
-          horizontal: true,
+          titulo: "Elecciones por jornada",
+          datos: contarPor(eleccionActiva, (e) => e.jornada || "Sin jornada"),
           unidad: "elecciones",
         }}
         dona={{
@@ -458,11 +458,7 @@ export default function EleccionesActivasPage() {
         <Col md={8} lg={6} className="mb-2 mb-md-0">
           <Form.Control
             type="text"
-            placeholder={
-              esRed
-                ? "Buscar por título, centro o regional..."
-                : "Buscar elección por nombre..."
-            }
+            placeholder="Buscar elección por nombre..."
             value={buscador}
             onChange={(e) => setBuscador(e.target.value)}
           />
@@ -489,12 +485,14 @@ export default function EleccionesActivasPage() {
           striped
           customStyles={adminTableStyles}
           noDataComponent={
-            esRed
-              ? "No hay elecciones registradas en la red."
+            loading
+              ? "Cargando elecciones…"
               : "No hay elecciones registradas en este centro."
           }
         />
       </div>
+        </>
+      )}
 
       <DetalleFilaModal
         show={!!ficha}

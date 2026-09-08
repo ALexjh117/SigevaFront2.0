@@ -48,8 +48,7 @@ export default function SelecionarCandidato({
     
     try {
       const payload = {
-        aprendiz_idaprendiz: user?.id,
-        elecciones_ideleccion: id,
+        elecciones_ideleccion: Number(id),
       };
      
 
@@ -162,7 +161,6 @@ export default function SelecionarCandidato({
             "/api/votoXCandidato/crear/",
             {
               idcandidatos: Number(candidato.idCandidato),
-              idaprendiz: Number(user?.id),
               contador: 1,
               ideleccion: Number(id),
             }

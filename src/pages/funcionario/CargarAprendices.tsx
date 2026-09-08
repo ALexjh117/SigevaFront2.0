@@ -11,7 +11,7 @@ import ProgressBar from "react-bootstrap/ProgressBar";
 import Spinner from "react-bootstrap/Spinner";
 import { api } from "../../api";
 import { useAuth } from "../../context/auth/auth.context";
-import type { User, Gestor } from "../../context/auth/types/authTypes";
+import type { User } from "../../context/auth/types/authTypes";
 import { esRolDeCentro } from "../../utils/roles";
 import Modal from "react-bootstrap/Modal";
 import { Toast } from "react-bootstrap";
@@ -32,7 +32,6 @@ const UPLOAD_URL = "/api/aprendices/importarExcel";
 export default function CargarAprendices() {
   const { user, isAuthenticated } = useAuth();
   const puedeImportar = isAuthenticated && esRolDeCentro((user as User)?.perfil);
-  const userId = puedeImportar ? (user as Gestor).id : null;
 
   const [file, setFile] = useState<File | null>(null);
   const [preview, setPreview] = useState<FilaExcel[]>([]);
@@ -146,11 +145,6 @@ export default function CargarAprendices() {
       setShowToast(true);
       return;
     }
-    if (!userId) {
-      setMsg({ type: "danger", text: "No se encontró el userId en sesión." });
-      setShowToast(true);
-      return;
-    }
     if (!file) {
       setMsg({ type: "danger", text: "Selecciona un archivo Excel primero." });
       setShowToast(true);
@@ -212,7 +206,6 @@ export default function CargarAprendices() {
 
     const fd = new FormData();
     fd.append("excel", file);
-    fd.append("userId", String(userId));
 
     setSubiendo(true);
     setMsg(null);

@@ -1,11 +1,12 @@
-import { useState, type PropsWithChildren } from "react";
+import { useEffect, useState, type PropsWithChildren } from "react";
 import { AuthContext } from "./auth.context";
-import type { Gestor, ResponseType, User, UserNormalizado } from "./types/authTypes";
+import type { ResponseType, User, UserNormalizado } from "./types/authTypes";
 import toast from "react-hot-toast";
 import { type Jornada } from "../../constants/jornada";
 import { getJornadaGuardada, guardarJornada, idDelAprendiz } from "../../utils/jornadaAprendiz";
-import { setActorHeader } from "../../api";
+import { api, setOnUnauthorized, silenciarUnauthorized } from "../../api";
 import { esAprendiz } from "../../utils/roles";
+import { ubicacionDesdeUsuario } from "../../utils/centro";
 
 function estadoHabilitado(estado?: string) {
   const n = (estado || "")
@@ -16,25 +17,38 @@ function estadoHabilitado(estado?: string) {
   return n === "activo" || n === "en formacion" || n === "condicionado";
 }
 
-function centroDe(rawUser: User): number | undefined {
-  if ("CentroFormacion" in rawUser && rawUser.CentroFormacion != null) {
-    return Number(rawUser.CentroFormacion);
+function hidratarUsuario(rawUser: User): UserNormalizado {
+  const ubicacion = ubicacionDesdeUsuario(rawUser);
+  const centro = ubicacion.idCentro || undefined;
+  const idAprendiz = idDelAprendiz(rawUser) ?? Number(rawUser.id);
+  const esApre = esAprendiz(rawUser.perfil);
+  const jornada = esApre && idAprendiz ? getJornadaGuardada(idAprendiz) : null;
+
+  if (esApre && jornada && idAprendiz) {
+    guardarJornada(idAprendiz, jornada);
   }
-  if ("centroFormacion" in rawUser && rawUser.centroFormacion != null) {
-    return Number(rawUser.centroFormacion);
-  }
-  if (
-    "centroFormacionIdcentroFormacion" in rawUser &&
-    rawUser.centroFormacionIdcentroFormacion != null
-  ) {
-    return Number(rawUser.centroFormacionIdcentroFormacion);
-  }
-  return undefined;
+
+  const nombre =
+    (rawUser as { nombre?: string; nombres?: string }).nombre ||
+    (rawUser as { nombres?: string }).nombres;
+
+  return {
+    ...rawUser,
+    id: idAprendiz || rawUser.id,
+    nombre,
+    nombres: (rawUser as { nombres?: string }).nombres || nombre,
+    centroFormacion: centro,
+    CentroFormacion: centro ?? (rawUser as { CentroFormacion?: number }).CentroFormacion,
+    nombreCentro: ubicacion.nombreCentro || undefined,
+    nombreRegional: ubicacion.nombreRegional || undefined,
+    jornada,
+  };
 }
 
 export function AuthProvider({ children }: PropsWithChildren) {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [user, setUser] = useState<UserNormalizado | null>(null);
+  const [sesionLista, setSesionLista] = useState(false);
 
   const login = (response: ResponseType<User>) => {
     if (!response.success) {
@@ -49,39 +63,17 @@ export function AuthProvider({ children }: PropsWithChildren) {
       return false;
     }
 
-    const rawUser = response.data!;
-    const centro = centroDe(rawUser);
-    const idAprendiz = idDelAprendiz(rawUser) ?? Number(rawUser.id);
-    const esApre = esAprendiz(rawUser.perfil);
-    const jornada = esApre && idAprendiz ? getJornadaGuardada(idAprendiz) : null;
-
-    if (esApre && jornada && idAprendiz) {
-      guardarJornada(idAprendiz, jornada);
-    }
-
-    const normalizado: UserNormalizado = {
-      ...rawUser,
-      id: idAprendiz || rawUser.id,
-      centroFormacion: centro ?? (rawUser as Gestor).centroFormacion,
-      CentroFormacion: centro,
-      jornada,
-    };
-
     setIsAuthenticated(true);
-    setUser(normalizado);
-    if (esApre) {
-      setActorHeader(null);
-    } else {
-      setActorHeader(rawUser.id);
-    }
+    setUser(hidratarUsuario(response.data!));
     toast.success("¡Inicio de sesión exitoso!");
     return true;
   };
 
   const logout = () => {
+    silenciarUnauthorized();
+    void api.post("/api/auth/logout").catch(() => undefined);
     setIsAuthenticated(false);
     setUser(null);
-    setActorHeader(null);
     toast.success("Sesión cerrada correctamente");
   };
 
@@ -94,11 +86,40 @@ export function AuthProvider({ children }: PropsWithChildren) {
     });
   };
 
+  useEffect(() => {
+    setOnUnauthorized(() => {
+      setIsAuthenticated(false);
+      setUser(null);
+      toast.error("Sesión expirada. Inicia sesión de nuevo.");
+    });
+
+    let cancelado = false;
+    (async () => {
+      try {
+        const { data } = await api.get<ResponseType<User>>("/api/auth/me");
+        if (!cancelado && data?.success && data.data && estadoHabilitado(data.data.estado)) {
+          setIsAuthenticated(true);
+          setUser(hidratarUsuario(data.data));
+        }
+      } catch {
+        /* sin cookie o sesión inválida */
+      } finally {
+        if (!cancelado) setSesionLista(true);
+      }
+    })();
+
+    return () => {
+      cancelado = true;
+      setOnUnauthorized(null);
+    };
+  }, []);
+
   return (
     <AuthContext
       value={{
         user,
         isAuthenticated,
+        sesionLista,
         login,
         logout,
         setJornada,

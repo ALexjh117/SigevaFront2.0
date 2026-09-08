@@ -6,13 +6,14 @@
   position: relative;
 
   width: 100%;
-  max-width: none;
+  max-width: 100%;
 
   margin: 0;
 
-  padding: 55px 55px 80px;
+  padding: 55px clamp(20px, 4vw, 72px) 80px;
 
-  overflow: hidden;
+  overflow-x: clip;
+  overflow-y: visible;
 
   isolation: isolate;
 
@@ -192,7 +193,8 @@
 ========================================================= */
 
 .eq-intro {
-  margin-bottom: 40px;
+  max-width: 1280px;
+  margin: 0 auto 40px;
 }
 
 .eq-kicker {
@@ -240,8 +242,8 @@
 
 .eq-block {
   width: 100%;
-
-  margin-bottom: 45px;
+  max-width: 1280px;
+  margin: 0 auto 45px;
 }
 
 .eq-block h2,
@@ -376,6 +378,72 @@
 
 
 /* =========================================================
+   BRILLO EN DESTACADOS
+========================================================= */
+
+.eq-card-sheen {
+  position: absolute;
+  inset: 0;
+  z-index: 12;
+  overflow: hidden;
+  pointer-events: none;
+  border-radius: inherit;
+}
+
+.eq-card.is-featured .eq-card-sheen::before,
+.eq-card.is-leader .eq-card-sheen::before {
+  content: none;
+}
+
+.eq-card.is-featured .eq-card-sheen::after,
+.eq-card.is-leader .eq-card-sheen::after {
+  content: "";
+  position: absolute;
+  top: -40%;
+  left: -70%;
+  width: 42%;
+  height: 180%;
+  background: linear-gradient(
+    105deg,
+    transparent 0%,
+    transparent 42%,
+    rgba(255, 255, 255, 0.28) 48%,
+    rgba(255, 255, 255, 0.88) 50%,
+    rgba(255, 255, 255, 0.28) 52%,
+    transparent 58%
+  );
+  filter: blur(1.2px);
+  transform: rotate(18deg);
+  animation: eq-sheen 6.5s ease-in-out infinite;
+}
+
+@keyframes eq-sheen {
+  0% {
+    transform: translateX(0) rotate(18deg);
+    opacity: 0;
+  }
+  8% {
+    opacity: 1;
+  }
+  78% {
+    opacity: 1;
+  }
+  88%,
+  100% {
+    transform: translateX(380%) rotate(18deg);
+    opacity: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .eq-card.is-featured .eq-card-sheen::after,
+  .eq-card.is-leader .eq-card-sheen::after {
+    animation: none;
+  }
+}
+
+
+/* =========================================================
    HOVER
 ========================================================= */
 
@@ -385,6 +453,84 @@
   box-shadow:
     0 10px 25px
     rgba(0, 0, 0, 0.13);
+}
+
+.eq-ribbon {
+  display: inline-flex;
+  margin: 0 0 7px;
+  padding: 0.18rem 0.58rem;
+  border-radius: 999px;
+  background: #39a900;
+  color: #fff;
+  font-size: 0.62rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.eq-card.is-leader,
+.eq-card.is-featured {
+  min-height: 148px;
+}
+
+.eq-card.is-leader .eq-card-content,
+.eq-card.is-featured .eq-card-content {
+  width: 56%;
+  min-height: 148px;
+  padding: 20px 14px 20px 24px;
+}
+
+.eq-card.is-leader .eq-copy strong,
+.eq-card.is-featured .eq-copy strong {
+  font-size: 1.08rem;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+}
+
+.eq-card.is-leader .eq-copy p,
+.eq-card.is-featured .eq-copy p {
+  font-weight: 600;
+}
+
+.eq-card.is-leader .eq-person-photo-container,
+.eq-card.is-leader .eq-person-photo-button,
+.eq-card.is-featured .eq-person-photo-container,
+.eq-card.is-featured .eq-person-photo-button {
+  width: 44%;
+}
+
+.eq-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+  margin: 0 0 0.7rem;
+}
+
+.eq-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  padding: 0.22rem 0.55rem;
+  border-radius: 999px;
+  background: rgba(57, 169, 0, 0.1);
+  color: #0b3d2e;
+  font-size: 0.68rem;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.eq-tag svg {
+  width: 11px;
+  height: 11px;
+}
+
+.eq-tag--web {
+  background: rgba(57, 169, 0, 0.14);
+}
+
+.eq-tag--movil {
+  background: rgba(11, 61, 46, 0.1);
 }
 
 
@@ -525,6 +671,24 @@
   background: transparent;
 }
 
+.eq-person-photo-container::after,
+.eq-person-photo-button::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  z-index: 2;
+  width: 42%;
+  pointer-events: none;
+  background: linear-gradient(
+    90deg,
+    #ffffff 0%,
+    rgba(255, 255, 255, 0.35) 55%,
+    transparent 100%
+  );
+}
+
 
 /* =========================================================
    BOTÓN DE FOTO
@@ -626,13 +790,34 @@
   height: 15px;
 }
 
+.eq-grid.compact .eq-card.is-leader,
+.eq-grid.compact .eq-card.is-featured {
+  min-height: 156px;
+}
+
+.eq-grid.compact .eq-card.is-leader .eq-card-content,
+.eq-grid.compact .eq-card.is-featured .eq-card-content {
+  min-height: 156px;
+}
+
+.eq-grid.compact .eq-ribbon {
+  font-size: 0.56rem;
+  margin-bottom: 5px;
+}
+
+.eq-grid.compact .eq-card.is-leader .eq-copy strong,
+.eq-grid.compact .eq-card.is-featured .eq-copy strong {
+  font-size: 1.02rem;
+}
+
 
 /* =========================================================
    ARCHIVO
 ========================================================= */
 
 .eq-archive {
-  margin-top: 50px;
+  max-width: 1280px;
+  margin: 50px auto 0;
 
   padding-top: 30px;
 
@@ -651,11 +836,47 @@
 
 
 /* =========================================================
+   CODISTAS EN FORMACIÓN
+========================================================= */
+
+.eq-starters {
+  width: 100%;
+  max-width: 1280px;
+  margin: 0 auto 50px;
+}
+
+.eq-starters h2 {
+  margin: 0 0 8px;
+  color: #111827;
+  font-size: 27px;
+  font-weight: 700;
+}
+
+
+/* =========================================================
    TABLET
 ========================================================= */
 
-@media (max-width: 1200px) {
+@media (min-width: 1400px) {
+  .eq-page {
+    padding-left: 88px;
+    padding-right: 88px;
+  }
 
+  .eq-intro,
+  .eq-block,
+  .eq-archive,
+  .eq-starters {
+    max-width: 1480px;
+  }
+
+  .eq-page::before,
+  .eq-page::after {
+    opacity: 0.55;
+  }
+}
+
+@media (max-width: 1200px) {
   .eq-page {
     padding-left: 35px;
     padding-right: 35px;
@@ -691,6 +912,24 @@
     grid-template-columns: 1fr;
 
     gap: 13px;
+  }
+
+  .eq-card.is-featured,
+  .eq-card.is-leader {
+    grid-column: span 1;
+    min-height: 148px;
+  }
+
+  .eq-card.is-featured .eq-card-content,
+  .eq-card.is-leader .eq-card-content {
+    width: 56%;
+    min-height: 148px;
+    padding: 16px 16px 16px 20px;
+  }
+
+  .eq-card.is-featured .eq-copy strong,
+  .eq-card.is-leader .eq-copy strong {
+    font-size: 1.02rem;
   }
 
   .eq-card {

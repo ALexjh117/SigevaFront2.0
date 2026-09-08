@@ -25,7 +25,7 @@ export default function AprendizLayout() {
   }
 
   return (
-    <MainLayout showSidebar>
+    <MainLayout showSidebar role="aprendiz">
       <Outlet />
     </MainLayout>
   );

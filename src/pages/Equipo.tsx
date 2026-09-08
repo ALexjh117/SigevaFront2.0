@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Modal } from "react-bootstrap";
 import { GrGithub } from "react-icons/gr";
+import { FaLaptopCode, FaMobileAlt } from "react-icons/fa";
 
 import LandingHeader from "../components/landing/LandingHeader";
 import LandingFooter from "../components/landing/LandingFooter";
@@ -21,6 +22,11 @@ type Miembro = {
   github?: string;
   avatar: string;
   grupo: Grupo;
+  destacado?: boolean;
+  lider?: boolean;
+  cinta?: string;
+  tono?: 1 | 2 | 3 | 4 | 5 | 6;
+  etiquetas?: string[];
 };
 
 
@@ -44,14 +50,20 @@ const equipoActual: Miembro[] = [
     rol: "Product Owner",
     avatar: "/avatars/henry.png",
     grupo: "Manejo",
+    lider: true,
+    cinta: "Liderazgo",
+    etiquetas: ["Product Owner", "Liderazgo"],
   },
 
   {
     nombre: "Alex Jhoan Chaguendo",
-    rol: "Full Stack Developer/ Scrum Master",
+    rol: "Full Stack Developer · Web y Móvil",
     github: "ALexjh117",
     avatar: "/avatars/alex.jpg",
     grupo: "Desarrolladores",
+    destacado: true,
+    cinta: "Web y Móvil",
+    etiquetas: ["Web", "Móvil", "Scrum Master"],
   },
 
   {
@@ -60,6 +72,8 @@ const equipoActual: Miembro[] = [
     github: "maiKol269",
     avatar: "/avatars/maikol-sg.jpeg",
     grupo: "Desarrolladores",
+    tono: 1,
+    etiquetas: ["Backend", "APIs"],
   },
 
   {
@@ -68,22 +82,28 @@ const equipoActual: Miembro[] = [
     github: "mebelcampo",
     avatar: "/avatars/mebel-sg.jpeg",
     grupo: "Desarrolladores",
+    tono: 2,
+    etiquetas: ["Full Stack", "Web"],
   },
 
   {
     nombre: "María Paula Santacruz",
-    rol: "Frontend Developer/Diseño ui/ux",
+    rol: "Frontend Developer · Web y Móvil · UI/UX",
     github: "Paulasantacruz",
     avatar: "/avatars/paula-sg.jpeg",
     grupo: "Desarrolladores",
+    tono: 3,
+    etiquetas: ["Web", "Móvil", "UI/UX"],
   },
 
   {
     nombre: "Sofia Bonilla Gallego",
-    rol: "Frontend Developer/Diseño ui/ux",
+    rol: "Frontend Developer · UI/UX",
     github: "sofiaboni06",
     avatar: "/avatars/sofia-sg.jpeg",
     grupo: "Desarrolladores",
+    tono: 4,
+    etiquetas: ["Frontend", "UI/UX"],
   },
 ];
 
@@ -98,29 +118,37 @@ const equipoAnterior: Miembro[] = [
     rol: "Product Owner",
     avatar: "/avatars/henry.png",
     grupo: "Manejo",
+    lider: true,
+    cinta: "Liderazgo",
+    etiquetas: ["Product Owner", "Liderazgo"],
   },
 
   {
     nombre: "Alexandra Guevara Muñoz",
     rol: "Supervisora",
-    avatar: "/avatars/alexandra.png",
+    avatar: "/avatars/alexa.jpeg",
     grupo: "Manejo",
+    tono: 5,
   },
 
   {
     nombre: "Jorge Enrique Porras",
     rol: "Scrum Master",
     github: "IngAlim2023",
-    avatar: "/avatars/jorge.png",
+    avatar: "/avatars/jorge.jpeg",
     grupo: "Manejo",
+    destacado: true,
+    cinta: "Scrum Master",
+    etiquetas: ["Scrum Master"],
   },
 
   {
     nombre: "Fernanda Gonzalez",
     rol: "Back End Developer",
     github: "feeer-28",
-    avatar: "/avatars/na.png",
+    avatar: "/avatars/Fernanda.jpeg",
     grupo: "Desarrolladores",
+    tono: 1,
   },
 
   {
@@ -129,21 +157,24 @@ const equipoAnterior: Miembro[] = [
     github: "ALexjh117",
     avatar: "/avatars/alex.jpg",
     grupo: "Desarrolladores",
+    destacado: true,
+    cinta: "Full Stack",
+    etiquetas: ["Full Stack", "Web"],
   },
 
   {
     nombre: "Dovin Richard Hoyos",
     rol: "Full Stack Developer",
     github: "dovinhoyos",
-    avatar: "/avatars/dovin.jpeg",
+    avatar: "/avatars/na.jpeg",
     grupo: "Desarrolladores",
   },
 
   {
-    nombre: "Bryan Andrés Hurtado",
+    nombre: "Brayan Andrés Hurtado",
     rol: "Front End & Mobile Developer",
     github: "Bryanhurtado0006",
-    avatar: "/avatars/bryan.jpg",
+    avatar: "/avatars/brayan.jpeg",
     grupo: "Desarrolladores",
   },
 
@@ -159,7 +190,7 @@ const equipoAnterior: Miembro[] = [
     nombre: "Víctor Manuel Mosquera",
     rol: "Mobile Developer",
     github: "victormosqueraconejo",
-    avatar: "/avatars/victor.jpg",
+    avatar: "/avatars/victor.jpeg",
     grupo: "Desarrolladores",
   },
 
@@ -167,7 +198,7 @@ const equipoAnterior: Miembro[] = [
     nombre: "Andrés Santiago Arias",
     rol: "Full Stack Developer",
     github: "AndresArias28",
-    avatar: "/avatars/ariasavatar.jpg",
+    avatar: "/avatars/arias.jpeg",
     grupo: "Desarrolladores",
   },
 
@@ -175,7 +206,7 @@ const equipoAnterior: Miembro[] = [
     nombre: "Jeison Reyes Ruiz",
     rol: "Back End Developer",
     github: "JEISON101",
-    avatar: "/avatars/jeison.jpg",
+    avatar: "/avatars/jeison.jpeg",
     grupo: "Desarrolladores",
   },
 
@@ -183,7 +214,7 @@ const equipoAnterior: Miembro[] = [
     nombre: "Camilo Hurtado",
     rol: "Full Stack Developer",
     github: "oKCam04",
-    avatar: "/avatars/camilo.png",
+    avatar: "/avatars/na.png",
     grupo: "Desarrolladores",
   },
 
@@ -191,7 +222,7 @@ const equipoAnterior: Miembro[] = [
     nombre: "Daniela Paredes",
     rol: "Back End Developer",
     github: "renteria08P",
-    avatar: "/avatars/dani.jpeg",
+    avatar: "/avatars/daniela.jpeg",
     grupo: "Desarrolladores",
   },
 
@@ -199,7 +230,23 @@ const equipoAnterior: Miembro[] = [
     nombre: "David Santiago Rengifo",
     rol: "Front End & Mobile Developer",
     github: "DavidRengifo12",
-    avatar: "/avatars/na.png",
+    avatar: "/avatars/santiagor.jpeg",
+    grupo: "Desarrolladores",
+  },
+];
+
+
+const codistasNuevos: Miembro[] = [
+  {
+    nombre: "Nombre",
+    rol: "En formación",
+    avatar: "",
+    grupo: "Desarrolladores",
+  },
+  {
+    nombre: "Nombre",
+    rol: "En formación",
+    avatar: "",
     grupo: "Desarrolladores",
   },
 ];
@@ -221,25 +268,31 @@ function TarjetaMiembro({
   onVerFoto?: (m: Miembro) => void;
 }) {
   const src = m.avatar || avatarFallback(m.nombre);
-
   const sePuedeAmpliar =
     ampliables && Boolean(m.avatar);
 
-  return (
-    <article
-      className={`eq-card${
-        compacto ? " compact-card" : ""
-      }`}
-    >
+  const clases = [
+    "eq-card",
+    compacto ? "compact-card" : "",
+    m.destacado ? "is-featured" : "",
+    m.lider ? "is-leader" : "",
+  ]
+    .filter(Boolean)
+    .join(" ");
 
-      {/* ==========================================
-          CONTENIDO DE TEXTO
-          SIN FOTO A LA IZQUIERDA
-      ========================================== */}
+  return (
+    <article className={clases}>
+      <span className="eq-card-sheen" aria-hidden="true" />
 
       <div className="eq-card-content">
 
         <div className="eq-copy">
+
+          {m.lider || m.destacado ? (
+            <span className="eq-ribbon">
+              {m.cinta ?? (m.lider ? "Liderazgo" : "Destacado")}
+            </span>
+          ) : null}
 
           <strong>
             {m.nombre}
@@ -248,6 +301,32 @@ function TarjetaMiembro({
           <p>
             {m.rol}
           </p>
+
+          {m.etiquetas && m.etiquetas.length > 0 ? (
+            <div className="eq-tags">
+              {m.etiquetas.map((etiqueta) => (
+                <span
+                  key={etiqueta}
+                  className={`eq-tag${
+                    etiqueta.toLowerCase().includes("móvil") ||
+                    etiqueta.toLowerCase().includes("movil")
+                      ? " eq-tag--movil"
+                      : etiqueta.toLowerCase().includes("web")
+                        ? " eq-tag--web"
+                        : ""
+                  }`}
+                >
+                  {etiqueta.toLowerCase().includes("móvil") ||
+                  etiqueta.toLowerCase().includes("movil") ? (
+                    <FaMobileAlt aria-hidden />
+                  ) : etiqueta.toLowerCase().includes("web") ? (
+                    <FaLaptopCode aria-hidden />
+                  ) : null}
+                  {etiqueta}
+                </span>
+              ))}
+            </div>
+          ) : null}
 
           {/* ======================================
               GITHUB
@@ -467,6 +546,35 @@ const Equipo: React.FC = () => {
           ampliables
           onVerFoto={setFotoGrande}
         />
+
+
+        <section className="eq-starters">
+
+          <p className="eq-kicker">
+            En formación
+          </p>
+
+          <h2>
+            Quienes empiezan
+          </h2>
+
+          <p className="eq-archive-lead">
+            Dos espacios para quienes apenas
+            arrancan y nos ayudan a construir
+            SIGEVA. Aquí ponemos nombre y foto
+            cuando se sumen.
+          </p>
+
+          <div className="eq-grid">
+            {codistasNuevos.map((m, i) => (
+              <TarjetaMiembro
+                key={`starter-${i}`}
+                m={m}
+              />
+            ))}
+          </div>
+
+        </section>
 
 
         {/* ========================================
