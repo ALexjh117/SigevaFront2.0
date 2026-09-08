@@ -428,54 +428,44 @@
    ACCIONES DE TABLA - SOLO ICONO
    ========================================================= */
 
-.tabla-accion-icono {
+.tabla-accion-icono,
+button.tabla-accion-icono,
+.btn.tabla-accion-icono,
+.btn-link.tabla-accion-icono {
   border: none !important;
   outline: none !important;
-
   background: transparent !important;
-
-  padding: 4px !important;
-
-  width: 32px;
-  height: 32px;
-
+  background-color: transparent !important;
+  padding: 0 !important;
+  width: auto;
+  min-width: 0;
+  height: auto;
+  min-height: 0;
   display: inline-flex !important;
   align-items: center;
   justify-content: center;
-
   color: #006b30 !important;
-
   box-shadow: none !important;
-
-  border-radius: 6px !important;
-
-  transition:
-    color 0.2s ease,
-    background 0.2s ease,
-    transform 0.2s ease;
+  border-radius: 0 !important;
+  text-decoration: none !important;
+  transition: color 0.2s ease;
 }
 
-/* Hover */
-
-.tabla-accion-icono:hover {
-  background: rgba(22, 160, 0, 0.10) !important;
-
-  color: #16a000 !important;
-
-  transform: translateY(-1px);
-}
-
-/* Cuando se hace clic */
-
+.tabla-accion-icono:hover,
 .tabla-accion-icono:active,
-.tabla-accion-icono:focus {
-  background: rgba(22, 160, 0, 0.14) !important;
-
-  color: #006b30 !important;
-
+.tabla-accion-icono:focus,
+.tabla-accion-icono:focus-visible,
+.btn.tabla-accion-icono:hover,
+.btn.tabla-accion-icono:active,
+.btn.tabla-accion-icono:focus,
+.btn-link.tabla-accion-icono:hover,
+.btn-link.tabla-accion-icono:focus {
+  background: transparent !important;
+  background-color: transparent !important;
+  color: #16a000 !important;
   box-shadow: none !important;
-
   outline: none !important;
+  text-decoration: none !important;
 }
 
 /* Tamaño del icono */

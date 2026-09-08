@@ -25,7 +25,7 @@ const respuestas: Respuesta[] = [
       "saludos"
     ],
     respuesta:
-      "¡Hola! 👋 Soy SIGI, el asistente virtual de SIGEVA 🤖. Estoy aquí para ayudarte con todo lo relacionado con las elecciones del SENA. ¿Qué deseas consultar?"
+      "¡Hola! 👋 Soy EVA, el asistente virtual de SIGEVA 🤖. Estoy aquí para ayudarte con todo lo relacionado con las elecciones del SENA. ¿Qué deseas consultar?"
   },
 
   // ¿QUÉ ES SIGEVA?
@@ -304,7 +304,7 @@ export default function ChatBot() {
   const [mensajes, setMensajes] = useState<Mensaje[]>([
     {
       texto:
-        "¡Hola! 👋 Soy SIGI, el asistente virtual de SIGEVA 🤖. Estoy aquí para ayudarte con los procesos electorales del SENA. ¿Qué deseas consultar?",
+        "¡Hola! 👋 Soy EVA, el asistente virtual de SIGEVA 🤖. Estoy aquí para ayudarte con los procesos electorales del SENA. ¿Qué deseas consultar?",
       usuario: false
     }
   ]);
@@ -509,7 +509,7 @@ export default function ChatBot() {
               <div>
 
                 <strong>
-                  SIGI
+                  EVA
                 </strong>
 
                 <span className="chatbot-status">
@@ -586,7 +586,7 @@ export default function ChatBot() {
                 <div className="mensaje-texto escribiendo">
 
                   <span>
-                    SIGI está escribiendo
+                    EVA está escribiendo
                   </span>
 
                   <span className="puntos">
@@ -711,7 +711,7 @@ export default function ChatBot() {
               type="text"
               placeholder={
                 escribiendo
-                  ? "SIGI está escribiendo..."
+                  ? "EVA está escribiendo..."
                   : "Escribe tu pregunta..."
               }
               value={entrada}
