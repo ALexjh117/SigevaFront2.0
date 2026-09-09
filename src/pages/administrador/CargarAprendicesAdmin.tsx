@@ -108,7 +108,7 @@ export default function CargarAprendices() {
   const [uploadPct, setUploadPct] = useState(0);
   const [subiendo, setSubiendo] = useState(false);
   const [showToast, setShowToast] = useState(false);
-  const [toastMsg, setToastMsg] = useState("");
+  const [toastMsg] = useState("");
   const [skippedAprendices, setSkippedAprendices] = useState<FilaExcel[]>([]);
   const [showSkippedModal, setShowSkippedModal] = useState(false);
 
