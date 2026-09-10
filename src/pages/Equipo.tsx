@@ -47,9 +47,7 @@ const equipoActual: Miembro[] = [
     rol: "Product Owner",
     avatar: "/avatars/henry.png",
     grupo: "Manejo",
-    lider: true,
-    cinta: "Liderazgo",
-    etiquetas: ["Product Owner", "Liderazgo"],
+    etiquetas: ["Product Owner"],
   },
 
   {
@@ -58,8 +56,6 @@ const equipoActual: Miembro[] = [
     github: "ALexjh117",
     avatar: "/avatars/alex.jpg",
     grupo: "Desarrolladores",
-    destacado: true,
-    cinta: "Web y Móvil",
     etiquetas: ["Web", "Móvil", "Scrum Master"],
   },
 
@@ -114,9 +110,7 @@ const equipoAnterior: Miembro[] = [
     rol: "Product Owner",
     avatar: "/avatars/henry.png",
     grupo: "Manejo",
-    lider: true,
-    cinta: "Liderazgo",
-    etiquetas: ["Product Owner", "Liderazgo"],
+    etiquetas: ["Product Owner"],
   },
 
   {
@@ -133,8 +127,6 @@ const equipoAnterior: Miembro[] = [
     github: "IngAlim2023",
     avatar: "/avatars/jorge.jpeg",
     grupo: "Manejo",
-    destacado: true,
-    cinta: "Scrum Master",
     etiquetas: ["Scrum Master"],
   },
 
@@ -153,8 +145,6 @@ const equipoAnterior: Miembro[] = [
     github: "ALexjh117",
     avatar: "/avatars/alex.jpg",
     grupo: "Desarrolladores",
-    destacado: true,
-    cinta: "Full Stack",
     etiquetas: ["Full Stack", "Web"],
   },
 
