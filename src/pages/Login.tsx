@@ -47,7 +47,17 @@ export default function Login(_props: Props) {
     },
   });
 
-  if (sesionLista && isAuthenticated && user) {
+  if (!sesionLista) {
+    return (
+      <div className="d-flex justify-content-center align-items-center min-vh-100">
+        <div className="spinner-border text-success" role="status">
+          <span className="visually-hidden">Verificando sesión…</span>
+        </div>
+      </div>
+    );
+  }
+
+  if (isAuthenticated && user) {
     if (perfilEsAprendiz(user.perfil)) {
       const id = idDelAprendiz(user);
       const yaEligio = id ? Boolean(getJornadaGuardada(id)) : false;
