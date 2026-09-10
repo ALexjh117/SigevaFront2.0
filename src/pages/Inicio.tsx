@@ -12,12 +12,12 @@ import {
   FaChartBar,
   FaCheck,
   FaCogs,
-  FaShieldAlt,
+  FaPuzzlePiece,
   FaVoteYea,
 } from "react-icons/fa";
 import LandingHeader from "../components/landing/LandingHeader";
 import LandingFooter from "../components/landing/LandingFooter";
-import { SigevaMark, SigevaWordmark, SigevaName } from "../components/landing/SigevaMark";
+import { SigevaWordmark, SigevaName } from "../components/landing/SigevaMark";
 import "./Inicio.css";
 
 function Marca() {
@@ -30,7 +30,7 @@ const infoCards = [
     titulo: <>¿Qué es <Marca />?</>,
     aria: "¿Qué es SIGEVA?",
     texto:
-      "Es la plataforma oficial del SENA para gestionar y participar en los procesos electorales de forma digital, clara y segura.",
+      "Es el Sistema de Gestión de Votación para Aprendices, una plataforma digital que permite participar de forma fácil, clara y segura.",
     icon: (
       <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" strokeWidth="1.7">
         <path d="M12 3 20 7.5v9L12 21 4 16.5v-9L12 3Z" />
@@ -51,7 +51,7 @@ const infoCards = [
     titulo: "¿Cómo funciona?",
     aria: "¿Cómo funciona?",
     texto:
-      "Ingresas, eliges tu jornada y participas en los procesos activos de tu centro. El sistema organiza cada etapa del proceso.",
+      "Ingresa a SIGEVA según tu perfil, selecciona tu jornada y participa o gestiona elecciones como funcionario",
     icon: <FaCogs />,
   },
   {
@@ -59,7 +59,7 @@ const infoCards = [
     titulo: "¿Quién puede usarlo?",
     aria: "¿Quién puede usarlo?",
     texto:
-      "Aprendices, funcionarios y administradores del SENA, cada uno con las acciones que le corresponden dentro de la plataforma.",
+      "Aprendices y funcionarios del SENA, cada uno con las acciones que le corresponden dentro de la plataforma.",
     icon: <FaUsers />,
   },
   {
@@ -68,7 +68,12 @@ const infoCards = [
     aria: "¿Por qué usar SIGEVA?",
     texto:
       "Porque hace el proceso más simple, seguro y transparente, y te permite participar desde cualquier dispositivo, cuando lo necesites.",
-    icon: <FaShieldAlt />,
+    icon: (
+      <span className="lp-puzzle-mark" aria-hidden="true">
+        <FaPuzzlePiece />
+        <span className="lp-puzzle-mark-question">?</span>
+      </span>
+    ),
   },
 ];
 
@@ -166,12 +171,12 @@ const Inicio: React.FC = () => {
                   <b />
                 </div>
                 <header className="lp-app-head">
-                  <SigevaMark size={26} />
+                  <img src="/landing/logosigeva.jpg" alt="" width={26} height={26} aria-hidden="true" />
                   <FaSearch />
                 </header>
                 <p className="lp-app-hi">¡Hola, Aprendiz! 👋</p>
                 <article className="lp-app-election">
-                  <strong>Elección Representantes Aprendices 2023</strong>
+                  <strong>Elección Representantes Aprendices 2026</strong>
                   <span>Votación abierta</span>
                 </article>
                 <p className="lp-app-label">Acciones rápidas</p>
@@ -204,10 +209,10 @@ const Inicio: React.FC = () => {
               <h4>
                 Lleva <Marca /> contigo
               </h4>
-              <p>Escanea el código QR y accede a SIGEVA desde tu dispositivo móvil.</p>
+              <p>Descarga SIGEVA o accede desde la versión web móvil.</p>
               <img src="/landing/qr.png" alt="Código QR de SIGEVA" />
               <div className="lp-qr-status">
-                <i /> Disponible para móviles
+                <i /> O Vota sin descargar 
               </div>
             </aside>
           </div>
