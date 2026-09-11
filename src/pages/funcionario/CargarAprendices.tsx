@@ -81,24 +81,24 @@ export default function CargarAprendices() {
     const wb = XLSX.read(buffer, { type: "array" });
     const sheet = wb.Sheets[wb.SheetNames[0]];
 
-    const c2 = sheet?.["C2"]?.v?.toString().trim() || "";
-    const fichaLimpia = c2.replace(/–/g, "-");
-    const partes = fichaLimpia.split(" - ");
-    const numeroGrupo = partes[0]?.trim() || "";
-    const nombrePrograma = partes[1]?.trim() || "";
-    setFichaDetectada(numeroGrupo);
-    setProgramaDetectado(nombrePrograma);
-
     const data = XLSX.utils.sheet_to_json<Record<string, any>>(sheet, {
-      range: 4,
+      range: 0,
       defval: "",
     });
 
     // Guarda toda la data para validaciones posteriores
     setAllData(data);
 
+    // Obtener ficha y programa de la primera fila del nuevo formato
     if (data.length > 0) {
-    
+      const primeraFila = data[0];
+      const numeroGrupo = String(primeraFila["Ficha"] || "").trim();
+      const nombrePrograma = String(primeraFila["Programa"] || "").trim();
+      setFichaDetectada(numeroGrupo);
+      setProgramaDetectado(nombrePrograma);
+    }
+
+    if (data.length > 0) {
       setPreview(data.slice(0, 20));
     } else {
       setPreview([]);
@@ -270,8 +270,8 @@ export default function CargarAprendices() {
       <Container className="mb-3">
         <h1 className="mb-2">Cargar aprendices</h1>
         <p className="text-muted mb-0">
-          Sube el <strong>Reporte de Aprendices</strong> de Sofia Plus (.xls). La ficha y el
-          programa salen de la celda C2. La contraseña inicial de cada aprendiz es su{" "}
+          Sube el Excel con las columnas: Tipo de Documento, Número de Documento, Nombre, Apellidos, Celular, Correo Electrónico, Estado, Ficha, Programa.
+          La contraseña inicial de cada aprendiz es su{" "}
           <strong>número de documento</strong>. Si se le olvida, usa Recuperar contraseña.
           La jornada <strong>no se elige aquí</strong>: la elige el aprendiz cuando entra.
         </p>
@@ -359,14 +359,15 @@ export default function CargarAprendices() {
                 <th>Nombre</th>
                 <th>Documento</th>
                 <th>Correo</th>
-                <th>Programa (C2)</th>
+                <th>Ficha</th>
+                <th>Programa</th>
                 <th>Estado</th>
               </tr>
             </thead>
             <tbody>
               {preview.length === 0 ? (
                 <tr>
-                  <td colSpan={5} className="text-center py-4 text-muted">
+                  <td colSpan={6} className="text-center py-4 text-muted">
                     No hay datos para mostrar.
                   </td>
                 </tr>
@@ -388,6 +389,8 @@ export default function CargarAprendices() {
                     fila["correo"] ||
                     fila["email"] ||
                     "—";
+                  const ficha = String(fila["Ficha"] || fila["ficha"] || "—");
+                  const programa = String(fila["Programa"] || fila["programa"] || "—");
                   const estado = (fila["Estado"] || fila["estado"] || "")
                     .toString()
                     .trim();
@@ -397,7 +400,8 @@ export default function CargarAprendices() {
                       <td>{nombre}</td>
                       <td>{doc}</td>
                       <td>{correo}</td>
-                      <td>{programaDetectado || "—"}</td>
+                      <td>{ficha}</td>
+                      <td>{programa}</td>
                       <td>
                         {estado ? (
                           <Badge bg={activo ? "success" : "secondary"} pill>
@@ -457,9 +461,7 @@ export default function CargarAprendices() {
             manualmente.
           </p>
           <p>
-            El archivo debe ser el <strong>Reporte de Aprendices</strong> de Sofia Plus
-            (ejemplo: <code>Reporte de Aprendices Ficha 2992857.xls</code>). No cambies C2 ni los
-            nombres de columnas.
+            El archivo debe tener las columnas: Tipo de Documento, Número de Documento, Nombre, Apellidos, Celular, Correo Electrónico, Estado, Ficha, Programa.
           </p>
           <p>
             La contraseña inicial será el <strong>número de documento</strong>. Quien la olvide usa
