@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react";
+import { FaShieldAlt } from "react-icons/fa";
 import { Link, useLocation } from "react-router-dom";
 import ChatBot from "../components/ChatBot/ChatBot";
 import {
