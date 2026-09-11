@@ -201,7 +201,7 @@ const Inicio: React.FC = () => {
                 Lleva <Marca /> contigo
               </h4>
               <p>Descarga SIGEVA o accede desde la versión web móvil.</p>
-              <img src="/landing/qr.png" alt="Código QR de SIGEVA" />
+              <img src="/landing/qr-sigeva.jpeg" alt="Código QR de SIGEVA" />
               <div className="lp-qr-status">
                 <i /> O Vota sin descargar 
               </div>
