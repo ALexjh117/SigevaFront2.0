@@ -8,7 +8,8 @@ import {
   FaUser,
   FaCalendarCheck,
   FaUsers,
-  FaBullhorn,
+   FaBullseye, 
+   FaEye,
   FaChartBar,
   FaCheck,
   FaCogs,
@@ -30,9 +31,16 @@ const infoCards = [
     titulo: <>¿Qué es <Marca />?</>,
     aria: "¿Qué es SIGEVA?",
     texto:
-      "Es el Sistema de Gestión de Votación para Aprendices, una plataforma digital que permite participar de forma fácil, clara y segura.",
+      "SIGEVA es el Sistema de Gestión de Votación del SENA, una plataforma digital que permite a los aprendices participar de manera clara, fácil y segura en los procesos electorales de su centro de formación.",
     icon: (
-      <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" strokeWidth="1.7">
+      <svg
+        viewBox="0 0 24 24"
+        width="22"
+        height="22"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="1.7"
+      >
         <path d="M12 3 20 7.5v9L12 21 4 16.5v-9L12 3Z" />
         <path d="M12 12 20 7.5M12 12v9M12 12 4 7.5" />
       </svg>
@@ -43,7 +51,7 @@ const infoCards = [
     titulo: "¿Para qué sirve?",
     aria: "¿Para qué sirve?",
     texto:
-      "Consulta elecciones, conoce candidatos, emite tu voto y revisa resultados desde un solo lugar, con tu cuenta institucional.",
+      "Permite consultar elecciones, conocer candidatos y sus propuestas, emitir el voto y consultar los resultados de los procesos electorales desde un solo lugar.",
     icon: <FaCheck />,
   },
   {
@@ -51,7 +59,7 @@ const infoCards = [
     titulo: "¿Cómo funciona?",
     aria: "¿Cómo funciona?",
     texto:
-      "Ingresa a SIGEVA según tu perfil, selecciona tu jornada y participa o gestiona elecciones como funcionario",
+      "Ingresa de acuerdo con tu perfil. Como aprendiz podrás consultar los procesos activos de tu centro, seleccionar tu jornada y participar en las elecciones habilitadas.",
     icon: <FaCogs />,
   },
   {
@@ -59,7 +67,7 @@ const infoCards = [
     titulo: "¿Quién puede usarlo?",
     aria: "¿Quién puede usarlo?",
     texto:
-      "Aprendices y funcionarios del SENA, cada uno con las acciones que le corresponden dentro de la plataforma.",
+      "Aprendices y funcionarios del SENA acceden a la plataforma según su perfil y las funciones habilitadas para cada usuario. La participación en las votaciones corresponde a los aprendices.",
     icon: <FaUsers />,
   },
   {
@@ -67,49 +75,31 @@ const infoCards = [
     titulo: <>¿Por qué usar <Marca />?</>,
     aria: "¿Por qué usar SIGEVA?",
     texto:
-      "Porque hace el proceso más simple, seguro y transparente, y te permite participar desde cualquier dispositivo, cuando lo necesites.",
-    icon: (
-      <span className="lp-puzzle-mark" aria-hidden="true">
-        <FaPuzzlePiece />
-        <span className="lp-puzzle-mark-question">?</span>
-      </span>
-    ),
+      "Porque facilita procesos electorales más simples, seguros y transparentes, permitiendo acceder a la información desde diferentes dispositivos.",
+    icon: <FaShieldAlt />,
   },
 ];
-
 const acciones = [
   {
     titulo: "Elecciones",
-    texto: "Consulta y participa en los procesos electorales disponibles.",
-    cta: "Ver elecciones",
-    to: "/login-aprendiz",
+    texto:
+      "Consulta como aprendiz las elecciones activas y ejerce tu derecho al voto de forma fácil y segura.",
     img: "/landing/login-voto.png",
     alt: "Aprendiz depositando su voto",
     icon: <FaCalendarCheck />,
   },
   {
     titulo: "Candidatos",
-    texto: "Conoce los candidatos y consulta información de sus postulaciones.",
-    cta: "Ver candidatos",
-    to: "/login-aprendiz",
+    texto:
+      "Conoce a los candidatos, descubre sus propuestas. Participa en las elecciones y haz que tu voz cuente con tu voto.",
     img: "/landing/hero-equipo.jpg",
     alt: "Aprendices trabajando en equipo",
     icon: <FaUsers />,
   },
   {
-    titulo: "Convocatorias",
-    texto: "Consulta las convocatorias disponibles y conoce cómo participar en los procesos.",
-    cta: "Ver convocatorias",
-    to: "/login-aprendiz",
-    img: "/landing/convocatorias.jpg",
-    alt: "Aprendices en una convocatoria",
-    icon: <FaBullhorn />,
-  },
-  {
     titulo: "Resultados",
-    texto: "Consulta información y estadísticas relacionadas con los procesos electorales.",
-    cta: "Ver resultados",
-    to: "/login",
+    texto:
+      "Consulta el avance del escrutinio en tiempo real y conoce los resultados de los procesos electorales.",
     img: "/landing/resultados.svg",
     alt: "Consulta de resultados y métricas",
     icon: <FaChartBar />,
@@ -264,83 +254,90 @@ const Inicio: React.FC = () => {
         </div>
       </section>
 
-      <section className="lp-section" id="acciones">
-        <h2>
-          ¿Qué puedes hacer en <Marca />?
-        </h2>
-        <p className="lp-lead">Explora las principales acciones que puedes realizar en la plataforma.</p>
-        <div className="lp-actions">
-          {acciones.map((a) => (
-            <article key={a.titulo} className="lp-action">
-              <div className="lp-action-media">
-                <img src={a.img} alt={a.alt} />
-                <span className="lp-action-icon">{a.icon}</span>
-              </div>
-              <div className="lp-action-body">
-                <h3>{a.titulo}</h3>
-                <p>{a.texto}</p>
-                <Link to={a.to} className="lp-btn lp-btn-green">
-                  {a.cta} <FaArrowRight />
-                </Link>
-              </div>
-            </article>
-          ))}
+  <section className="lp-section" id="acciones">
+  <h2>
+    ¿Qué puedes hacer en <Marca />?
+  </h2>
+
+  <p className="lp-lead">
+    Todo lo que necesitas para participar en los procesos electorales.
+  </p>
+
+  <div className="lp-actions">
+    {acciones.map((a) => (
+      <article key={a.titulo} className="lp-action">
+        <div className="lp-action-media">
+          <img src={a.img} alt={a.alt} />
+
+          <span className="lp-action-icon">
+            {a.icon}
+          </span>
         </div>
-      </section>
+
+        <div className="lp-action-body">
+          <h3>{a.titulo}</h3>
+          <p>{a.texto}</p>
+        </div>
+      </article>
+    ))}
+  </div>
+</section>
 
       <section className="lp-section" id="elecciones">
-        <h2>Elecciones y convocatorias</h2>
-        <p className="lp-lead">
-          Conoce las elecciones y convocatorias disponibles y encuentra toda la información necesaria
-          para participar.
+  <h2>Acceso a la plataforma</h2>
+
+  <p className="lp-lead">
+    Selecciona tu rol para acceder a las funciones disponibles como Aprendiz o Funcionario.
+  </p>
+
+  <div className="lp-duos">
+
+    {/* MISIÓN */}
+    <article className="lp-duo">
+      <img
+        src="/landing/login-voto.png"
+        alt="Participación electoral en SIGEVA"
+      />
+
+      <div className="lp-duo-copy">
+        <span className="lp-duo-icon" aria-hidden="true">
+          <FaBullseye />
+        </span>
+
+        <h3>Misión</h3>
+
+        <p>
+          Promover una participación electoral activa, informada y transparente
+          dentro de la comunidad SENA mediante herramientas digitales
+          accesibles y confiables.
         </p>
-        <div className="lp-duos">
-          <article className="lp-duo">
-            <img
-              src="/landing/login-voto.png"
-              alt="Aprendiz depositando su voto"
-            />
+      </div>
+    </article>
 
-            <div className="lp-duo-copy">
-              <span className="lp-duo-icon lp-duo-icon-vote" aria-hidden="true">
-                <FaVoteYea />
-              </span>
+    {/* VISIÓN */}
+    <article className="lp-duo">
+      <img
+        src="/landing/convocatorias.jpg"
+        alt="Comunidad SENA participando en procesos electorales"
+      />
 
-              <h3>Elecciones</h3>
+      <div className="lp-duo-copy">
+        <span className="lp-duo-icon lp-duo-icon-vision" aria-hidden="true">
+          <FaEye />
+        </span>
 
-              <p>
-                Consulta las elecciones disponibles y participa activamente.
-              </p>
+        <h3>Visión</h3>
 
-              <Link to="/login-aprendiz" className="lp-btn lp-btn-dark">
-                Ver elecciones <FaArrowRight />
-              </Link>
-            </div>
-          </article>
-          <article className="lp-duo">
-            <img
-              src="/landing/convocatorias.jpg"
-              alt="Aprendices revisando una convocatoria"
-            />
+        <p>
+          Ser una plataforma líder en la transformación digital de los procesos
+          electorales del SENA, impulsando la participación y fortaleciendo
+          la democracia institucional.
+        </p>
+      </div>
+    </article>
 
-            <div className="lp-duo-copy">
-              <span className="lp-duo-icon lp-duo-icon-call" aria-hidden="true">
-                <FaBullhorn />
-              </span>
-
-              <h3>Convocatorias</h3>
-
-              <p>
-                Conoce las convocatorias y oportunidades para participar.
-              </p>
-
-              <Link to="/login-aprendiz" className="lp-btn lp-btn-dark">
-                Ver convocatorias <FaArrowRight />
-              </Link>
-            </div>
-          </article>
-        </div>
-      </section>
+  </div>
+</section>
 
       <section className="lp-section lp-cta-wrap">
         <div className="lp-cta">

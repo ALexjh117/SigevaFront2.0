@@ -858,7 +858,7 @@ html {
 /* ——— Action cards ——— */
 .lp-actions {
   display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 1.1rem;
 }
 
@@ -941,6 +941,7 @@ html {
 }
 
 /* ——— Duo cards ——— */
+
 .lp-duos {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -969,6 +970,28 @@ html {
     0 16px 40px rgba(16, 24, 40, 0.10);
 
   isolation: isolate;
+}
+.lp-duo-icon {
+  width: 52px;
+  height: 52px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  color: #386b2c;
+  font-size: 1.4rem;
+}
+
+.lp-duo-icon-vision {
+
+  width: 52px;
+  height: 52px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  color: #386b2c;
+  font-size: 1.4rem;
 }
 
 .lp-duo::before {
