@@ -14,7 +14,7 @@ import {
   FaChartBar,
   FaCheck,
   FaCogs,
-  FaPuzzlePiece,
+  
   FaVoteYea,
 } from "react-icons/fa";
 import LandingHeader from "../components/landing/LandingHeader";
