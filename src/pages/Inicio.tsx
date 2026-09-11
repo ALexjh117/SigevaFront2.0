@@ -13,12 +13,12 @@ import {
   FaChartBar,
   FaCheck,
   FaCogs,
-  FaShieldAlt,
+  FaPuzzlePiece,
   FaVoteYea,
 } from "react-icons/fa";
 import LandingHeader from "../components/landing/LandingHeader";
 import LandingFooter from "../components/landing/LandingFooter";
-import { SigevaMark, SigevaWordmark, SigevaName } from "../components/landing/SigevaMark";
+import { SigevaWordmark, SigevaName } from "../components/landing/SigevaMark";
 import "./Inicio.css";
 
 function Marca() {
@@ -161,12 +161,12 @@ const Inicio: React.FC = () => {
                   <b />
                 </div>
                 <header className="lp-app-head">
-                  <SigevaMark size={26} />
+                  <img src="/landing/logosigeva.jpg" alt="" width={26} height={26} aria-hidden="true" />
                   <FaSearch />
                 </header>
                 <p className="lp-app-hi">¡Hola, Aprendiz! 👋</p>
                 <article className="lp-app-election">
-                  <strong>Elección Representantes Aprendices 2023</strong>
+                  <strong>Elección Representantes Aprendices 2026</strong>
                   <span>Votación abierta</span>
                 </article>
                 <p className="lp-app-label">Acciones rápidas</p>
@@ -199,10 +199,10 @@ const Inicio: React.FC = () => {
               <h4>
                 Lleva <Marca /> contigo
               </h4>
-              <p>Escanea el código QR y accede a SIGEVA desde tu dispositivo móvil.</p>
+              <p>Descarga SIGEVA o accede desde la versión web móvil.</p>
               <img src="/landing/qr.png" alt="Código QR de SIGEVA" />
               <div className="lp-qr-status">
-                <i /> Disponible para móviles
+                <i /> O Vota sin descargar 
               </div>
             </aside>
           </div>
