@@ -390,6 +390,16 @@
   box-shadow: 0 0 0 3px rgba(57, 169, 0, 0.15);
 }
 
+.theme-admin .form-select option {
+  color: var(--admin-ink);
+  background-color: #fff;
+}
+
+.theme-admin .form-select option:hover,
+.theme-admin .form-select option:focus {
+  background-color: rgba(57, 169, 0, 0.1);
+}
+
 .theme-admin .app-accent {
   color: var(--dios-d) !important;
 }

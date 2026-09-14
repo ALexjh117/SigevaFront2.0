@@ -20,6 +20,7 @@ import {
   esAdminSistema,
   esAprendiz as perfilEsAprendiz,
   esFuncionario,
+  esColaborador,
 } from "../utils/roles";
 import { SigevaWordmark, SigevaName } from "../components/landing/SigevaMark";
 import "./Login.css";
@@ -30,7 +31,6 @@ interface Props {
 
 export default function Login(_props: Props) {
   const [showPassword, setShowPassword] = useState(false);
-  const [cookiesDesactivadas, setCookiesDesactivadas] = useState(false);
   const [mostrarModalCookies, setMostrarModalCookies] = useState(false);
   const { login, isAuthenticated, sesionLista, user } = useAuth();
   const navigate = useNavigate();
@@ -45,11 +45,9 @@ export default function Login(_props: Props) {
       document.cookie = "testCookie=1; SameSite=Lax; Secure; expires=Thu, 01 Jan 1970 00:00:00 GMT";
 
       if (!cookiesEnabled) {
-        setCookiesDesactivadas(true);
         setMostrarModalCookies(true);
       }
     } catch (e) {
-      setCookiesDesactivadas(true);
       setMostrarModalCookies(true);
     }
   }, []);
@@ -115,6 +113,8 @@ export default function Login(_props: Props) {
           navigate("/dashboard");
         } else if (esAdministradorRed(perfil)) {
           navigate("/dashboard-admin");
+        } else if (esColaborador(perfil)) {
+          navigate("/dashboard");
         }
       }
     } catch {

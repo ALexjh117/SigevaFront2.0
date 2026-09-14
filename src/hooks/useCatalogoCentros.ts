@@ -46,8 +46,8 @@ export function useCatalogoCentros(activo = true) {
       setCargando(true);
       try {
         const [resCentros, resRegionales] = await Promise.all([
-          api.get("api/centrosFormacion/obtiene"),
-          api.get("api/regionales"),
+          api.get("/api/centrosFormacion/obtiene"),
+          api.get("/api/regionales"),
         ]);
         if (!vivo) return;
 

@@ -32,6 +32,7 @@ import Equipo from "./pages/Equipo";
 import PoliticaPrivacidad from "./pages/PoliticaPrivacidad";
 import ResultadosDemoPage from "./pages/funcionario/ResultadosDemoPage";
 import AdminsCentro from "./pages/administrador/AdminsCentro";
+import Colaboradores from "./pages/administrador/Colaboradores";
 import {
   esAdminSistema,
   esAdministradorRed,
@@ -149,6 +150,7 @@ function App() {
           <Route element={<RedSenaLayout />}>
             <Route path="/dashboard-admin" element={<DashboardAdmin />} />
             <Route path="/admins-centro" element={<AdminsCentro />} />
+            <Route path="/colaboradores" element={<Colaboradores />} />
             <Route path="/cargar-aprendices-admin" element={<CargarAprendicesAdmin/>} />
           </Route>
         </Route>

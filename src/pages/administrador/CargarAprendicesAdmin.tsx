@@ -208,13 +208,13 @@ export default function CargarAprendices() {
       defval: "",
     });
 
-    // Obtener ficha y programa de la primera fila del nuevo formato
+    // Obtener las fichas y programas únicos del archivo
     if (data.length > 0) {
-      const primeraFila = data[0];
-      const numeroGrupo = String(primeraFila["Ficha"] || "").trim();
-      const nombrePrograma = String(primeraFila["Programa"] || "").trim();
-      setFichaDetectada(numeroGrupo);
-      setProgramaDetectado(nombrePrograma);
+      const fichasUnicas = [...new Set(data.map(f => String(f["Ficha"] || "").trim()).filter(f => f))];
+      const programasUnicos = [...new Set(data.map(f => String(f["Programa"] || "").trim()).filter(p => p))];
+      
+      setFichaDetectada(fichasUnicas.length > 0 ? `${fichasUnicas.length} fichas diferentes` : "");
+      setProgramaDetectado(programasUnicos.length > 0 ? `${programasUnicos.length} programas diferentes` : "");
     }
 
     setPreview(data.slice(0, 20));
@@ -510,8 +510,8 @@ export default function CargarAprendices() {
         {(fichaDetectada || programaDetectado || centroSeleccionado) && (
           <div className="mt-2">
             <small className="text-muted">
-              <strong>Ficha detectada:</strong> {fichaDetectada || "—"} {" | "}
-              <strong>Programa:</strong> {programaDetectado || "—"} {" | "}
+              <strong>Fichas:</strong> {fichaDetectada || "—"} {" | "}
+              <strong>Programas:</strong> {programaDetectado || "—"} {" | "}
               <strong>Centro:</strong> {centroSeleccionado?.nombre || "—"}
             </small>
           </div>
@@ -580,10 +580,10 @@ export default function CargarAprendices() {
               </strong>
             </li>
             <li>
-              Ficha detectada: <strong>{fichaDetectada || "—"}</strong>
+              Fichas detectadas: <strong>{fichaDetectada || "—"}</strong>
             </li>
             <li>
-              Programa detectado: <strong>{programaDetectado || "—"}</strong>
+              Programas detectados: <strong>{programaDetectado || "—"}</strong>
             </li>
           </ul>
         </Modal.Body>

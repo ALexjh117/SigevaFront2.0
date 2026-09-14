@@ -127,14 +127,13 @@ const Aprendices: React.FC = () => {
       width: "56px",
       center: true,
       cell: (row) => (
-        <Button
-          variant="link"
+        <button
           className="tabla-accion-icono"
           title="Editar aprendiz"
           onClick={() => navigate("/aprendiz-form", { state: { aprendiz: row } })}
         >
           <FaEdit />
-        </Button>
+        </button>
       ),
       ignoreRowClick: true,
     },
