@@ -21,6 +21,7 @@ import {
   esAdminSistema,
   esAprendiz,
   esFuncionario,
+  esColaborador,
   usaTemaAdmin
 } from '../utils/roles';
 import { jornadaDelAprendiz } from '../utils/jornadaAprendiz';
@@ -154,9 +155,9 @@ const Sidebar: React.FC<SidebarProps> = ({ onNavigate }) => {
       return [
         { to: '/dashboard', icon: <FaHome />, text: 'Inicio', type: 'link' },
         { to: '/panel-metricas', icon: <FaChartBar />, text: 'Resultados en vivo', type: 'link' },
-        { 
-          type: 'dropdown', 
-          text: 'Gestión de Usuarios', 
+        {
+          type: 'dropdown',
+          text: 'Gestión de Usuarios',
           icon: <FaUsers />,
           items: [
             {
@@ -189,6 +190,34 @@ const Sidebar: React.FC<SidebarProps> = ({ onNavigate }) => {
 
     }
 
+    // COLABORADOR
+    if (esColaborador(user.perfil)) {
+
+      return [
+        { to: '/dashboard', icon: <FaHome />, text: 'Inicio', type: 'link' },
+        {
+          type: 'dropdown',
+          text: 'Gestión de Usuarios',
+          icon: <FaUsers />,
+          items: [
+            {
+              to: '/aprendices',
+              icon: <FaUserGraduate />,
+              text: 'Aprendices'
+            },
+          ]
+        },
+
+        {
+          to: '/cargar-aprendices',
+          icon: <FaUserPlus />,
+          text: 'Cargar Aprendices',
+          type: 'link'
+        },
+      ];
+
+    }
+
     // ADMINISTRADOR DE RED
     if (esAdministradorRed(user.perfil)) {
 
@@ -197,9 +226,9 @@ const Sidebar: React.FC<SidebarProps> = ({ onNavigate }) => {
         { to: '/panel-metricas', icon: <FaChartBar />, text: 'Resultados en vivo', type: 'link' },
         { to: '/elecciones', icon: <FaClipboardList />, text: 'Elecciones de la red', type: 'link' },
         { to: '/aprendices', icon: <FaUserGraduate />, text: 'Aprendices', type: 'link' },
-        { 
-          type: 'dropdown', 
-          text: 'Gestión de Usuarios', 
+        {
+          type: 'dropdown',
+          text: 'Gestión de Usuarios',
           icon: <FaUsers />,
           items: [
             {
@@ -212,7 +241,11 @@ const Sidebar: React.FC<SidebarProps> = ({ onNavigate }) => {
               icon: <FaUserTie />,
               text: 'Funcionarios'
             },
-
+            {
+              to: '/colaboradores',
+              icon: <FaUserTie />,
+              text: 'Colaboradores'
+            },
             {
               to: '/cargar-aprendices-admin',
               icon: <FaUserPlus />,

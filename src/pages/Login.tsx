@@ -1,9 +1,10 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import toast from "react-hot-toast";
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
+import Modal from "react-bootstrap/Modal";
 import { Link, Navigate, useLocation, useNavigate } from "react-router-dom";
-import { FaArrowLeft, FaArrowRight, FaLock, FaUserGraduate, FaUserTie, FaEye, FaEyeSlash } from "react-icons/fa";
+import { FaArrowLeft, FaArrowRight, FaLock, FaUserGraduate, FaUserTie, FaEye, FaEyeSlash, FaCookie, FaExclamationTriangle } from "react-icons/fa";
 import { api } from "../api";
 import { useAuth } from "../context/auth/auth.context";
 import type { ResponseType, User } from "../context/auth/types/authTypes";
@@ -19,6 +20,7 @@ import {
   esAdminSistema,
   esAprendiz as perfilEsAprendiz,
   esFuncionario,
+  esColaborador,
 } from "../utils/roles";
 import { SigevaWordmark, SigevaName } from "../components/landing/SigevaMark";
 import "./Login.css";
@@ -29,10 +31,31 @@ interface Props {
 
 export default function Login(_props: Props) {
   const [showPassword, setShowPassword] = useState(false);
+  const [mostrarModalCookies, setMostrarModalCookies] = useState(false);
   const { login, isAuthenticated, sesionLista, user } = useAuth();
   const navigate = useNavigate();
   const { pathname } = useLocation();
   const esAprendiz = pathname.includes("login-aprendiz");
+
+  // Verificar si las cookies están desactivadas y mostrar modal
+  useEffect(() => {
+    try {
+      document.cookie = "testCookie=1; SameSite=Lax; Secure";
+      const cookiesEnabled = document.cookie.indexOf("testCookie") !== -1;
+      document.cookie = "testCookie=1; SameSite=Lax; Secure; expires=Thu, 01 Jan 1970 00:00:00 GMT";
+
+      if (!cookiesEnabled) {
+        setMostrarModalCookies(true);
+      }
+    } catch (e) {
+      setMostrarModalCookies(true);
+    }
+  }, []);
+
+  const handleAceptarCookies = () => {
+    setMostrarModalCookies(false);
+    toast.success("Por favor activa las cookies en tu navegador y recarga la página", { duration: 5000 });
+  };
 
   const {
     control,
@@ -90,6 +113,8 @@ export default function Login(_props: Props) {
           navigate("/dashboard");
         } else if (esAdministradorRed(perfil)) {
           navigate("/dashboard-admin");
+        } else if (esColaborador(perfil)) {
+          navigate("/dashboard");
         }
       }
     } catch {
@@ -241,6 +266,45 @@ export default function Login(_props: Props) {
           </Link>
         </div>
       </section>
+
+      {/* Modal de Cookies Desactivadas */}
+      <Modal
+        show={mostrarModalCookies}
+        onHide={() => setMostrarModalCookies(false)}
+        centered
+        backdrop="static"
+        keyboard={false}
+      >
+        <Modal.Header className="bg-warning">
+          <Modal.Title className="d-flex align-items-center">
+            <FaExclamationTriangle className="me-2" />
+            Cookies Requeridas
+          </Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <div className="text-center mb-3">
+            <FaCookie size={64} className="text-warning mb-3" />
+          </div>
+          <h5 className="text-center mb-3">SIGEVA requiere cookies habilitadas</h5>
+          <p className="text-center mb-4">
+            Para garantizar tu experiencia de votación segura y confiable, SIGEVA necesita que las cookies estén activadas en tu navegador.
+          </p>
+          <div className="alert alert-info">
+            <strong>¿Cómo activar cookies?</strong>
+            <ul className="mb-0 mt-2">
+              <li><strong>Chrome:</strong> Configuración → Privacidad → Cookies y datos de sitios → Permitir todas las cookies</li>
+              <li><strong>Edge:</strong> Configuración → Cookies y permisos → Permitir cookies</li>
+              <li><strong>Firefox:</strong> Configuración → Privacidad y seguridad → Cookies y datos de sitios → Permitir cookies</li>
+              <li><strong>Safari:</strong> Configuración → Safari → Bloquear cookies → Nunca</li>
+            </ul>
+          </div>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={handleAceptarCookies}>
+            Entendido
+          </Button>
+        </Modal.Footer>
+      </Modal>
     </div>
   );
 }

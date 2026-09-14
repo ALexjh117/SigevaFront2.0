@@ -350,22 +350,20 @@ const Funcionarios: React.FC = () => {
       width: "110px",
       cell: (row: Funcionario) => (
         <div className="d-flex gap-1">
-          <Button
-            variant="link"
+          <button
             className="tabla-accion-icono"
             onClick={() => handleEditar(row)}
             title="Editar funcionario"
           >
             <FaEdit />
-          </Button>
-          <Button
-            variant={row.estado === "activo" ? "outline-danger" : "outline-success"}
-            size="sm"
+          </button>
+          <button
+            className="tabla-accion-icono"
             onClick={() => handleToggleStatus(row.id, estadoCanonico(row.estado) === "Activo" ? "Inactivo" : "Activo")}
             title={estadoCanonico(row.estado) === "Activo" ? "Desactivar" : "Activar"}
           >
             {estadoCanonico(row.estado) === "Activo" ? <FaToggleOff /> : <FaToggleOn />}
-          </Button>
+          </button>
         </div>
       ),
       ignoreRowClick: true,

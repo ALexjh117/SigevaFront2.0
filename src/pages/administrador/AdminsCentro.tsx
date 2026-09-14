@@ -1,15 +1,15 @@
 import { useEffect, useState } from "react";
 import { Button, Form, InputGroup } from "react-bootstrap";
 import Swal from "sweetalert2";
-import { FaPlus, FaSearch } from "react-icons/fa";
+import { FaPlus, FaSearch, FaEdit, FaToggleOn, FaToggleOff } from "react-icons/fa";
 import DataTable from "react-data-table-component";
 import type { TableColumn } from "react-data-table-component";
 import { CrearFuncionarioModal } from "./modals/CrearFuncionarioModal";
 import { api } from "../../api";
 import { ADMIN_PALETTE } from "../../theme/tokens";
 import { adminTableStyles } from "../../theme/adminTableStyles";
-import { SemaforoEstado, textoCorto } from "../../components/tabla/detalleTabla";
-import { listaDe, mensajeApi, nombreDeCentro } from "../../utils/centro";
+import { SemaforoEstado, textoCorto, LupaDetalle } from "../../components/tabla/detalleTabla";
+import { listaDe, mensajeApi, nombreDeCentro, estadoCanonico } from "../../utils/centro";
 
 type AdminCentro = {
   id: number;
@@ -86,6 +86,39 @@ export default function AdminsCentro() {
       width: "110px",
       center: true,
       cell: (row) => <SemaforoEstado estado={row.estado} />,
+    },
+    {
+      name: "",
+      width: "56px",
+      center: true,
+      cell: (row) => (
+        <LupaDetalle onClick={() => console.log("Ver detalle", row)} />
+      ),
+      ignoreRowClick: true,
+    },
+    {
+      name: "",
+      width: "110px",
+      cell: (row) => (
+        <div className="d-flex gap-1">
+          <button
+            className="tabla-accion-icono"
+            onClick={() => console.log("Editar", row)}
+            title="Editar admin"
+          >
+            <FaEdit />
+          </button>
+          <button
+            className="tabla-accion-icono"
+            onClick={() => console.log("Activar/Desactivar", row)}
+            title={estadoCanonico(row.estado) === "Activo" ? "Desactivar" : "Activar"}
+          >
+            {estadoCanonico(row.estado) === "Activo" ? <FaToggleOff /> : <FaToggleOn />}
+          </button>
+        </div>
+      ),
+      ignoreRowClick: true,
+      button: true,
     },
   ];
 

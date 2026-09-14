@@ -28,6 +28,8 @@ type FilaExcel = {
   ["Celular"]?: string | number;
   ["Correo Electrónico"]?: string;
   ["Estado"]?: string;
+  ["Ficha"]?: string | number;
+  ["Programa"]?: string;
   motivo?: string; // <-- el backend ahora puede devolver motivo
   [k: string]: unknown;
 };
@@ -201,18 +203,20 @@ export default function CargarAprendices() {
     const wb = XLSX.read(buffer, { type: "array" });
     const sheet = wb.Sheets[wb.SheetNames[0]];
 
-    const c2 = sheet?.["C2"]?.v?.toString().trim() || "";
-    const fichaLimpia = c2.replace(/–/g, "-");
-    const partes = fichaLimpia.split(" - ");
-    const numeroGrupo = partes[0]?.trim() || "";
-    const nombrePrograma = partes[1]?.trim() || "";
-    setFichaDetectada(numeroGrupo);
-    setProgramaDetectado(nombrePrograma);
-
     const data = XLSX.utils.sheet_to_json<FilaExcel>(sheet, {
-      range: 4,
+      range: 0,
       defval: "",
     });
+
+    // Obtener las fichas y programas únicos del archivo
+    if (data.length > 0) {
+      const fichasUnicas = [...new Set(data.map(f => String(f["Ficha"] || "").trim()).filter(f => f))];
+      const programasUnicos = [...new Set(data.map(f => String(f["Programa"] || "").trim()).filter(p => p))];
+      
+      setFichaDetectada(fichasUnicas.length > 0 ? `${fichasUnicas.length} fichas diferentes` : "");
+      setProgramaDetectado(programasUnicos.length > 0 ? `${programasUnicos.length} programas diferentes` : "");
+    }
+
     setPreview(data.slice(0, 20));
   };
 
@@ -379,8 +383,9 @@ export default function CargarAprendices() {
       <Container className="mb-3">
         <h1 className="mb-2">Cargar aprendices (red SENA)</h1>
         <p className="text-muted mb-0">
-          Elegí la regional y el <strong>centro de formación</strong> destino. El Excel es el
-          Reporte de Aprendices de Sofia Plus. La contraseña inicial es el{" "}
+          Elegí la regional y el <strong>centro de formación</strong> destino. El Excel debe tener
+          las columnas: Tipo de Documento, Número de Documento, Nombre, Apellidos, Celular, Correo Electrónico, Estado, Ficha, Programa.
+          La contraseña inicial es el{" "}
           <strong>número de documento</strong>. La jornada la elige el aprendiz al entrar, no
           se pide en esta carga.
         </p>
@@ -505,8 +510,8 @@ export default function CargarAprendices() {
         {(fichaDetectada || programaDetectado || centroSeleccionado) && (
           <div className="mt-2">
             <small className="text-muted">
-              <strong>Ficha detectada:</strong> {fichaDetectada || "—"} {" | "}
-              <strong>Programa:</strong> {programaDetectado || "—"} {" | "}
+              <strong>Fichas:</strong> {fichaDetectada || "—"} {" | "}
+              <strong>Programas:</strong> {programaDetectado || "—"} {" | "}
               <strong>Centro:</strong> {centroSeleccionado?.nombre || "—"}
             </small>
           </div>
@@ -553,9 +558,8 @@ export default function CargarAprendices() {
             manualmente.
           </p>
           <p>
-            El archivo debe ser el reporte oficial de aprendices generado desde{" "}
-            <span className="text-success">Sofia plus</span> (C2 = ficha - programa, filas desde la
-            5). La contraseña inicial será el número de documento.
+            El archivo debe tener las columnas: Tipo de Documento, Número de Documento, Nombre, Apellidos, Celular, Correo Electrónico, Estado, Ficha, Programa.
+            La contraseña inicial será el número de documento.
           </p>
 
           <ul>
@@ -576,10 +580,10 @@ export default function CargarAprendices() {
               </strong>
             </li>
             <li>
-              Ficha detectada: <strong>{fichaDetectada || "—"}</strong>
+              Fichas detectadas: <strong>{fichaDetectada || "—"}</strong>
             </li>
             <li>
-              Programa detectado: <strong>{programaDetectado || "—"}</strong>
+              Programas detectados: <strong>{programaDetectado || "—"}</strong>
             </li>
           </ul>
         </Modal.Body>

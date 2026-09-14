@@ -16,9 +16,13 @@ export function esAdministradorRed(perfil?: string | null) {
   return perfil?.toLowerCase() === "administrador";
 }
 
+export function esColaborador(perfil?: string | null) {
+  return perfil?.toLowerCase() === "colaborador";
+}
+
 /** Funcionario o admin_sistema: viven en UN centro. */
 export function esRolDeCentro(perfil?: string | null) {
-  return esAdminSistema(perfil) || esFuncionario(perfil);
+  return esAdminSistema(perfil) || esFuncionario(perfil) || esColaborador(perfil);
 }
 
 /** Mismo panel visual para red, centro, funcionario y aprendiz. */
