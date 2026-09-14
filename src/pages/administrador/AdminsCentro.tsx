@@ -91,7 +91,7 @@ export default function AdminsCentro() {
       name: "",
       width: "56px",
       center: true,
-      cell: (row) => (
+      cell: (_row) => (
         <LupaDetalle onClick={() => {}} />
       ),
       ignoreRowClick: true,
