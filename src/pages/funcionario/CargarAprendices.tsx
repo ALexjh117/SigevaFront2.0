@@ -127,7 +127,6 @@ export default function CargarAprendices() {
     try {
       await leerExcelParaPreview(f);
     } catch (err) {
-      console.error(err);
       setMsg({
         type: "danger",
         text: "No se pudo leer el Excel para la vista previa.",
@@ -166,7 +165,6 @@ export default function CargarAprendices() {
           defval: "",
         });
       } catch (err) {
-        console.error(err);
         setMsg({
           type: "danger",
           text: "No se pudo leer el archivo para validar.",

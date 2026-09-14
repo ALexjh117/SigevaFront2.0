@@ -61,13 +61,6 @@ export default function SelecionarCandidato({
       return true;
     } catch (error: any) {
       // intentamos extraer info útil del error
-      console.error("[enviarOTP] error al generar OTP:", error);
-      console.error("[enviarOTP] error.message:", error?.message);
-      console.error(
-        "[enviarOTP] error.response?.status:",
-        error?.response?.status
-      );
-      console.error("[enviarOTP] error.response?.data:", error?.response?.data);
 
       // muestra Swal con más detalles si están disponibles
       const serverMsg =
@@ -149,14 +142,7 @@ export default function SelecionarCandidato({
             }).then(() => navigate("/votaciones"));
             return;
           }
-          console.log(
-            "[submit] registrando voto. candidatoId:",
-            candidato.idCandidato,
-            "aprendiz:",
-            user?.id,
-            "eleccionId:",
-            id
-          );
+
           const { data: votoResp } = await api.post(
             "/api/votoXCandidato/crear/",
             {
@@ -189,11 +175,6 @@ export default function SelecionarCandidato({
             });
           }
         } catch (error: any) {
-          console.error("[submit] error al crear voto:", error);
-          console.error(
-            "[submit] error.response?.data:",
-            error?.response?.data
-          );
           Swal.fire({
             title: "Tu Voto No Fue Registrado, Intenta nuevamente",
             text: String(error?.response?.data || error?.message),

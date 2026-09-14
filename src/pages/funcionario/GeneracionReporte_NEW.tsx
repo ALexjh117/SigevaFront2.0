@@ -51,7 +51,6 @@ const GeneracionReporte: React.FC<GeneracionReporteProps> = ({
         candidatos: bloque.lista,
       });
     } catch (error) {
-      console.error("Error al generar el PDF:", error);
     } finally {
       setExportando("");
     }
@@ -67,7 +66,6 @@ const GeneracionReporte: React.FC<GeneracionReporteProps> = ({
         candidatos: eleccion.candidatos,
       });
     } catch (error) {
-      console.error("Error al generar el PDF:", error);
     } finally {
       setExportando("");
     }

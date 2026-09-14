@@ -157,12 +157,10 @@ const Colaboradores: React.FC = () => {
   };
 
   const cargarCentrosPorRegional = async (idRegional: number) => {
-    console.log("Colaboradores: Cargando centros de formación para regional:", idRegional);
     setLoadingCentros(true);
     try {
       // Usar el endpoint general y filtrar por regional en el frontend
       const response = await api.get("/api/centrosFormacion/obtiene");
-      console.log("Colaboradores: Respuesta de centros generales:", response);
       
       // Extraer los datos según el patrón del proyecto
       const centrosData = response.data?.data || response.data || [];
@@ -180,25 +178,8 @@ const Colaboradores: React.FC = () => {
         centro_formacioncol: centro.centroFormacioncol || centro.centro_formacioncol || centro.nombre
       }));
       
-      console.log("Colaboradores: Centros filtrados por regional:", centrosFiltrados);
-      console.log("Colaboradores: Cantidad de centros:", centrosFiltrados.length);
-      console.log("Colaboradores: Centros normalizados:", centrosNormalizados);
-      
-      // Verificar estructura de datos
-      if (centrosNormalizados.length > 0) {
-        console.log("Colaboradores: Primer centro para depuración:", centrosNormalizados[0]);
-        console.log("Colaboradores: Todos los campos del primer centro:", JSON.stringify(centrosNormalizados[0], null, 2));
-        console.log("Colaboradores: Campos de nombre disponibles:", {
-          centro_formacioncol: centrosNormalizados[0].centro_formacioncol,
-          centro_formacion: centrosNormalizados[0].centro_formacion,
-          nombre: centrosNormalizados[0].nombre
-        });
-      }
-      
       setCentros(centrosNormalizados);
     } catch (err) {
-      console.error("Colaboradores: Error al cargar centros por regional:", err);
-      console.error("Colaboradores: Detalles del error:", JSON.stringify(err, null, 2));
       setCentros([]);
     } finally {
       setLoadingCentros(false);
@@ -324,7 +305,6 @@ const Colaboradores: React.FC = () => {
     // Si se cambia la regional, cargar los centros correspondientes
     if (name === "idregional") {
       const idRegional = Number(value);
-      console.log("Colaboradores: Regional cambiada a:", idRegional);
       if (idRegional > 0) {
         cargarCentrosPorRegional(idRegional);
       } else {
@@ -405,7 +385,6 @@ const Colaboradores: React.FC = () => {
   };
 
   useEffect(() => {
-    console.log("Colaboradores: useEffect iniciado - cargando datos iniciales");
     cargarColaboradores();
     cargarRegionales();
   }, []);
@@ -419,7 +398,7 @@ const Colaboradores: React.FC = () => {
           ? `${row.nombres} ${row.apellidos}`
           : row.email,
       sortable: true,
-      grow: 2,
+      width: "250px",
       cell: (row: Colaborador) =>
         textoCorto(
           row.nombres && row.apellidos
@@ -432,22 +411,26 @@ const Colaboradores: React.FC = () => {
       name: "Centro",
       selector: (row: Colaborador) => row.centroFormacion?.centroFormacioncol || row.centroFormacion?.centro_formacioncol || row.centroFormacion?.nombre || "Sin centro",
       sortable: true,
-      grow: 2,
+      width: "250px",
       cell: (row: Colaborador) => textoCorto(row.centroFormacion?.centroFormacioncol || row.centroFormacion?.centro_formacioncol || row.centroFormacion?.nombre || "Sin centro", 20),
     },
     {
       name: "Estado",
       selector: (row: Colaborador) => row.estado,
       width: "110px",
-      center: true,
-      cell: (row: Colaborador) => <SemaforoEstado estado={row.estado} />,
+      cell: (row: Colaborador) => (
+        <div style={{ display: 'flex', justifyContent: 'center' }}>
+          <SemaforoEstado estado={row.estado} />
+        </div>
+      ),
     },
     {
       name: "",
       width: "56px",
-      center: true,
       cell: (row: Colaborador) => (
-        <LupaDetalle onClick={() => handleVerDetalle(row)} />
+        <div style={{ display: 'flex', justifyContent: 'center' }}>
+          <LupaDetalle onClick={() => handleVerDetalle(row)} />
+        </div>
       ),
       ignoreRowClick: true,
     },
@@ -455,7 +438,7 @@ const Colaboradores: React.FC = () => {
       name: "",
       width: "110px",
       cell: (row: Colaborador) => (
-        <div className="d-flex gap-1">
+        <div className="d-flex gap-1 justify-content-center">
           <button
             className="tabla-accion-icono"
             onClick={() => handleEditar(row)}
@@ -473,12 +456,10 @@ const Colaboradores: React.FC = () => {
         </div>
       ),
       ignoreRowClick: true,
-      button: true,
     },
   ];
 
   if (!esRed) {
-    console.log("Colaboradores: Usuario no es administrador de red, mostrando mensaje de advertencia");
     return (
       <div className="container mt-4 admin-page">
         <div className="alert alert-warning">
@@ -487,12 +468,6 @@ const Colaboradores: React.FC = () => {
       </div>
     );
   }
-
-  console.log("Colaboradores: Renderizando componente principal");
-  console.log("Colaboradores: Estado loading:", loading);
-  console.log("Colaboradores: Estado error:", error);
-  console.log("Colaboradores: Cantidad colaboradores:", colaboradores.length);
-  console.log("Colaboradores: Estado showModal:", showModal);
 
   return (
     <div className="container mt-4 admin-page">
@@ -551,12 +526,8 @@ const Colaboradores: React.FC = () => {
         <Button
           variant="primary"
           onClick={() => {
-            console.log("Colaboradores: Botón Nuevo Colaborador clickeado");
-            console.log("Colaboradores: Estado actual showModal:", showModal);
             resetForm();
-            console.log("Colaboradores: Formulario reseteado");
             setShowModal(true);
-            console.log("Colaboradores: Modal activado, nuevo estado showModal:", true);
           }}
           className="d-flex align-items-center"
         >

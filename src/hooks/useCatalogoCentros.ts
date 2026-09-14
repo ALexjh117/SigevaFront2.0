@@ -89,7 +89,6 @@ export function useCatalogoCentros(activo = true) {
         setRegionales(listaRegionales);
         setCentros(listaCentros);
       } catch (error) {
-        console.error("Error al cargar regionales y centros:", error);
       } finally {
         if (vivo) setCargando(false);
       }

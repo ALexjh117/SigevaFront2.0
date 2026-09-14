@@ -157,9 +157,6 @@ export async function generarReporte(eleccion: Eleccion) {
       logoDrawnHeight = logoH;
     } catch (e) {
       // Si falla la decodificación (p.ej., firma PNG incorrecta), continuar sin logo
-      if (import.meta.env.DEV) {
-        console.debug("Logo omitido en PDF (no válido):", e);
-      }
     }
   }
 

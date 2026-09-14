@@ -102,8 +102,6 @@ const ModificarCandidatoModal = ({ show, onHide, candidato, onSave, aprendices }
 
       onHide();
     } catch (error: any) {
-      console.error("Error al crear candidato:", error.response?.data || error.message);
-
       toast.error("Error al guardar candidato");
     }
   };

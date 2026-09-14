@@ -57,7 +57,6 @@ export default function CandidateSelectionPage() {
         setCandidatos(hayJornada ? deJornada : todos);
         setYaVoto(eleccionYaVotada(todos, votados));
       } catch (error) {
-        console.error("Error al cargar candidatos:", error);
         setCandidatos([]);
       } finally {
         setLoading(false);

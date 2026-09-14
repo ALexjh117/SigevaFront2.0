@@ -254,7 +254,6 @@ export default function EleccionesActivasPage() {
 
       setEleccionActiva(ordenarElecciones(lista));
     } catch (error) {
-      console.error("Error al cargar las votaciones:", error);
       setEleccionActiva([]);
     } finally {
       setLoading(false);
@@ -289,7 +288,6 @@ export default function EleccionesActivasPage() {
       const res = await api.get(`/api/candidatos/listar/${eleccion.ideleccion}`);
       setCandidatos(comoLista<Candidato>(res.data));
     } catch (error) {
-      console.error("Error al cargar los candidatos:", error);
       setCandidatos([]);
     } finally {
       setLoadingCandidatos(false);

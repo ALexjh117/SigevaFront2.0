@@ -191,7 +191,6 @@ export function useResultadosEnVivo(idEleccion: number | null) {
         setMeta(data.meta);
         setActualizado(new Date());
       } catch (error) {
-        console.error("Error al cargar resultados en vivo:", error);
         if (!silencioso) setCandidatos([]);
       } finally {
         setCargando(false);
