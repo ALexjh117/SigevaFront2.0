@@ -13,7 +13,7 @@ import type { TableColumn } from "react-data-table-component";
 import { AiOutlinePlusCircle } from "react-icons/ai";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/auth/auth.context";
-import { esAdministradorRed } from "../../utils/roles";
+import { esAdministradorRed, esColaborador } from "../../utils/roles";
 import { adminTableStyles } from "../../theme/adminTableStyles";
 import {
   DetalleFilaModal,
@@ -57,6 +57,7 @@ const Aprendices: React.FC = () => {
   const [cargando, setCargando] = useState(false);
   const { user } = useAuth();
   const esRed = esAdministradorRed(user?.perfil);
+  const soloActualiza = esColaborador(user?.perfil);
   const {
     regionales,
     centrosFiltrados,
@@ -148,13 +149,15 @@ const Aprendices: React.FC = () => {
             Gestión de <span className="app-accent">Aprendices</span>
           </h3>
           <p className="text-muted mb-0">
-            {esRed
-              ? centroElegido
-                ? `Aprendices de ${centroElegido.nombre}${
-                    centroElegido.regional ? ` · ${centroElegido.regional}` : ""
-                  }.`
-                : "Elige la regional y el centro de formación para consultar sus aprendices."
-              : "Aprendices de tu centro de formación habilitados para votar."}
+            {soloActualiza
+              ? "Puedes consultar y actualizar la información de los aprendices de tu centro."
+              : esRed
+                ? centroElegido
+                  ? `Aprendices de ${centroElegido.nombre}${
+                      centroElegido.regional ? ` · ${centroElegido.regional}` : ""
+                    }.`
+                  : "Elige la regional y el centro de formación para consultar sus aprendices."
+                : "Aprendices de tu centro de formación habilitados para votar."}
           </p>
         </Col>
       </Row>
@@ -207,15 +210,17 @@ const Aprendices: React.FC = () => {
                 onChange={(e) => setBuscar(e.target.value)}
               />
             </Col>
-            <Col xs="auto">
-              <Button
-                variant="primary"
-                onClick={() => navigate("/aprendiz-form")}
-              >
-                <AiOutlinePlusCircle className="me-2 fs-3" />
-                Nuevo Aprendiz
-              </Button>
-            </Col>
+            {!soloActualiza ? (
+              <Col xs="auto">
+                <Button
+                  variant="primary"
+                  onClick={() => navigate("/aprendiz-form")}
+                >
+                  <AiOutlinePlusCircle className="me-2 fs-3" />
+                  Nuevo Aprendiz
+                </Button>
+              </Col>
+            ) : null}
           </Row>
 
           <div className="admin-table-shell">

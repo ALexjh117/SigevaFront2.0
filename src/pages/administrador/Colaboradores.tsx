@@ -8,7 +8,7 @@ import type { TableColumn } from 'react-data-table-component';
 import { api } from "../../api";
 import { ADMIN_PALETTE } from "../../theme/tokens";
 import { adminTableStyles } from "../../theme/adminTableStyles";
-import { SemaforoEstado, etiquetaEstado, textoCorto, LupaDetalle, DetalleFilaModal } from "../../components/tabla/detalleTabla";
+import { SemaforoEstado, etiquetaEstado, LupaDetalle, DetalleFilaModal } from "../../components/tabla/detalleTabla";
 import { MiniGraficas, contarPor, topN } from "../../components/graficas/MiniGraficas";
 import { useAuth } from "../../context/auth/auth.context";
 import { esAdministradorRed } from "../../utils/roles";
@@ -134,7 +134,7 @@ const Colaboradores: React.FC = () => {
     setLoading(true);
     setError(null);
     try {
-      const response = await api.get<Colaborador[]>("api/usuarios/colaboradores");
+      const response = await api.get<Colaborador[]>("/api/usuarios/colaboradores");
       setColaboradores(response.data || []);
     } catch (err: unknown) {
       const message = mensajeApi(err);
@@ -236,7 +236,7 @@ const Colaboradores: React.FC = () => {
       await cargarColaboradores();
       handleCloseModal();
     } catch (err: unknown) {
-      const message = err instanceof Error ? err.message : "Error desconocido";
+      const message = mensajeApi(err);
       setFormError(message);
       Swal.fire({
         title: "Error",
@@ -398,39 +398,48 @@ const Colaboradores: React.FC = () => {
           ? `${row.nombres} ${row.apellidos}`
           : row.email,
       sortable: true,
-      width: "250px",
-      cell: (row: Colaborador) =>
-        textoCorto(
+      grow: 2,
+      wrap: true,
+      cell: (row: Colaborador) => {
+        const nombre =
           row.nombres && row.apellidos
             ? `${row.nombres} ${row.apellidos}`
-            : row.email,
-          24
-        ),
+            : row.email;
+        return <span title={nombre}>{nombre}</span>;
+      },
     },
     {
       name: "Centro",
-      selector: (row: Colaborador) => row.centroFormacion?.centroFormacioncol || row.centroFormacion?.centro_formacioncol || row.centroFormacion?.nombre || "Sin centro",
+      selector: (row: Colaborador) =>
+        row.centroFormacion?.centroFormacioncol ||
+        row.centroFormacion?.centro_formacioncol ||
+        row.centroFormacion?.nombre ||
+        "Sin centro",
       sortable: true,
-      width: "250px",
-      cell: (row: Colaborador) => textoCorto(row.centroFormacion?.centroFormacioncol || row.centroFormacion?.centro_formacioncol || row.centroFormacion?.nombre || "Sin centro", 20),
+      grow: 2,
+      wrap: true,
+      cell: (row: Colaborador) => {
+        const centro =
+          row.centroFormacion?.centroFormacioncol ||
+          row.centroFormacion?.centro_formacioncol ||
+          row.centroFormacion?.nombre ||
+          "Sin centro";
+        return <span title={centro}>{centro}</span>;
+      },
     },
     {
       name: "Estado",
       selector: (row: Colaborador) => row.estado,
       width: "110px",
-      cell: (row: Colaborador) => (
-        <div style={{ display: 'flex', justifyContent: 'center' }}>
-          <SemaforoEstado estado={row.estado} />
-        </div>
-      ),
+      center: true,
+      cell: (row: Colaborador) => <SemaforoEstado estado={row.estado} />,
     },
     {
       name: "",
       width: "56px",
+      center: true,
       cell: (row: Colaborador) => (
-        <div style={{ display: 'flex', justifyContent: 'center' }}>
-          <LupaDetalle onClick={() => handleVerDetalle(row)} />
-        </div>
+        <LupaDetalle onClick={() => handleVerDetalle(row)} />
       ),
       ignoreRowClick: true,
     },
@@ -438,7 +447,7 @@ const Colaboradores: React.FC = () => {
       name: "",
       width: "110px",
       cell: (row: Colaborador) => (
-        <div className="d-flex gap-1 justify-content-center">
+        <div className="d-flex gap-1">
           <button
             className="tabla-accion-icono"
             onClick={() => handleEditar(row)}
@@ -448,14 +457,26 @@ const Colaboradores: React.FC = () => {
           </button>
           <button
             className="tabla-accion-icono"
-            onClick={() => handleToggleStatus(row.id, estadoCanonico(row.estado) === "Activo" ? "Inactivo" : "Activo")}
-            title={estadoCanonico(row.estado) === "Activo" ? "Desactivar" : "Activar"}
+            onClick={() =>
+              handleToggleStatus(
+                row.id,
+                estadoCanonico(row.estado) === "Activo" ? "Inactivo" : "Activo"
+              )
+            }
+            title={
+              estadoCanonico(row.estado) === "Activo" ? "Desactivar" : "Activar"
+            }
           >
-            {estadoCanonico(row.estado) === "Activo" ? <FaToggleOff /> : <FaToggleOn />}
+            {estadoCanonico(row.estado) === "Activo" ? (
+              <FaToggleOff />
+            ) : (
+              <FaToggleOn />
+            )}
           </button>
         </div>
       ),
       ignoreRowClick: true,
+      button: true,
     },
   ];
 

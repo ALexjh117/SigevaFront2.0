@@ -10,6 +10,8 @@ const redes = [
 ];
 
 export default function LandingFooter() {
+  const anio = new Date().getFullYear();
+
   return (
     <footer className="lp-foot">
       <div className="lp-foot-inner">
@@ -44,18 +46,16 @@ export default function LandingFooter() {
           <a href="https://www.sena.edu.co" target="_blank" rel="noopener noreferrer">
             Términos de uso
           </a>
-          <Link to="/#informacion">Mapa del sitio</Link>
-          <Link to="/#informacion">Accesibilidad</Link>
+          <Link to="/#mision">Misión</Link>
+          <Link to="/#vision">Visión</Link>
         </div>
 
         <div>
           <h4>Ayuda y soporte</h4>
-          <a href="https://www.sena.edu.co" target="_blank" rel="noopener noreferrer">
-            Canales de atención
-          </a>
-          <Link to="/#informacion">Preguntas frecuentes</Link>
-          <a href="mailto:contacto@misena.edu.co">Soporte técnico</a>
-          <a href="mailto:contacto@misena.edu.co">Contáctenos</a>
+          <Link to="/#faq">Cómo votar</Link>
+          <Link to="/#faq">Preguntas frecuentes</Link>
+          <a href="mailto:fabricaswctpicauca@gmail.com">Soporte técnico</a>
+          <a href="mailto:fabricaswctpicauca@gmail.com">Contáctenos</a>
         </div>
 
         <div className="lp-foot-follow">
@@ -94,7 +94,8 @@ export default function LandingFooter() {
       <div className="lp-foot-bar">
         <span className="lp-foot-spacer" aria-hidden />
         <span className="lp-foot-copy">
-          © {new Date().getFullYear()} SENA - Servicio Nacional de Aprendizaje. Todos los derechos reservados.
+          © {anio} SENA — CTPI · Centro de Teleinformática y Producción Industrial.
+          Todos los derechos reservados.
         </span>
         <img src="/sena.svg" alt="SENA" className="lp-foot-sena" />
       </div>
