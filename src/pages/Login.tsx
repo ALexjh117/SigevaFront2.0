@@ -92,6 +92,9 @@ export default function Login(_props: Props) {
     if (esAdministradorRed(user.perfil)) {
       return <Navigate to="/dashboard-admin" replace />;
     }
+    if (esColaborador(user.perfil)) {
+      return <Navigate to="/aprendices" replace />;
+    }
   }
 
   const onSubmit: SubmitHandler<FormValues> = async (data) => {
@@ -101,6 +104,7 @@ export default function Login(_props: Props) {
         : "/api/usuarios/login";
       const res = await api.post<ResponseType<User>>(endpoint, data);
 
+      // success:false (p. ej. 200) → toast en login(); 401/red → catch
       if (!login(res.data)) return;
 
       if (res.data.success && res.data.data) {
@@ -114,11 +118,11 @@ export default function Login(_props: Props) {
         } else if (esAdministradorRed(perfil)) {
           navigate("/dashboard-admin");
         } else if (esColaborador(perfil)) {
-          navigate("/dashboard");
+          navigate("/aprendices");
         }
       }
     } catch {
-      toast.error("Credenciales inválidas. Verifica tu correo y contraseña.");
+      toast.error("Credenciales incorrectas. Verifica tu correo y contraseña.");
     }
   };
 

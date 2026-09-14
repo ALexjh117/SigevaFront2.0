@@ -26,6 +26,35 @@ function Marca() {
   return <SigevaName />;
 }
 
+const preguntasFrecuentes = [
+  {
+    pregunta: "¿Cómo voto en SIGEVA?",
+    respuesta:
+      "Ingresa como aprendiz con tu correo y contraseña, elige la jornada si te la piden, revisa las elecciones activas de tu centro y confirma tu voto siguiendo los pasos en pantalla.",
+  },
+  {
+    pregunta: "¿Necesito descargar una aplicación?",
+    respuesta:
+      "No. Puedes votar desde el navegador en el celular o el computador, sin instalar nada. El código QR y la app son opcionales.",
+  },
+  {
+    pregunta: "¿Quién puede participar?",
+    respuesta:
+      "Los aprendices habilitados de cada centro de formación, según las elecciones que active el personal autorizado del SENA.",
+  },
+  {
+    pregunta: "¿Qué hago si olvidé mi contraseña?",
+    respuesta:
+      "En la pantalla de inicio de sesión usa «Recuperar contraseña» y sigue las instrucciones con el correo registrado. Si no puedes, pide apoyo a Bienestar o a tu funcionario de mesa.",
+  },
+  {
+    pregunta: "¿Mi voto es seguro y secreto?",
+    respuesta:
+      "Sí. SIGEVA protege tu sesión y el proceso electoral. Tu elección se registra de forma segura y no se muestra a otros aprendices.",
+  },
+];
+
+
 const infoCards = [
   {
     id: "que-es",
@@ -294,7 +323,7 @@ const Inicio: React.FC = () => {
   <div className="lp-duos">
 
     {/* MISIÓN */}
-    <article className="lp-duo">
+    <article className="lp-duo" id="mision">
       <img
         src="/landing/login-voto.png"
         alt="Participación electoral en SIGEVA"
@@ -316,7 +345,7 @@ const Inicio: React.FC = () => {
     </article>
 
     {/* VISIÓN */}
-    <article className="lp-duo">
+    <article className="lp-duo" id="vision">
       <img
         src="/landing/convocatorias.jpg"
         alt="Comunidad SENA participando en procesos electorales"
@@ -338,7 +367,22 @@ const Inicio: React.FC = () => {
     </article>
 
   </div>
-</section>
+      </section>
+
+      <section className="lp-section lp-faq" id="faq">
+        <h2>Preguntas frecuentes</h2>
+        <p className="lp-lead">
+          Respuestas rápidas para votar con confianza, desde el navegador y sin complicaciones.
+        </p>
+        <div className="lp-faq-list">
+          {preguntasFrecuentes.map((item) => (
+            <details key={item.pregunta} className="lp-faq-item">
+              <summary>{item.pregunta}</summary>
+              <p>{item.respuesta}</p>
+            </details>
+          ))}
+        </div>
+      </section>
 
       <section className="lp-section lp-cta-wrap">
         <div className="lp-cta">

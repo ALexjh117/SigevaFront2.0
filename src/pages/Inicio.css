@@ -1414,14 +1414,75 @@ html {
 .lp-foot-copy {
   grid-column: 2;
   text-align: center;
-  font-size: 0.8rem;
+  font-size: 0.78rem;
+  line-height: 1.45;
   color: rgba(255, 255, 255, 0.7);
+  max-width: 38rem;
+  justify-self: center;
 }
 
 .lp-foot-sena {
   height: 42px;
   width: auto;
   justify-self: end;
+}
+
+/* ——— FAQ ——— */
+.lp-faq-list {
+  max-width: 720px;
+  margin: 1.5rem auto 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+}
+
+.lp-faq-item {
+  border-bottom: 1px solid #d5dcd7;
+  padding: 0.15rem 0 0.75rem;
+}
+
+.lp-faq-item summary {
+  cursor: pointer;
+  list-style: none;
+  font-weight: 700;
+  font-size: 1rem;
+  color: var(--lp-green-dark);
+  padding: 0.55rem 1.6rem 0.55rem 0;
+  position: relative;
+}
+
+.lp-faq-item summary::-webkit-details-marker {
+  display: none;
+}
+
+.lp-faq-item summary::after {
+  content: "+";
+  position: absolute;
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 1.25rem;
+  font-weight: 500;
+  color: var(--lp-green);
+}
+
+.lp-faq-item[open] summary::after {
+  content: "–";
+}
+
+.lp-faq-item p {
+  margin: 0 0 0.35rem;
+  font-size: 0.92rem;
+  line-height: 1.55;
+  color: var(--lp-muted);
+  max-width: 40rem;
+}
+
+.lp-duo,
+#faq,
+#mision,
+#vision {
+  scroll-margin-top: 5.5rem;
 }
 
 /* ——— Responsive ——— */

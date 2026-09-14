@@ -37,6 +37,7 @@ import {
   esAdminSistema,
   esAdministradorRed,
   esAprendiz,
+  esColaborador,
   esFuncionario,
   esRolDeCentro,
 } from "./utils/roles";
@@ -78,10 +79,22 @@ function GestionLayout() {
   );
 }
 
+/** Colaborador: solo aprendices. Resto de gestión de centro = fuera. */
+function SinColaboradorLayout() {
+  const { user } = useAuth();
+  if (esColaborador(user?.perfil)) {
+    return <Navigate to="/aprendices" replace />;
+  }
+  return <Outlet />;
+}
+
 function RedSenaLayout() {
   const { user } = useAuth();
   if (esAprendiz(user?.perfil)) {
     return <Navigate to="/votaciones" replace />;
+  }
+  if (esColaborador(user?.perfil)) {
+    return <Navigate to="/aprendices" replace />;
   }
   if (esRolDeCentro(user?.perfil)) {
     return <Navigate to="/dashboard" replace />;
@@ -99,7 +112,7 @@ function AltaPersonalLayout() {
     return <Navigate to="/dashboard" replace />;
   }
   if (!esAdministradorRed(user?.perfil) && !esAdminSistema(user?.perfil)) {
-    return <Navigate to="/" replace />;
+    return <Navigate to="/aprendices" replace />;
   }
   return <Outlet />;
 }
@@ -130,19 +143,21 @@ function App() {
             <Route path="/confirmar-voto" element={<ConfirmarVoto />} />
           </Route>
 
-          {/* Gestión de centro: funcionario y admin_sistema */}
+          {/* Gestión de centro: funcionario, admin_sistema y colaborador (solo aprendices) */}
           <Route element={<GestionLayout />}>
-            <Route path="/dashboard" element={<DashboardAdmin />} />
-            <Route path="/gestion-candidatos/:idEleccion" element={<GestionCandidatos />} />
-            <Route path="/cargar-aprendices" element={<CargarAprendices />} />
-            <Route path="/panel-metricas" element={<PanelMetricas />} />
-            <Route path="/elecciones" element={<EleccionesActivasPage />} />
-            <Route path="/agregar-candidato" element={<AgregarCandidato />} />
-            <Route path="/nueva-eleccion" element={<FormEleccion />} />
             <Route path="/aprendices" element={<Aprendices />} />
             <Route path="/aprendiz-form" element={<AprendizForm />} />
-            <Route element={<AltaPersonalLayout />}>
-              <Route path="/funcionarios" element={<Funcionarios />} />
+            <Route element={<SinColaboradorLayout />}>
+              <Route path="/dashboard" element={<DashboardAdmin />} />
+              <Route path="/gestion-candidatos/:idEleccion" element={<GestionCandidatos />} />
+              <Route path="/cargar-aprendices" element={<CargarAprendices />} />
+              <Route path="/panel-metricas" element={<PanelMetricas />} />
+              <Route path="/elecciones" element={<EleccionesActivasPage />} />
+              <Route path="/agregar-candidato" element={<AgregarCandidato />} />
+              <Route path="/nueva-eleccion" element={<FormEleccion />} />
+              <Route element={<AltaPersonalLayout />}>
+                <Route path="/funcionarios" element={<Funcionarios />} />
+              </Route>
             </Route>
           </Route>
 
@@ -157,7 +172,7 @@ function App() {
 
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
-      <Toaster position="top-right" reverseOrder={false} />
+      <Toaster position="top-right" reverseOrder={false} containerStyle={{ zIndex: 99999 }} />
     </BrowserRouter>
   );
 }

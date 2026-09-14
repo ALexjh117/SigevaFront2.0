@@ -54,7 +54,7 @@ export function AuthProvider({ children }: PropsWithChildren) {
     if (!response.success) {
       setIsAuthenticated(false);
       setUser(null);
-      toast.error(response.message);
+      toast.error("Credenciales incorrectas. Verifica tu correo y contraseña.");
       return false;
     }
 

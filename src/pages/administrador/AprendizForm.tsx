@@ -6,7 +6,7 @@ import { useForm } from "react-hook-form";
 import toast, { Toaster } from "react-hot-toast";
 import { useEffect, useState } from "react";
 import { useAuth } from "../../context/auth/auth.context";
-import { esAdministradorRed } from "../../utils/roles";
+import { esAdministradorRed, esColaborador } from "../../utils/roles";
 
 export interface ProgramaFormacion {
   idprogramaFormacion: number;
@@ -60,12 +60,16 @@ const AprendizForm = () => {
   };
 
   useEffect(() => {
+    if (esColaborador(user?.perfil) && !aprendiz) {
+      navigate("/aprendices", { replace: true });
+      return;
+    }
     if (!esAdministradorRed(user?.perfil) && !user?.centroFormacion) {
       return;
     }
     getCentros();
     getProgramas();
-  }, [user?.perfil, user?.centroFormacion]);
+  }, [user?.perfil, user?.centroFormacion, aprendiz, navigate]);
 
   const { register, handleSubmit } = useForm({
     defaultValues: aprendiz

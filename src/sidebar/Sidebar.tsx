@@ -190,32 +190,16 @@ const Sidebar: React.FC<SidebarProps> = ({ onNavigate }) => {
 
     }
 
-    // COLABORADOR
+    // COLABORADOR: solo aprendices (actualizar info de su centro)
     if (esColaborador(user.perfil)) {
-
       return [
-        { to: '/dashboard', icon: <FaHome />, text: 'Inicio', type: 'link' },
         {
-          type: 'dropdown',
-          text: 'Gestión de Usuarios',
-          icon: <FaUsers />,
-          items: [
-            {
-              to: '/aprendices',
-              icon: <FaUserGraduate />,
-              text: 'Aprendices'
-            },
-          ]
-        },
-
-        {
-          to: '/cargar-aprendices',
-          icon: <FaUserPlus />,
-          text: 'Cargar Aprendices',
-          type: 'link'
+          to: '/aprendices',
+          icon: <FaUserGraduate />,
+          text: 'Aprendices',
+          type: 'link',
         },
       ];
-
     }
 
     // ADMINISTRADOR DE RED
