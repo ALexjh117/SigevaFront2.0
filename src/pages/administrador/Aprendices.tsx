@@ -82,7 +82,6 @@ const Aprendices: React.FC = () => {
         const res = await api.get(`api/aprendiz/inscritos/centro/${centroConsulta}`);
         setAprendices(listaAprendices(res.data));
       } catch (error) {
-        console.error("Error al cargar los aprendices:", error);
         setAprendices([]);
       } finally {
         setCargando(false);

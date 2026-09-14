@@ -134,7 +134,6 @@ export default function EleccionEditarModal({
       onUpdated();
       onHide();
     } catch (error) {
-      console.error("Error al actualizar elección:", error);
       alert("Ocurrió un error al actualizar la elección");
     }
   };

@@ -44,7 +44,6 @@ const AgregarCandidato = () => {
             setElecciones(data);
             return data;
         } catch (error) {
-            console.error(error);
             return [];
         }
     };
@@ -92,7 +91,6 @@ const AgregarCandidato = () => {
             // await fetch("/api/candidatos", {...t
 
         } catch (err) {
-            console.log(err);
             alert("Error al guardar");
             setSaving(false);
         }

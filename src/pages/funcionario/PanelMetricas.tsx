@@ -229,7 +229,6 @@ export default function PanelMetricas() {
           setIdCentro(id);
         }
       } catch (error) {
-        console.error("Error al listar centros y elecciones:", error);
       } finally {
         setCargandoLista(false);
       }
@@ -404,7 +403,6 @@ export default function PanelMetricas() {
         candidatos: bloque.lista,
       });
     } catch (error) {
-      console.error("Error al exportar PDF:", error);
     } finally {
       setExportando("");
     }
@@ -421,7 +419,6 @@ export default function PanelMetricas() {
         candidatos,
       });
     } catch (error) {
-      console.error("Error al exportar PDF:", error);
     } finally {
       setExportando("");
     }

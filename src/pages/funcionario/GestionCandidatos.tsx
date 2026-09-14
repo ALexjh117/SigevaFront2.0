@@ -67,7 +67,6 @@ const GestionCandidatos = () => {
       const res = await api.get(`/api/candidatos/listar/${idEleccion}`);
       setCandidatos(res.data.data || []);
     } catch (error) {
-      console.error(error);
     } finally {
       setLoading(false);
     }
@@ -80,7 +79,6 @@ const GestionCandidatos = () => {
         const res = await api.get(`/api/aprendiz/inscritos/centro/${idCentro}`);
         setAprendices(res.data.data || []);
       } catch (error) {
-        console.error(error);
       }
     };
 
@@ -92,7 +90,6 @@ const GestionCandidatos = () => {
           res.data.data.find((e: Eleccion) => e.ideleccion === Number(idEleccion))?.nombre || ""
         );
       } catch (error) {
-        console.error(error);
       }
     };
 
@@ -112,7 +109,6 @@ const GestionCandidatos = () => {
       setCandidatoSeleccionado(candidato);
       setShowModalModificar(true);
     } catch (error: any) {
-      console.error("Error al obtener candidato:", error.response?.data || error.message);
       alert("No se pudo cargar el candidato");
     }
   };
@@ -130,7 +126,6 @@ const GestionCandidatos = () => {
           throw new Error("Error al eliminar el candidato");
         }
       } catch (error) {
-        console.error("Error al eliminar el candidato:", error);
         alert("Ocurrió un error al eliminar el candidato");
       } finally {
         setLoading(false);

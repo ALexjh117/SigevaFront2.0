@@ -92,7 +92,7 @@ export default function AdminsCentro() {
       width: "56px",
       center: true,
       cell: (row) => (
-        <LupaDetalle onClick={() => console.log("Ver detalle", row)} />
+        <LupaDetalle onClick={() => {}} />
       ),
       ignoreRowClick: true,
     },
@@ -103,14 +103,14 @@ export default function AdminsCentro() {
         <div className="d-flex gap-1">
           <button
             className="tabla-accion-icono"
-            onClick={() => console.log("Editar", row)}
+            onClick={() => {}}
             title="Editar admin"
           >
             <FaEdit />
           </button>
           <button
             className="tabla-accion-icono"
-            onClick={() => console.log("Activar/Desactivar", row)}
+            onClick={() => {}}
             title={estadoCanonico(row.estado) === "Activo" ? "Desactivar" : "Activar"}
           >
             {estadoCanonico(row.estado) === "Activo" ? <FaToggleOff /> : <FaToggleOn />}

@@ -84,7 +84,6 @@ const VotacionesActivasPage = () => {
 
         setVotaciones(conCandidatos.filter((v) => v.ideleccion));
       } catch (error) {
-        console.error("Error al cargar las votaciones:", error);
       } finally {
         setCargando(false);
       }

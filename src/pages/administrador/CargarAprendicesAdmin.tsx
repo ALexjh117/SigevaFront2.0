@@ -159,7 +159,6 @@ export default function CargarAprendices() {
         setCentros(centrosMapped);
         setRegionales(regionalesMapped);
       } catch (e: unknown) {
-        console.error("Error al cargar centros/regionales:", e);
         if (axios.isAxiosError(e)) {
           setMsg({
             type: "danger",

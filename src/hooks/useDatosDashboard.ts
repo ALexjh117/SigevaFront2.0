@@ -199,7 +199,6 @@ export function useDatosDashboard() {
         setVotosHoy(votosDeHoy.length);
         setVotacionesActivas(eleccionesAbiertas);
       } catch (error) {
-        console.error("Error al traer datos del dashboard:", error);
       } finally {
         if (vivo) setCargando(false);
       }

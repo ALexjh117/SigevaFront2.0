@@ -97,7 +97,6 @@ const AgregarCandidatoModal = ({ show, onHide, onSave, idEleccion, aprendices }:
       setPreviewUrl("");
       onHide();
     } catch (error: any) {
-      console.error("Error al crear candidato:", error.response?.data || error.message);
       const mensaje =
         error.response?.data?.message ||
         error.response?.data?.errors?.jornada?.[0] ||
