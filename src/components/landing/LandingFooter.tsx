@@ -1,12 +1,14 @@
 import { Link } from "react-router-dom";
-import { FaFacebookF, FaTwitter, FaInstagram, FaYoutube } from "react-icons/fa";
+
 import { SigevaWordmark, SigevaName } from "./SigevaMark";
+import { SiGmail } from "react-icons/si";
+import { FaQuestionCircle } from "react-icons/fa";
 
 const redes = [
-  { href: "https://www.facebook.com/SENA/?locale=es_LA", label: "Facebook", icon: <FaFacebookF /> },
-  { href: "https://x.com/SENAComunica", label: "X", icon: <FaTwitter /> },
-  { href: "https://www.instagram.com/senacomunica/", label: "Instagram", icon: <FaInstagram /> },
-  { href: "https://www.youtube.com/@SENAComunica", label: "YouTube", icon: <FaYoutube /> },
+  { href: " https://fabricaswctpicauca@gmail.com", label: "Facebook", icon: <SiGmail /> },
+ 
+  { href: "https://soporte.cloudsenactpi.net", label: "Instagram", icon: <FaQuestionCircle /> },
+
 ];
 
 export default function LandingFooter() {
@@ -54,8 +56,14 @@ export default function LandingFooter() {
           <h4>Ayuda y soporte</h4>
           <Link to="/#faq">Cómo votar</Link>
           <Link to="/#faq">Preguntas frecuentes</Link>
-          <a href="mailto:fabricaswctpicauca@gmail.com">Soporte técnico</a>
-          <a href="mailto:fabricaswctpicauca@gmail.com">Contáctenos</a>
+          <a
+            href="https://soporte.cloudsenactpi.net"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Soporte técnico
+          </a>
+          <a href="https://soporte.cloudsenactpi.net">Contáctenos</a>
         </div>
 
         <div className="lp-foot-follow">
@@ -76,17 +84,8 @@ export default function LandingFooter() {
           </div>
 
           <div className="lp-foot-contact">
-            <a href="mailto:fabricaswctpicauca@gmail.com">
-              fabricaswctpicauca@gmail.com
-            </a>
-
-            <a
-              href="https://fabricasw.cloudsenactpi.net/"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              https://fabricasw.cloudsenactpi.net/
-            </a>
+            
+            
           </div>
         </div>
       </div>
@@ -94,8 +93,21 @@ export default function LandingFooter() {
       <div className="lp-foot-bar">
         <span className="lp-foot-spacer" aria-hidden />
         <span className="lp-foot-copy">
-          © {anio} SENA — CTPI · Centro de Teleinformática y Producción Industrial.
-          Todos los derechos reservados.
+          © {anio} Servicio Nacional de Aprendizaje Sena | Centro de Teleinformática 
+          y produccion industrial CTPI- Regional Cauca 
+          fabricasoftwarectpi@misena.edu.co
+
+          <br />
+          
+           <span className="lp-foot-spacer"> 
+
+
+        Copyrigth©2026
+           </span>
+          
+   
+          
+          
         </span>
         <img src="/sena.svg" alt="SENA" className="lp-foot-sena" />
       </div>

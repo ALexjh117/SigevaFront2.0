@@ -20,7 +20,7 @@ export function esColaborador(perfil?: string | null) {
   return perfil?.toLowerCase() === "colaborador";
 }
 
-/** Funcionario o admin_sistema: viven en UN centro. */
+/** Mesa de un centro: admin_sistema, colaborador o funcionario (legado). */
 export function esRolDeCentro(perfil?: string | null) {
   return esAdminSistema(perfil) || esFuncionario(perfil) || esColaborador(perfil);
 }

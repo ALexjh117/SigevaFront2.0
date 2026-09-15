@@ -166,9 +166,9 @@ const Sidebar: React.FC<SidebarProps> = ({ onNavigate }) => {
               text: 'Aprendices'
             },
             {
-              to: '/funcionarios',
+              to: '/gestion-usuarios',
               icon: <FaUserTie />,
-              text: 'Funcionarios'
+              text: 'Usuarios del centro'
             },
           ]
         },
@@ -202,7 +202,7 @@ const Sidebar: React.FC<SidebarProps> = ({ onNavigate }) => {
       ];
     }
 
-    // ADMINISTRADOR DE RED
+    // ADMINISTRADOR DE RED (Admin general)
     if (esAdministradorRed(user.perfil)) {
 
       return [
@@ -216,19 +216,9 @@ const Sidebar: React.FC<SidebarProps> = ({ onNavigate }) => {
           icon: <FaUsers />,
           items: [
             {
-              to: '/admins-centro',
+              to: '/gestion-usuarios',
               icon: <FaUserTie />,
-              text: 'Admin de centro'
-            },
-            {
-              to: '/funcionarios',
-              icon: <FaUserTie />,
-              text: 'Funcionarios'
-            },
-            {
-              to: '/colaboradores',
-              icon: <FaUserTie />,
-              text: 'Colaboradores'
+              text: 'Usuarios'
             },
             {
               to: '/cargar-aprendices-admin',

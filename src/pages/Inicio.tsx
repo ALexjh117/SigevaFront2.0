@@ -61,7 +61,7 @@ const infoCards = [
     titulo: <>¿Qué es <Marca />?</>,
     aria: "¿Qué es SIGEVA?",
     texto:
-      "SIGEVA es el Sistema de Gestión de Votación del SENA, una plataforma digital que permite a los aprendices participar de manera clara, fácil y segura en los procesos electorales de su centro de formación.",
+      " una plataforma digital que permite a los aprendices participar de manera clara, fácil y segura en los procesos electorales de su centro de formación.",
     icon: (
       <svg
         viewBox="0 0 24 24"

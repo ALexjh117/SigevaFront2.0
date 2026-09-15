@@ -60,7 +60,8 @@ const secciones = [
         </p>
         <ul className="pp-datos">
           <li>
-            <strong>Nombre de la entidad:</strong> Fábrica de Software
+            <strong>Nombre de la entidad:</strong> Sena (CTPI) Centro de Teleinformática
+            y produccion industrial
           </li>
           <li>
             <strong>Dirección:</strong> Carrera 9 # 71 Norte (Alto Cauca), Popayán
@@ -70,8 +71,12 @@ const secciones = [
           </li>
           <li>
             <strong>Correo de contacto:</strong>{" "}
-            <a href="mailto:fabricaswctpicauca@gmail.com">
-              fabricaswctpicauca@gmail.com
+            <a
+              href="https://soporte.cloudsenactpi.net"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              soporte.cloudsenactpi.net
             </a>
           </li>
         </ul>
@@ -451,8 +456,12 @@ const secciones = [
           </li>
           <li>
             <strong>Correo de privacidad:</strong>{" "}
-            <a href="mailto:fabricaswctpicauca@gmail.com">
-              fabricaswctpicauca@gmail.com
+            <a
+              href="https://soporte.cloudsenactpi.net"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              soporte.cloudsenactpi.net
             </a>
           </li>
           <li>

@@ -25,11 +25,13 @@ export function inicialesDeUsuario(user?: UserNormalizado | null) {
 export function etiquetaPerfil(perfil?: string | null) {
   switch (perfil?.toLowerCase()) {
     case "administrador":
-      return "Administrador";
+      return "Admin general";
     case "admin_sistema":
       return "Admin de centro";
     case "funcionario":
-      return "Funcionario";
+      return "Funcionario (legado)";
+    case "colaborador":
+      return "Colaborador";
     case "aprendiz":
       return "Aprendiz";
     default:
