@@ -190,7 +190,7 @@ const respuestas: Respuesta[] = [
       "funcionario"
     ],
     respuesta:
-      "👨‍💼 Los funcionarios habilitados pueden acceder a las funciones correspondientes dentro de SIGEVA. Si necesitas información sobre tu acceso, puedes acercarte a Bienestar al Aprendiz."
+      "👨‍💼 Los administradores de centro y colaboradores habilitados pueden acceder a las funciones correspondientes dentro de SIGEVA. Si necesitas información sobre tu acceso, puedes acercarte a Bienestar al Aprendiz o a soporte.cloudsenactpi.net."
   },
 
   // ADMINISTRADORES
@@ -352,7 +352,7 @@ export default function ChatBot() {
       textoUsuario = "👨‍💼 Soy funcionario";
 
       respuesta =
-        "👨‍💼 Si eres funcionario, acércate a Bienestar al Aprendiz, donde podrán ayudarte con la información necesaria para ingresar a SIGEVA. También puedes escribir al correo fabricaswctpicauca@gmail.com.";
+        "👨‍💼 Si eres admin de centro o colaborador, acércate a Bienestar al Aprendiz, donde podrán ayudarte con la información necesaria para ingresar a SIGEVA. También puedes usar el soporte oficial en https://soporte.cloudsenactpi.net.";
 
     }
 
@@ -361,7 +361,7 @@ export default function ChatBot() {
       textoUsuario = "⚙️ Soy administrador";
 
       respuesta =
-        "⚙️ Si eres administrador, acércate a Bienestar al Aprendiz, donde podrán brindarte la información necesaria para ingresar a SIGEVA. También puedes escribir al correo fabricaswctpicauca@gmail.com.";
+        "⚙️ Si eres administrador, acércate a Bienestar al Aprendiz, donde podrán brindarte la información necesaria para ingresar a SIGEVA. También puedes usar el soporte oficial en https://soporte.cloudsenactpi.net.";
 
     }
 

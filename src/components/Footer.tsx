@@ -65,6 +65,16 @@ const Footer: React.FC = () => {
                 <li className="mb-2">Calle 57 No. 8 - 69 Bogotá D.C. (Cundinamarca), Colombia</li>
                 <li className="mb-2">El SENA brinda a la ciudadanía, atención presencial en las 33 Regionales y 118 Centros de Formación</li>
                 <li className="mb-2">
+                  <a
+                    href="https://soporte.cloudsenactpi.net"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-reset"
+                  >
+                    soporte.cloudsenactpi.net
+                  </a>
+                </li>
+                <li className="mb-2">
                   <a href="mailto:contacto@misena.edu.co" className="text-reset">
                     contacto@misena.edu.co
                   </a>

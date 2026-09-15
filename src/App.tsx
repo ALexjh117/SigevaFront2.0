@@ -24,15 +24,13 @@ import { useAuth } from "./context/auth/auth.context";
 import Inicio from "./pages/Inicio";
 import Aprendices from "./pages/administrador/Aprendices";
 import AprendizForm from "./pages/administrador/AprendizForm";
-import Funcionarios from "./pages/administrador/Funcionarios";
 import { DashboardAdmin } from "./pages/administrador/DashboardAdmin";
 import { Toaster } from "react-hot-toast";
 import CargarAprendicesAdmin from "./pages/administrador/CargarAprendicesAdmin";
 import Equipo from "./pages/Equipo";
 import PoliticaPrivacidad from "./pages/PoliticaPrivacidad";
 import ResultadosDemoPage from "./pages/funcionario/ResultadosDemoPage";
-import AdminsCentro from "./pages/administrador/AdminsCentro";
-import Colaboradores from "./pages/administrador/Colaboradores";
+import GestionUsuarios from "./pages/administrador/GestionUsuarios";
 import {
   esAdminSistema,
   esAdministradorRed,
@@ -156,7 +154,10 @@ function App() {
               <Route path="/agregar-candidato" element={<AgregarCandidato />} />
               <Route path="/nueva-eleccion" element={<FormEleccion />} />
               <Route element={<AltaPersonalLayout />}>
-                <Route path="/funcionarios" element={<Funcionarios />} />
+                <Route path="/gestion-usuarios" element={<GestionUsuarios />} />
+                <Route path="/funcionarios" element={<Navigate to="/gestion-usuarios" replace />} />
+                <Route path="/admins-centro" element={<Navigate to="/gestion-usuarios" replace />} />
+                <Route path="/colaboradores" element={<Navigate to="/gestion-usuarios" replace />} />
               </Route>
             </Route>
           </Route>
@@ -164,8 +165,6 @@ function App() {
           {/* Torre de red: solo Administrador */}
           <Route element={<RedSenaLayout />}>
             <Route path="/dashboard-admin" element={<DashboardAdmin />} />
-            <Route path="/admins-centro" element={<AdminsCentro />} />
-            <Route path="/colaboradores" element={<Colaboradores />} />
             <Route path="/cargar-aprendices-admin" element={<CargarAprendicesAdmin/>} />
           </Route>
         </Route>
